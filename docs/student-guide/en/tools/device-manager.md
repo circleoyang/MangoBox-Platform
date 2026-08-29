@@ -1,0 +1,299 @@
+# Device Manager Basics
+
+Device Manager is used for **MangoX2 / MangoLite configuration and maintenance**. It helps you confirm what the Runtime currently accepts before returning to MangoThonny/Python to build a project with the Student API.
+
+> This page follows the current `v0.4.8` multi-target design. The `v0.4.8-rc14` MangoX2 IR dynamic-pin UI fix is still on a Draft PR. Because GitHub Actions minutes have not reset yet, do not describe rc14 as build-validated.
+
+---
+
+# 1. What can Device Manager do?
+
+Common learner tasks include:
+
+- connect MangoX2 / MangoLite;
+- confirm target and Runtime/firmware information;
+- enable or disable optional modules;
+- configure GPIO/Pin assignments;
+- apply settings and read them back;
+- use Live Read / Monitor where the selected version supports it;
+- perform implemented calibration/maintenance for Light, Sound, Joystick and similar modules;
+- import, export, or restore configuration;
+- inspect Student API / JSON previews where provided.
+
+Device Manager does **not** replace the Student API. After configuration, return to MangoThonny/Python to write the project.
+
+---
+
+# 2. Choose the correct connection path
+
+Two common management paths are used today.
+
+## A. MicroUSB / Pico
+
+Uses the Pico USB connection and MicroPython REPL/RuntimeConfig management path.
+
+This supports a one-cable classroom workflow.
+
+### Do not let two programs own the same COM port
+
+If Thonny/MangoThonny currently owns the Pico COM port, Device Manager may not be able to use it simultaneously.
+
+Recommended flow:
+
+```text
+stop the current program
+→ release/disconnect the device in Thonny
+→ connect with Device Manager
+```
+
+When configuration is complete, return to Thonny/MangoThonny.
+
+## B. Runtime UART
+
+Uses a USB-to-TTL adapter connected to the Runtime UART.
+
+MangoLite and MangoX2 do not use the same UART pins. Follow the selected target's current tool/hardware documentation rather than reusing another board's pin assignment.
+
+Always share ground:
+
+```text
+GND ↔ GND
+```
+
+Current Runtime UART baud rate is `115200`.
+
+---
+
+# 3. After connecting, confirm device identity first
+
+Do not change pins immediately.
+
+First verify:
+
+```text
+Target
+Runtime / firmware version
+Connection path
+Configuration read succeeded
+```
+
+Distinguish among:
+
+```text
+MangoX2 + Pico
+MangoX2 + Pico 2 W
+MangoLite + Pico 2 W
+```
+
+because IR, Button, UART and other hardware rules can differ by target.
+
+> An open COM port is not proof that the Runtime is ready. Runtime replies/system-info style handshakes are the meaningful readiness evidence.
+
+---
+
+# 4. Standard module-configuration flow
+
+For an external IR Sensor, for example:
+
+```text
+Choose IR
+   ↓
+Enable
+   ↓
+Choose Pin
+   ↓
+Apply settings
+   ↓
+Read config again
+   ↓
+Confirm the same values were accepted
+   ↓
+Run the Student API
+```
+
+If Device Manager reports:
+
+```text
+IR enabled = True
+IR Pin = GP4
+```
+
+the physical module must also use:
+
+```text
+IR OUT / Signal → GP4
+```
+
+Configuration and wiring must agree.
+
+---
+
+# 5. Understanding Pin Config
+
+Device Manager should treat the **Runtime's current configuration as the source of truth** instead of maintaining a second hidden GPIO default map.
+
+Learners should verify both:
+
+### ① The displayed setting
+
+For example:
+
+```text
+Servo → GP10
+Light Sensor → GP26
+IR → GP4
+```
+
+### ② The real Signal wire
+
+If the UI says `GP4` while the sensor is physically connected to `GP17`, correct Python code still cannot receive the signal.
+
+---
+
+# 6. Do not mix MangoLite and MangoX2 hardware rules
+
+The same feature name may represent different hardware.
+
+### MangoLite + Pico 2 W IR
+
+The IR receiver is fixed onboard hardware on:
+
+```text
+GP22
+```
+
+It should not be presented like an arbitrary external IR pin.
+
+### MangoX2 + Pico / Pico 2 W IR
+
+IR is optional and High Level MicroPython uses:
+
+```text
+enabled_modules.ir_sensor
+ir_sensor_pin
+```
+
+Therefore Device Manager should display the current `ir_sensor_pin`, not MangoLite's fixed GP22.
+
+The `v0.4.8-rc14` candidate contains this UI correction, but it still needs the build/test gate after GitHub Actions quota resets.
+
+---
+
+# 7. Using Live Read / Monitor
+
+When a page provides Live Read / Monitor, use it as a quick high-level path check.
+
+For a Button, for example:
+
+```text
+released → 0
+pressed  → 1
+```
+
+If Live Read changes correctly, Runtime configuration and the high-level read path are probably healthy.
+
+If it does not respond, do not rewrite the full project first. Check:
+
+```text
+enablement
+→ configured Pin
+→ minimal raw diagnostic
+→ physical wiring / power
+```
+
+> Live Read / Monitor support varies by module and Runtime version. Documentation must only promise controls that the selected Device Manager/Runtime combination really implements.
+
+---
+
+# 8. Correct troubleshooting order for a Sensor
+
+For a Light Sensor:
+
+```text
+1. m.supports("light")
+2. light_sensor enabled?
+3. light_sensor_pin = ?
+4. Device Manager config / Live Read (when supported)
+5. minimal machine.ADC raw test
+6. AO / VCC / GND physical wiring
+7. raw changes but 0–100 is poor → calibration
+```
+
+Use `machine.Pin` for a small digital-input check where appropriate.
+
+This helps separate:
+
+```text
+API / Runtime issue
+configuration issue
+Pin / wiring issue
+calibration issue
+project-logic issue
+```
+
+---
+
+# 9. Import / Export / Restore
+
+Think of these as different operations:
+
+- **Export / backup** — save the current settings;
+- **Import** — apply selected settings to a device;
+- **Restore / Defaults** — broader configuration changes that require understanding their effect.
+
+Full restore behavior may depend on Runtime version, so production documentation should resolve instructions by Device Manager version + Runtime version.
+
+---
+
+# 10. When should I switch from Device Manager to Hardware Lab?
+
+Use Hardware Lab when the problem is no longer just one Sensor/Pin and instead involves:
+
+```text
+unknown firmware
+possible target / MCU mismatch
+wrong execution_mode
+Recovery / Rescue
+Clean Flash
+unexpected mode after an update
+MicroUSB / Host UART / Gateway lifecycle-management path
+```
+
+See [Hardware Lab Basics](hardware-lab.md).
+
+The current Hardware Lab focuses on firmware and device lifecycle; it is not a general GPIO/ADC Sensor tester.
+
+---
+
+# 11. Relationship to Student API documentation
+
+A future Device Manager module page can provide:
+
+```text
+[Guide]
+[Troubleshooting]
+```
+
+and pass known context into Online Documentation:
+
+```text
+language
+target
+programming mode
+Runtime version
+module
+module_enabled
+configured Pin
+```
+
+For example, MangoX2 IR configured on GP4 can open directly at:
+
+> MangoX2 + Pico 2 W → High Level MicroPython → IR → Troubleshooting → configured GP4
+
+without asking the learner to choose everything again.
+
+## Related documentation
+
+- [Hardware Lab Basics](hardware-lab.md)
+- each module's Troubleshooting view
+- [Tool → Documentation Deep-Link Contract](../../TOOL_HELP_DEEPLINK_CONTRACT_V1.md)
