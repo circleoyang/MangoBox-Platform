@@ -1,0 +1,76 @@
+{
+  "schema_version": 1,
+  "metadata_source": "../../compatibility_profiles.v1.json",
+  "recommended": {
+    "mangox2-pico": {
+      "high_level_micropython": "mangox2-pico__hlmp__runtime-0.2.6-rc10",
+      "host_python": "mangox2-pico__host-0.4.6__runtime-0.2.6-rc10"
+    },
+    "mangox2-pico2w": {
+      "high_level_micropython": "mangox2-pico2w__hlmp__runtime-0.2.6-rc10",
+      "host_python": "mangox2-pico2w__host-0.4.6__runtime-0.2.6-rc10"
+    },
+    "mangolite-pico2w": {
+      "high_level_micropython": "mangolite-pico2w__hlmp__runtime-0.6.0-rc22",
+      "host_python": "mangolite-pico2w__host-0.4.6__runtime-0.6.0-rc22"
+    }
+  },
+  "profiles": [
+    {
+      "id": "mangox2-pico__hlmp__runtime-0.2.6-rc10",
+      "target": "mangox2-pico",
+      "mode": "high_level_micropython",
+      "runtime": "0.2.6-rc10",
+      "label": {"zh-TW": "課程建議版 · Runtime 0.2.6-rc10", "en": "Recommended · Runtime 0.2.6-rc10"},
+      "capabilities": ["led", "buzzer", "servo", "oled", "button", "ir"]
+    },
+    {
+      "id": "mangox2-pico__host-0.4.6__runtime-0.2.6-rc10",
+      "target": "mangox2-pico",
+      "mode": "host_python",
+      "host_package": "0.4.6",
+      "runtime": "0.2.6-rc10",
+      "label": {"zh-TW": "Host 0.4.6 + Runtime 0.2.6-rc10", "en": "Host 0.4.6 + Runtime 0.2.6-rc10"},
+      "capabilities": ["led", "buzzer", "servo", "oled", "button"]
+    },
+    {
+      "id": "mangox2-pico2w__hlmp__runtime-0.2.6-rc10",
+      "target": "mangox2-pico2w",
+      "mode": "high_level_micropython",
+      "runtime": "0.2.6-rc10",
+      "label": {"zh-TW": "課程建議版 · Runtime 0.2.6-rc10", "en": "Recommended · Runtime 0.2.6-rc10"},
+      "capabilities": ["led", "buzzer", "servo", "oled", "button", "ir"]
+    },
+    {
+      "id": "mangox2-pico2w__host-0.4.6__runtime-0.2.6-rc10",
+      "target": "mangox2-pico2w",
+      "mode": "host_python",
+      "host_package": "0.4.6",
+      "runtime": "0.2.6-rc10",
+      "label": {"zh-TW": "Host 0.4.6 + Runtime 0.2.6-rc10", "en": "Host 0.4.6 + Runtime 0.2.6-rc10"},
+      "capabilities": ["led", "buzzer", "servo", "oled", "button"]
+    },
+    {
+      "id": "mangolite-pico2w__hlmp__runtime-0.6.0-rc22",
+      "target": "mangolite-pico2w",
+      "mode": "high_level_micropython",
+      "runtime": "0.6.0-rc22",
+      "label": {"zh-TW": "課程建議版 · Runtime 0.6.0-rc22", "en": "Recommended · Runtime 0.6.0-rc22"},
+      "capabilities": ["led", "buzzer", "servo", "oled", "button", "ir", "motion", "light", "sound_level", "joystick"]
+    },
+    {
+      "id": "mangolite-pico2w__host-0.4.6__runtime-0.6.0-rc22",
+      "target": "mangolite-pico2w",
+      "mode": "host_python",
+      "host_package": "0.4.6",
+      "runtime": "0.6.0-rc22",
+      "label": {"zh-TW": "Host 0.4.6 + Runtime 0.6.0-rc22", "en": "Host 0.4.6 + Runtime 0.6.0-rc22"},
+      "capabilities": ["led", "buzzer", "servo", "oled", "button"]
+    }
+  ],
+  "notes": [
+    "This file is a site-consumption mirror of compatibility_profiles.v1.json and should eventually be generated instead of edited independently.",
+    "A profile capability means the learner API path is implemented for the selected target/mode/version. Device module enablement is overlaid separately.",
+    "Host profiles do not expose IR/PIR/Light/Sound/Joystick until complete learner methods and compatibility metadata exist."
+  ]
+}
