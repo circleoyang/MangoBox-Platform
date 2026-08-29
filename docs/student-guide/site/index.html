@@ -1,60 +1,7 @@
 <!doctype html>
-<html lang="zh-Hant">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>MangoBox Documentation</title>
-  <link rel="stylesheet" href="styles.css">
-</head>
-<body>
-  <header class="topbar">
-    <a class="brand" href="../../../" aria-label="MangoBox Platform home">
-      <img class="brand-logo" src="../../../assets/brand/mangobox-core-refined-64.png" alt="MangoBox">
-      <span><strong>MangoBox Docs</strong><small>Student API & Hardware Guide</small></span>
-    </a>
-    <div class="top-actions">
-      <button id="contextButton" class="ghost-button" type="button">變更環境</button>
-      <div class="language-switch" aria-label="Language">
-        <button data-lang="zh-TW" type="button">繁中</button>
-        <button data-lang="en" type="button">EN</button>
-      </div>
-    </div>
-  </header>
-
-  <section id="contextStrip" class="context-strip hidden" aria-live="polite"></section>
-
-  <main>
-    <section id="setupPanel" class="setup-panel">
-      <div class="setup-intro">
-        <p class="eyebrow" data-i18n="setupEyebrow">開始前先確認</p>
-        <h1 data-i18n="setupTitle">選擇你手上的 MangoBox</h1>
-        <p data-i18n="setupBody">文件會依照硬體、程式方式與軟體版本，只顯示你這一套真正可以使用的 API。</p>
-      </div>
-      <div class="setup-step"><div class="step-heading"><span>1</span><h2 data-i18n="hardwareTitle">硬體版本</h2></div><div id="targetCards" class="choice-grid"></div></div>
-      <div id="modeStep" class="setup-step hidden"><div class="step-heading"><span>2</span><h2 data-i18n="modeTitle">程式方式</h2></div><div id="modeCards" class="choice-grid two"></div></div>
-      <div id="profileStep" class="setup-step hidden">
-        <div class="step-heading"><span>3</span><h2 data-i18n="versionTitle">軟體版本</h2></div>
-        <div class="profile-row"><select id="profileSelect" aria-label="Software version"></select><button id="enterDocs" class="primary-button" type="button" data-i18n="enterDocs">開啟使用文件</button></div>
-        <p class="muted" data-i18n="versionHint">預設顯示目前課程建議版本；舊版文件之後可由此切換。</p>
-      </div>
-    </section>
-
-    <section id="docsShell" class="docs-shell hidden">
-      <aside class="sidebar">
-        <div class="sidebar-heading"><span data-i18n="modules">功能模組</span><small id="moduleCount"></small></div>
-        <nav id="moduleNav" class="module-nav"></nav>
-        <div class="tool-links"><strong data-i18n="tools">工具操作</strong><a id="deviceManagerLink" href="#">Device Manager</a><a id="hardwareLabLink" href="#">Hardware Lab</a></div>
-      </aside>
-      <article class="doc-panel">
-        <div class="doc-header"><div><p id="moduleCapability" class="eyebrow"></p><h1 id="moduleTitle"></h1></div><span id="availabilityBadge" class="availability-badge"></span></div>
-        <div id="deviceNotice" class="notice hidden"></div>
-        <div id="viewTabs" class="view-tabs" role="tablist"><button data-view="guide" type="button" data-i18n="guide">使用指南</button><button data-view="troubleshooting" type="button" data-i18n="troubleshooting">問題排除</button><button data-view="reference" type="button">API Reference</button></div>
-        <div id="docContent" class="doc-content" aria-live="polite"></div>
-      </article>
-    </section>
-  </main>
-
-  <footer><span>MangoBox Online Documentation v1</span><span data-i18n="footerNote">本頁以 compatibility profile 過濾內容；裝置 Enable 狀態不等於 API 是否存在。</span></footer>
-  <script src="app.js" defer></script>
-</body>
-</html>
+<html lang="zh-Hant"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>MangoBox Documentation</title><link rel="stylesheet" href="styles.css"></head><body>
+<header class="topbar"><a class="brand" href="../../../" aria-label="MangoBox Platform home"><img class="brand-logo" src="../../../assets/brand/mangobox-core-refined-64.png" alt="MangoBox"><span><strong>MangoBox Docs</strong><small>Student API & Hardware Guide</small></span></a><div class="top-actions"><button id="contextButton" class="ghost-button" type="button">變更環境</button><div class="language-switch" aria-label="Language"><button data-lang="zh-TW" type="button">繁中</button><button data-lang="en" type="button">EN</button></div></div></header>
+<section id="contextStrip" class="context-strip hidden" aria-live="polite"></section><main><section id="setupPanel" class="setup-panel"><div class="setup-intro"><p class="eyebrow" data-i18n="setupEyebrow">開始前先確認</p><h1 data-i18n="setupTitle">選擇你手上的 MangoBox</h1><p data-i18n="setupBody">文件會依照硬體、程式方式與軟體版本，只顯示你這一套真正可以使用的 API。</p></div><div class="setup-step"><div class="step-heading"><span>1</span><h2 data-i18n="hardwareTitle">硬體版本</h2></div><div id="targetCards" class="choice-grid"></div></div><div id="modeStep" class="setup-step hidden"><div class="step-heading"><span>2</span><h2 data-i18n="modeTitle">程式方式</h2></div><div id="modeCards" class="choice-grid two"></div></div><div id="profileStep" class="setup-step hidden"><div class="step-heading"><span>3</span><h2 data-i18n="versionTitle">軟體版本</h2></div><div class="profile-row"><select id="profileSelect" aria-label="Software version"></select><button id="enterDocs" class="primary-button" type="button" data-i18n="enterDocs">開啟使用文件</button></div><p class="muted" data-i18n="versionHint">預設顯示目前課程建議版本；舊版文件之後可由此切換。</p></div></section>
+<section id="docsShell" class="docs-shell hidden"><aside class="sidebar"><div class="sidebar-heading"><span data-i18n="modules">功能模組</span><small id="moduleCount"></small></div><nav id="moduleNav" class="module-nav"></nav><div class="tool-links"><strong data-i18n="tools">工具操作</strong><a id="deviceManagerLink" href="#">Device Manager</a><a id="hardwareLabLink" href="#">Hardware Lab</a></div></aside><article class="doc-panel"><div class="doc-header"><div><p id="moduleCapability" class="eyebrow"></p><h1 id="moduleTitle"></h1></div><span id="availabilityBadge" class="availability-badge"></span></div><div id="deviceNotice" class="notice hidden"></div><div id="viewTabs" class="view-tabs" role="tablist"><button data-view="guide" type="button" data-i18n="guide">使用指南</button><button data-view="troubleshooting" type="button" data-i18n="troubleshooting">問題排除</button><button data-view="reference" type="button">API Reference</button></div><div id="docContent" class="doc-content" aria-live="polite"></div></article></section></main>
+<footer><span>MangoBox Online Documentation v1</span><span data-i18n="footerNote">本頁以 compatibility profile 過濾內容；裝置 Enable 狀態不等於 API 是否存在。</span><span id="copyrightLine">© 2026 歐陽芳泉 · 國立臺北商業大學 · MangoBox 平台。版權所有。</span></footer>
+<script src="app.js" defer></script><script>document.addEventListener('click',e=>{const b=e.target.closest('[data-lang]');if(!b)return;const c=document.getElementById('copyrightLine');if(c)c.textContent=b.dataset.lang==='en'?'© 2026 Fang-Chuan Ou Yang · National Taipei University of Business · MangoBox Platform. All rights reserved.':'© 2026 歐陽芳泉 · 國立臺北商業大學 · MangoBox 平台。版權所有。';});</script></body></html>
