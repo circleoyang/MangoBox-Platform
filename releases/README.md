@@ -25,6 +25,16 @@ Desktop-tool releases:
 - release notes
 - checksums where appropriate
 
+## Download-page version policy / 官網版本顯示原則
+
+The public download center should show the **current recommended version** in the main download section. The immediately previous validated version should remain available through a compact **Previous / Archive** section or its GitHub Release page, rather than competing visually with the current version.
+
+官網下載中心的主要下載區只顯示**目前建議版本**。前一個已驗證版本不刪除，而是移至簡潔的 **Previous / Archive（歷史版本）** 區或保留於 GitHub Release 頁，避免一般使用者誤選舊版，同時保留教室回退、相容性比對與研究重現能力。
+
+Older releases may remain on GitHub Releases unless there is a specific security, licensing, or distribution reason to remove them.
+
+除非有安全、授權或發布政策上的特殊原因，較舊版本原則上不必從 GitHub Releases 刪除。
+
 ## Official Release Notes format / 正式 Release Notes 格式
 
 All public MangoBox GitHub Releases should use a bilingual **Traditional Chinese + English** format. Traditional Chinese appears first, followed by English.
