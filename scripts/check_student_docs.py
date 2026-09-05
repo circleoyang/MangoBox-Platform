@@ -11,6 +11,7 @@ SITE = ROOT / "docs" / "student-guide" / "site"
 PROFILES_PATH = SITE / "data" / "profiles.json"
 MODULES_PATH = SITE / "data" / "modules.json"
 LANGS = ("zh-TW", "en")
+CURRENT_SOURCE_STATUS = "public-current"
 
 
 def load(path: Path):
@@ -32,10 +33,10 @@ def main() -> int:
     modules = modules_data.get("modules", [])
     errors: list[str] = []
 
-    if profiles_data.get("source_status") != "candidate-not-public-release":
-        errors.append("profiles.json must remain candidate-not-public-release until release gates pass")
-    if modules_data.get("source_status") != "candidate-not-public-release":
-        errors.append("modules.json must remain candidate-not-public-release until release gates pass")
+    if profiles_data.get("source_status") != CURRENT_SOURCE_STATUS:
+        errors.append(f"profiles.json source_status must be {CURRENT_SOURCE_STATUS!r}")
+    if modules_data.get("source_status") != CURRENT_SOURCE_STATUS:
+        errors.append(f"modules.json source_status must be {CURRENT_SOURCE_STATUS!r}")
 
     module_ids = set()
     capabilities = set()
@@ -62,6 +63,15 @@ def main() -> int:
             errors.append(f"duplicate profile id: {profile_id}")
         profile_ids.add(profile_id)
 
+        if "candidate" in profile_id.lower():
+            errors.append(f"public-current profile id must not contain candidate: {profile_id}")
+        if str(profile.get("release_status", "")).startswith("source_candidate"):
+            errors.append(f"stale candidate release_status: {profile_id}")
+
+        unknown_caps = sorted(profile_caps - capabilities - {"motor"})
+        if unknown_caps:
+            errors.append(f"profile references undocumented capabilities: {profile_id} -> {unknown_caps}")
+
         shown_modules = [m for m in modules if m.get("capability") in profile_caps]
         if not shown_modules:
             errors.append(f"profile exposes no documented modules: {profile_id}")
@@ -80,11 +90,20 @@ def main() -> int:
             if "line_tracking" in profile_caps:
                 errors.append(f"Host profile must not expose line_tracking: {profile_id}")
 
+        # MangoLite distance/obstacle/line-tracking are still legacy and are
+        # intentionally not promoted into the current shared Student API docs.
+        if str(profile.get("target", "")) == "mangolite-pico2w":
+            stale = profile_caps & {"distance", "obstacle", "line_tracking"}
+            if stale:
+                errors.append(f"MangoLite current profile exposes legacy shared capability: {profile_id} -> {sorted(stale)}")
+
     recommended = profiles_data.get("recommended", {})
     for target, modes in recommended.items():
         for mode, profile_id in modes.items():
             if profile_id not in profile_ids:
                 errors.append(f"recommended profile missing: {target}/{mode} -> {profile_id}")
+            if "candidate" in str(profile_id).lower():
+                errors.append(f"recommended profile still points to candidate id: {target}/{mode} -> {profile_id}")
 
     if errors:
         print("Student documentation validation FAILED")
