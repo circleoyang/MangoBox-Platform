@@ -1,100 +1,90 @@
 # Servo API Reference
 
-## `servo()`
+工程導向參考。Servo capability 仍需由 target／mode／version resolver 判斷；named Servo 目前是 MangoX2 current contract，MangoLite 仍保留單一／default Servo learner path。
+
+## 相容核心語法
+
+以下語法可作為單 Servo / default Servo 的共同教學寫法：
 
 ```python
 servo(angle) -> None
-```
-
-將位置型 Servo 移到指定角度。
-
-### Raises
-
-`ValueError`：角度超出 Student API 允許範圍。
-
-## `servo_move_to()`
-
-```python
+servo_set_angle(angle) -> None
 servo_move_to(angle, step=5, period=60) -> None
-```
-
-以多個步進逐漸移動到目標角度。
-
-## `servo_sweep()`
-
-```python
 servo_sweep(min_angle=0, max_angle=180, step=5, period=50) -> None
-```
-
-啟動往返掃動。
-
-### Raises
-
-`ValueError`：角度或範圍無效。
-
-## `servo_stop()`
-
-```python
 servo_stop() -> None
-```
-
-停止 sweep。
-
-## `servo_get_angle()`
-
-```python
 servo_get_angle()
-```
-
-取得 Runtime／Student API 已知角度。不同 Programming Mode 的 reply timing 可能不同，因此線上文件必須依 mode/version 顯示。
-
-## `servo_release()`
-
-```python
 servo_release() -> None
 ```
 
-停止 Servo PWM 輸出。
+角度由 Student API 驗證；超出允許範圍會拋出 `ValueError`。`servo_sweep()` 亦要求 `min_angle < max_angle`。
 
-## Execution lifecycle
+## MangoX2 named Servo
 
-| API | High Level MicroPython 行為 | `m.run_forever()` |
-|---|---|---:|
-| `servo(angle)` / `servo_set_angle()` | Immediate，直接寫入目標 PWM 位置 | 不需要 |
-| `servo_get_angle()` | local Runtime 回覆為同步路徑 | 不需要 |
-| `servo_release()` | Immediate | 不需要 |
-| `servo_move_to()` | 當已有目前角度時，以 Scheduler 分段移動 | 為確保漸進移動完成，需要 |
-| `servo_sweep()` | 持續 Scheduler 掃動 | 需要 |
-| `servo_stop()` | 立即移除 sweep 工作 | 不需要 |
+MangoX2 current named-device contract 在上述方法增加可選的 `name`：
 
-注意：若 Servo 尚無目前角度，`servo_move_to()` 的實作可能直接寫入目標位置。因此測試「漸進移動」時，應先用 `servo()` 設定起始角度，再呼叫 `servo_move_to()`。
-
-## Availability
-
-Servo 是可設定模組；只有 resolver 判定 `servo` capability 可用時才顯示。
-
-## Configuration
-
-```text
-enabled_modules.servo
-servo_pin
-servo_min_angle
-servo_max_angle
-servo_min_us
-servo_max_us
+```python
+servo(angle, name=None) -> None
+servo_set_angle(angle, name=None) -> None
+servo_move_to(angle, step=5, period=60, name=None) -> None
+servo_sweep(min_angle=0, max_angle=180, step=5, period=50, name=None) -> None
+servo_stop(name=None) -> None
+servo_get_angle(name=None)
+servo_release(name=None) -> None
 ```
 
-## Example
+範例：
 
 ```python
 from mangobox import Mango
 
 m = Mango()
-m.servo(30)
-m.servo_move_to(150, step=5, period=60)
-m.run_forever()
+m.servo(30, name="arm")
+m.servo_move_to(150, step=5, period=60, name="arm")
+print(m.servo_get_angle(name="arm"))
+m.servo_release(name="arm")
 ```
+
+`name=None` 使用目前 default/current Servo，因此舊程式不需要修改。named instance 必須存在於目前 Runtime 的 Servo 設定中並處於可用狀態。
+
+> MangoLite current profile 下請使用不帶 `name` 的共同語法；不要因為 MangoX2 已支援 named Servo，就假設 MangoLite 也已完成同一 named-device contract。
+
+## Execution lifecycle
+
+| API | High-Level MicroPython 行為 | `m.run_forever()` |
+|---|---|---:|
+| `servo()` / `servo_set_angle()` | Immediate，送至 local Runtime 並寫入目標位置 | 不需要 |
+| `servo_get_angle()` | local Runtime reply path | 不需要 |
+| `servo_release()` | Immediate | 不需要 |
+| `servo_move_to()` | 後續步進由 Runtime / Scheduler 處理 | 需要持續服務 Scheduler |
+| `servo_sweep()` | 持續 Runtime / Scheduler sweep | 需要 |
+| `servo_stop()` | 停止指定／目前 Servo 的 sweep | 不需要 |
+
+若要觀察完整漸進移動或持續 sweep，High-Level MicroPython 程式應保留 `m.run_forever()`。
+
+## Configuration
+
+MangoX2 current named-device 設定主要使用：
+
+```text
+enabled_modules.servo
+servos
+current_servo_setting
+```
+
+每個 named Servo 可包含自己的 `pin`、`min_angle`、`max_angle`、`min_us`、`max_us` 與 Enabled/Locked 狀態。舊的 scalar Servo keys 仍保留相容用途。
+
+MangoLite 目前仍使用既有單 Servo 設定；實際 Pin 與角度/PWM 範圍以 Device Manager / Runtime config 為準。
+
+## Availability
+
+先用：
+
+```python
+m.supports("servo")
+```
+
+`True` 代表目前 learner API / target / config 可使用 Servo 語意，不代表實體 Servo 一定已正確接線或供電。
 
 ## Related
 
-`servo()`, `servo_move_to()`, `servo_sweep()`, `servo_stop()`, `servo_get_angle()`, `servo_release()`, `run_forever()`
+`servo()`, `servo_set_angle()`, `servo_move_to()`, `servo_sweep()`, `servo_stop()`, `servo_get_angle()`, `servo_release()`, `supports()`, `run_forever()`
