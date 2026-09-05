@@ -1,86 +1,87 @@
 {
   "schema_version": 2,
-  "metadata_source": "MangoBox/docs/student_api/student_api_catalog.v1.json",
-  "source_status": "candidate-not-public-release",
-  "source_date": "2026-09-02",
+  "metadata_source": "MangoBox/docs/module_capabilities.json",
+  "source_status": "public-current",
+  "source_date": "2026-09-05",
   "recommended": {
     "mangox2-pico": {
-      "high_level_micropython": "mangox2-pico__hlmp__runtime-0.2.6-rc17-candidate",
-      "host_python": "mangox2-pico__host-0.4.6__runtime-0.2.6-rc17-candidate"
+      "high_level_micropython": "mangox2-pico__hlmp__runtime-0.2.6-rc17",
+      "host_python": "mangox2-pico__host-0.4.6__runtime-0.2.6-rc17"
     },
     "mangox2-pico2w": {
-      "high_level_micropython": "mangox2-pico2w__hlmp__runtime-0.2.6-rc17-candidate",
-      "host_python": "mangox2-pico2w__host-0.4.6__runtime-0.2.6-rc17-candidate"
+      "high_level_micropython": "mangox2-pico2w__hlmp__runtime-0.2.6-rc17",
+      "host_python": "mangox2-pico2w__host-0.4.6__runtime-0.2.6-rc17"
     },
     "mangolite-pico2w": {
-      "high_level_micropython": "mangolite-pico2w__hlmp__runtime-0.6.0-rc25-candidate",
-      "host_python": "mangolite-pico2w__host-0.4.6__runtime-0.6.0-rc25-candidate"
+      "high_level_micropython": "mangolite-pico2w__hlmp__runtime-0.6.0-rc25",
+      "host_python": "mangolite-pico2w__host-0.4.6__runtime-0.6.0-rc25"
     }
   },
   "profiles": [
     {
-      "id": "mangox2-pico__hlmp__runtime-0.2.6-rc17-candidate",
+      "id": "mangox2-pico__hlmp__runtime-0.2.6-rc17",
       "target": "mangox2-pico",
       "mode": "high_level_micropython",
       "runtime": "0.2.6-rc17",
-      "release_status": "source_candidate",
-      "label": {"zh-TW": "來源候選版 · Runtime 0.2.6-rc17", "en": "Source candidate · Runtime 0.2.6-rc17"},
+      "release_status": "integrated_current",
+      "label": {"zh-TW": "目前整合版 · Runtime 0.2.6-rc17", "en": "Current integrated · Runtime 0.2.6-rc17"},
       "capabilities": ["led", "buzzer", "servo", "oled", "button", "ir", "distance", "drive", "motor", "line_tracking", "obstacle", "motion", "light", "sound_level", "joystick"]
     },
     {
-      "id": "mangox2-pico__host-0.4.6__runtime-0.2.6-rc17-candidate",
+      "id": "mangox2-pico__host-0.4.6__runtime-0.2.6-rc17",
       "target": "mangox2-pico",
       "mode": "host_python",
       "host_package": "0.4.6",
       "runtime": "0.2.6-rc17",
-      "release_status": "source_candidate_ci_pass_hardware_pending",
-      "label": {"zh-TW": "來源候選版 · Host 0.4.6 + Runtime 0.2.6-rc17", "en": "Source candidate · Host 0.4.6 + Runtime 0.2.6-rc17"},
+      "release_status": "integrated_current",
+      "label": {"zh-TW": "目前整合版 · Host 0.4.6 + Runtime 0.2.6-rc17", "en": "Current integrated · Host 0.4.6 + Runtime 0.2.6-rc17"},
       "capabilities": ["led", "buzzer", "servo", "oled", "button", "ir", "distance", "drive", "motor", "obstacle", "motion", "light", "sound_level", "joystick"]
     },
     {
-      "id": "mangox2-pico2w__hlmp__runtime-0.2.6-rc17-candidate",
+      "id": "mangox2-pico2w__hlmp__runtime-0.2.6-rc17",
       "target": "mangox2-pico2w",
       "mode": "high_level_micropython",
       "runtime": "0.2.6-rc17",
-      "release_status": "source_candidate",
-      "label": {"zh-TW": "來源候選版 · Runtime 0.2.6-rc17", "en": "Source candidate · Runtime 0.2.6-rc17"},
+      "release_status": "integrated_current",
+      "label": {"zh-TW": "目前整合版 · Runtime 0.2.6-rc17", "en": "Current integrated · Runtime 0.2.6-rc17"},
       "capabilities": ["led", "buzzer", "servo", "oled", "button", "ir", "distance", "drive", "motor", "line_tracking", "obstacle", "motion", "light", "sound_level", "joystick"]
     },
     {
-      "id": "mangox2-pico2w__host-0.4.6__runtime-0.2.6-rc17-candidate",
+      "id": "mangox2-pico2w__host-0.4.6__runtime-0.2.6-rc17",
       "target": "mangox2-pico2w",
       "mode": "host_python",
       "host_package": "0.4.6",
       "runtime": "0.2.6-rc17",
-      "release_status": "source_candidate_ci_pass_hardware_pending",
-      "label": {"zh-TW": "來源候選版 · Host 0.4.6 + Runtime 0.2.6-rc17", "en": "Source candidate · Host 0.4.6 + Runtime 0.2.6-rc17"},
+      "release_status": "integrated_current",
+      "label": {"zh-TW": "目前整合版 · Host 0.4.6 + Runtime 0.2.6-rc17", "en": "Current integrated · Host 0.4.6 + Runtime 0.2.6-rc17"},
       "capabilities": ["led", "buzzer", "servo", "oled", "button", "ir", "distance", "drive", "motor", "obstacle", "motion", "light", "sound_level", "joystick"]
     },
     {
-      "id": "mangolite-pico2w__hlmp__runtime-0.6.0-rc25-candidate",
+      "id": "mangolite-pico2w__hlmp__runtime-0.6.0-rc25",
       "target": "mangolite-pico2w",
       "mode": "high_level_micropython",
       "runtime": "0.6.0-rc25",
-      "release_status": "source_candidate",
-      "label": {"zh-TW": "來源候選版 · Runtime 0.6.0-rc25", "en": "Source candidate · Runtime 0.6.0-rc25"},
+      "release_status": "integrated_current",
+      "label": {"zh-TW": "目前整合版 · Runtime 0.6.0-rc25", "en": "Current integrated · Runtime 0.6.0-rc25"},
       "capabilities": ["led", "buzzer", "servo", "oled", "button", "ir", "drive", "motor", "motion", "light", "sound_level", "joystick"]
     },
     {
-      "id": "mangolite-pico2w__host-0.4.6__runtime-0.6.0-rc25-candidate",
+      "id": "mangolite-pico2w__host-0.4.6__runtime-0.6.0-rc25",
       "target": "mangolite-pico2w",
       "mode": "host_python",
       "host_package": "0.4.6",
       "runtime": "0.6.0-rc25",
-      "release_status": "source_candidate_ci_pass_hardware_pending",
-      "label": {"zh-TW": "來源候選版 · Host 0.4.6 + Runtime 0.6.0-rc25", "en": "Source candidate · Host 0.4.6 + Runtime 0.6.0-rc25"},
+      "release_status": "integrated_current",
+      "label": {"zh-TW": "目前整合版 · Host 0.4.6 + Runtime 0.6.0-rc25", "en": "Current integrated · Host 0.4.6 + Runtime 0.6.0-rc25"},
       "capabilities": ["led", "buzzer", "servo", "oled", "button", "ir", "drive", "motor", "motion", "light", "sound_level", "joystick"]
     }
   ],
   "notes": [
-    "This branch mirrors the current private-source Student API candidate and is not a public release claim.",
-    "A profile capability means the learner API path exists for the selected target/mode source candidate. Physical module enablement and hardware verification are separate states.",
-    "MangoX2 line_tracking is intentionally absent from Host profiles because the current default GP12/GP13 line-tracking profile conflicts with active Host UART ownership.",
+    "These profiles describe the current integrated learner-facing Student API source on the public documentation site; they are not binary release labels.",
+    "A profile capability means the learner API path exists for the selected target/mode. Physical module presence, current Enable state, wiring health, and hardware validation are separate states.",
+    "MangoX2 line_tracking is intentionally absent from Host profiles because the default GP12/GP13 line-tracking profile conflicts with active Host UART ownership.",
     "MangoLite legacy distance/line_tracking/obstacle paths are intentionally not promoted until their current shared contracts are migrated.",
-    "Before merge to public main, replace candidate labels/status only after Host UART hardware and MangoThonny Windows package gates pass."
+    "Mode-specific capability sets are checked against the current Host and Runtime Student API capability resolvers in circleoyang/MangoBox main.",
+    "The private engineering repository remains the implementation source of truth during the public-repository migration."
   ]
 }
