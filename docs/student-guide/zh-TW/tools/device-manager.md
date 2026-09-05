@@ -2,7 +2,17 @@
 
 Device Manager 用來做 **MangoX2 / MangoLite 的裝置設定與維護**。它可以幫你確認 Runtime（執行環境）目前接受了哪些設定，再回到 MangoThonny／Python 使用 Student API。
 
-> 本頁以目前 `v0.4.8` 系列的多 target 設計為基礎。`v0.4.8-rc14` 的 MangoX2 IR 動態 Pin 顯示修正目前仍在 Draft PR，因 GitHub Actions 額度尚未恢復，不能把 rc14 寫成「已完成 build 驗證」。
+> 本頁以目前公開的 `v0.5.0-rc8` 多 target 設計為基礎。Windows 一般使用者建議使用繁體中文 Installer；需要免安裝環境時可使用 Portable ZIP。
+
+目前 `v0.5.0-rc8` 可辨識的主要組合包括：
+
+```text
+MangoX2 + Pico
+MangoX2 + Pico 2 W
+MangoX2 + Pico W
+MangoLite + Pico 2 W
+MangoLite + Pico W
+```
 
 ---
 
@@ -62,6 +72,8 @@ GND ↔ GND
 
 目前 Runtime UART baud rate 為 `115200`。
 
+`v0.5.0-rc8` 在 MangoX2 從 `MicroUSB / Pico` 切回 `Runtime UART` 時，會先等待 Runtime 正常 reboot，再進行單次 readiness / config refresh，避免同一輪恢復重複讀取多次裝置資訊。
+
 ---
 
 # 3. 連線成功後，先看「我是誰」
@@ -82,7 +94,9 @@ Runtime / Firmware version
 ```text
 MangoX2 + Pico
 MangoX2 + Pico 2 W
+MangoX2 + Pico W
 MangoLite + Pico 2 W
+MangoLite + Pico W
 ```
 
 因為同一個「IR」、「Button」或「UART」在不同 target 可能有不同硬體規則。
@@ -140,9 +154,20 @@ Device Manager 的 Pin 設定應以 **Runtime 目前的 config 作為 source of 
 
 ```text
 Servo → GP10
-Light Sensor → GP26
+Light Sensor → GP26 (AD0)
+Sound Sensor → GP27 (AD1)
 IR → GP4
 ```
+
+`v0.5.0-rc8` 的 ADC 腳位顯示會對齊板上絲印：
+
+```text
+GP26 (AD0)
+GP27 (AD1)
+GP28 (AD2)
+```
+
+括號中的 `AD0 / AD1 / AD2` 是 UI 顯示名稱；Runtime config 裡的 canonical GPIO 值仍然是 `26 / 27 / 28`。
 
 ### ② 真機 Signal 也要接同一個 Pin
 
@@ -156,7 +181,7 @@ IR → GP4
 
 以 IR 為例：
 
-### MangoLite + Pico 2 W
+### MangoLite + Pico 2 W / Pico W
 
 IR 是板載固定功能：
 
@@ -166,7 +191,7 @@ GP22
 
 學生不應把它當成一般可任意換 Pin 的外接 IR。
 
-### MangoX2 + Pico / Pico 2 W
+### MangoX2 + Pico / Pico 2 W / Pico W
 
 IR 是選配模組，High Level MicroPython 使用：
 
@@ -175,9 +200,7 @@ enabled_modules.ir_sensor
 ir_sensor_pin
 ```
 
-因此 Device Manager 應依 `ir_sensor_pin` 動態顯示目前 Pin，而不是顯示 MangoLite 的固定 GP22。
-
-`v0.4.8-rc14` candidate 已針對這個 UI 問題修改，但要等 GitHub Actions 額度恢復後才能完成正式 build/test gate。
+因此 Device Manager 會依 `ir_sensor_pin` 顯示目前 Pin，而不是顯示 MangoLite 的固定 GP22。
 
 ---
 
@@ -252,7 +275,24 @@ Device Manager 可用於保存或還原設定，但學生要分清楚：
 
 ---
 
-# 10. 什麼時候不要再用 Device Manager 硬查？
+# 10. OLED 字型管理的連線差異
+
+`v0.5.0-rc8` 的 OLED 字型頁在兩種連線模式都可使用既有的中文字分析／字模寫入路徑，但「目前學生自訂字庫」的持久字庫讀取／清除管理區塊只在 `MicroUSB / Pico` 模式顯示。
+
+```text
+Runtime UART
+→ 保留字模分析／寫入
+→ 隱藏持久字庫管理區塊
+
+MicroUSB / Pico
+→ 顯示完整持久字庫管理區塊
+```
+
+這是 UI 可用性設計，不代表 Runtime UART 的其他 OLED 功能被移除。
+
+---
+
+# 11. 什麼時候不要再用 Device Manager 硬查？
 
 如果問題已經不是某個 Sensor／Pin，而是：
 
@@ -272,7 +312,7 @@ Hardware Lab 目前主要處理 firmware 與裝置生命週期，不是通用 GP
 
 ---
 
-# 11. Device Manager 與 Student API 文件的關係
+# 12. Device Manager 與 Student API 文件的關係
 
 未來每個模組頁面可以提供：
 

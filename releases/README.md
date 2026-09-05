@@ -21,9 +21,12 @@ Firmware releases:
 
 Desktop-tool releases:
 
+- Windows Installer when the tool provides an installed distribution
 - portable Windows ZIP/package
 - release notes
-- checksums where appropriate
+- SHA-256 checksums where appropriate
+
+When Installer and Portable forms are both published for the same desktop-tool release, they should be produced from the same validated binary tree whenever the engineering build supports that contract.
 
 ## Download-page version policy / 官網版本顯示原則
 

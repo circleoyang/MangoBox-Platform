@@ -2,7 +2,17 @@
 
 Device Manager is used for **MangoX2 / MangoLite configuration and maintenance**. It helps you confirm what the Runtime currently accepts before returning to MangoThonny/Python to build a project with the Student API.
 
-> This page follows the current `v0.4.8` multi-target design. The `v0.4.8-rc14` MangoX2 IR dynamic-pin UI fix is still on a Draft PR. Because GitHub Actions minutes have not reset yet, do not describe rc14 as build-validated.
+> This page follows the current public `v0.5.0-rc8` multi-target design. The Traditional-Chinese Windows Installer is recommended for normal users; use the Portable ZIP when a no-install deployment is preferred.
+
+The main combinations recognized by `v0.5.0-rc8` include:
+
+```text
+MangoX2 + Pico
+MangoX2 + Pico 2 W
+MangoX2 + Pico W
+MangoLite + Pico 2 W
+MangoLite + Pico W
+```
 
 ---
 
@@ -62,6 +72,8 @@ GND ↔ GND
 
 Current Runtime UART baud rate is `115200`.
 
+In `v0.5.0-rc8`, when MangoX2 returns from `MicroUSB / Pico` to `Runtime UART`, Device Manager waits through the normal Runtime reboot and then performs one readiness/config refresh round instead of repeatedly reading the same device information.
+
 ---
 
 # 3. After connecting, confirm device identity first
@@ -82,7 +94,9 @@ Distinguish among:
 ```text
 MangoX2 + Pico
 MangoX2 + Pico 2 W
+MangoX2 + Pico W
 MangoLite + Pico 2 W
+MangoLite + Pico W
 ```
 
 because IR, Button, UART and other hardware rules can differ by target.
@@ -140,9 +154,20 @@ For example:
 
 ```text
 Servo → GP10
-Light Sensor → GP26
+Light Sensor → GP26 (AD0)
+Sound Sensor → GP27 (AD1)
 IR → GP4
 ```
+
+`v0.5.0-rc8` mirrors the Pico ADC silkscreen labels in the UI:
+
+```text
+GP26 (AD0)
+GP27 (AD1)
+GP28 (AD2)
+```
+
+`AD0 / AD1 / AD2` are presentation aliases. Canonical Runtime configuration values remain GPIO `26 / 27 / 28`.
 
 ### ② The real Signal wire
 
@@ -154,7 +179,7 @@ If the UI says `GP4` while the sensor is physically connected to `GP17`, correct
 
 The same feature name may represent different hardware.
 
-### MangoLite + Pico 2 W IR
+### MangoLite + Pico 2 W / Pico W IR
 
 The IR receiver is fixed onboard hardware on:
 
@@ -164,7 +189,7 @@ GP22
 
 It should not be presented like an arbitrary external IR pin.
 
-### MangoX2 + Pico / Pico 2 W IR
+### MangoX2 + Pico / Pico 2 W / Pico W IR
 
 IR is optional and High Level MicroPython uses:
 
@@ -173,9 +198,7 @@ enabled_modules.ir_sensor
 ir_sensor_pin
 ```
 
-Therefore Device Manager should display the current `ir_sensor_pin`, not MangoLite's fixed GP22.
-
-The `v0.4.8-rc14` candidate contains this UI correction, but it still needs the build/test gate after GitHub Actions quota resets.
+Therefore Device Manager displays the current `ir_sensor_pin`, not MangoLite's fixed GP22.
 
 ---
 
@@ -245,7 +268,24 @@ Full restore behavior may depend on Runtime version, so production documentation
 
 ---
 
-# 10. When should I switch from Device Manager to Hardware Lab?
+# 10. OLED font-management differences by connection mode
+
+In `v0.5.0-rc8`, the OLED Font Manager keeps the existing Chinese-glyph analysis/upload path in both connection modes, but the persistent `Current Student Custom Font Cache` read/clear management block is shown only in `MicroUSB / Pico`.
+
+```text
+Runtime UART
+→ glyph analysis/upload remains available
+→ persistent font-cache management block is hidden
+
+MicroUSB / Pico
+→ full persistent font-cache management block is shown
+```
+
+This is a UI availability decision; it does not remove other Runtime UART OLED capabilities.
+
+---
+
+# 11. When should I switch from Device Manager to Hardware Lab?
 
 Use Hardware Lab when the problem is no longer just one Sensor/Pin and instead involves:
 
@@ -265,7 +305,7 @@ The current Hardware Lab focuses on firmware and device lifecycle; it is not a g
 
 ---
 
-# 11. Relationship to Student API documentation
+# 12. Relationship to Student API documentation
 
 A future Device Manager module page can provide:
 
