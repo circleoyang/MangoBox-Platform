@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "source_status": "candidate-not-public-release",
+  "source_status": "public-current",
   "modules": [
     {
       "id": "led",
