@@ -1,0 +1,27 @@
+name: Check Student Documentation
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - "docs/student-guide/**"
+      - "scripts/check_student_docs.py"
+      - ".github/workflows/check-student-docs.yml"
+  push:
+    branches:
+      - main
+    paths:
+      - "docs/student-guide/**"
+      - "scripts/check_student_docs.py"
+      - ".github/workflows/check-student-docs.yml"
+
+jobs:
+  validate:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Validate profile/module/document coverage
+        run: python scripts/check_student_docs.py

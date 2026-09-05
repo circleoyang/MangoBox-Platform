@@ -1,5 +1,6 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
+  "source_status": "public-current",
   "modules": [
     {
       "id": "led",
@@ -8,10 +9,10 @@
       "gate": "enabled_modules.led_strip",
       "pins": ["led_strip_pin"],
       "signal": "digital_output",
-      "summary": {"zh-TW": "控制板載或外接 RGB LED 的顏色與燈效。", "en": "Control onboard or external RGB LED color and effects."},
+      "summary": {"zh-TW": "控制板載、預裝或外接 RGB LED 的顏色與燈效。", "en": "Control onboard, preinstalled, or external RGB LED color and effects."},
       "diagnostic": {
-        "high_level_micropython": "from mangobox import Mango\n\nm = Mango()\nprint('LED Pin =', m.config.get('led_strip_pin'))\nprint('LED count =', m.config.get('led_strip_leds'))\nm.led_all('#ff0000')",
-        "host_python": "# Host Python\n# 1. Confirm m.supports('led')\n# 2. Use Device Manager to verify target, LED enablement, pin and strip count.\n# 3. Then run m.led_all('#ff0000') from the Host program."
+        "high_level_micropython": "from mangobox import Mango\n\nm = Mango()\nprint('LED supported =', m.supports('led'))\nm.led_all('red')",
+        "host_python": "from mangobox import Mango\n\nm = Mango()\nprint('LED supported =', m.supports('led'))\nm.led_all('red')"
       }
     },
     {
@@ -23,8 +24,8 @@
       "signal": "digital_input",
       "summary": {"zh-TW": "讀取按鈕狀態，或在按下／放開時執行事件。", "en": "Read button state or react to press/release events."},
       "diagnostic": {
-        "high_level_micropython": "from machine import Pin\nfrom mangobox import Mango\nimport time\n\nm = Mango()\npin_no = m.config.get('button_pin')\np = Pin(pin_no, Pin.IN)\nprint('Button raw Pin = GP', pin_no)\nwhile True:\n    print(p.value())\n    time.sleep(0.2)",
-        "host_python": "# Host Python cannot use machine.Pin on the PC.\n# Use Device Manager Live Read/Monitor when supported,\n# and compare the configured Button Pin with the real wiring."
+        "high_level_micropython": "from mangobox import Mango\n\nm = Mango()\nprint('Button supported =', m.supports('button'))\nprint('Button =', m.read_button())",
+        "host_python": "from mangobox import Mango\n\nm = Mango()\nprint('Button supported =', m.supports('button'))\nprint('Button =', m.read_button())"
       }
     },
     {
@@ -34,15 +35,15 @@
       "gate": "enabled_modules.ir_sensor",
       "pins": ["ir_sensor_pin"],
       "signal": "digital_pulse",
-      "summary": {"zh-TW": "接收 NEC 紅外線遙控器按鍵。", "en": "Receive NEC infrared remote-control keys."},
+      "summary": {"zh-TW": "接收 NEC 紅外線遙控器按鍵與按下／放開事件。", "en": "Receive NEC infrared remote keys and press/release events."},
       "target_notes": {
-        "mangolite-pico2w": {"zh-TW": "MangoLite 為板載固定 IR，使用 GP22。", "en": "MangoLite has fixed onboard IR on GP22."},
-        "mangox2-pico": {"zh-TW": "MangoX2 為選配 IR，Pin 由 ir_sensor_pin 決定。", "en": "MangoX2 IR is optional; the pin comes from ir_sensor_pin."},
-        "mangox2-pico2w": {"zh-TW": "MangoX2 為選配 IR，Pin 由 ir_sensor_pin 決定。", "en": "MangoX2 IR is optional; the pin comes from ir_sensor_pin."}
+        "mangolite-pico2w": {"zh-TW": "MangoLite 為板載固定 GP22 IR，不由 ir_sensor 選配開關決定是否存在。", "en": "MangoLite has fixed onboard IR on GP22; the optional ir_sensor switch is not its availability gate."},
+        "mangox2-pico": {"zh-TW": "MangoX2 為選配外接 IR，Pin 由 ir_sensor_pin 決定。", "en": "MangoX2 IR is an optional external receiver configured by ir_sensor_pin."},
+        "mangox2-pico2w": {"zh-TW": "MangoX2 為選配外接 IR，Pin 由 ir_sensor_pin 決定。", "en": "MangoX2 IR is an optional external receiver configured by ir_sensor_pin."}
       },
       "diagnostic": {
-        "high_level_micropython": "from machine import Pin\nfrom mangobox import Mango\nimport time\n\nm = Mango()\npin_no = m.config.get('ir_sensor_pin')\nif pin_no is None:\n    pin_no = 22\nedges = 0\ndef changed(pin):\n    global edges\n    edges += 1\np = Pin(pin_no, Pin.IN)\np.irq(handler=changed, trigger=Pin.IRQ_RISING | Pin.IRQ_FALLING)\nprint('IR raw Pin = GP', pin_no)\nlast = 0\nwhile True:\n    time.sleep(1)\n    now = edges\n    print('edges / second =', now - last)\n    last = now",
-        "host_python": "# Current Host profiles do not expose the IR learner API.\n# If an old/deep link reaches this page, verify the selected profile first."
+        "high_level_micropython": "from mangobox import Mango\n\nm = Mango()\nprint('IR supported =', m.supports('ir'))\nprint('OK pressed =', m.is_ir_pressed('ok'))",
+        "host_python": "from mangobox import Mango\n\nm = Mango()\nprint('IR supported =', m.supports('ir'))\nprint('OK pressed =', m.is_ir_pressed('ok'))"
       }
     },
     {
@@ -54,8 +55,8 @@
       "signal": "i2c",
       "summary": {"zh-TW": "在 OLED 顯示文字與簡單效果。", "en": "Show text and simple effects on the OLED display."},
       "diagnostic": {
-        "high_level_micropython": "from machine import I2C, Pin\nfrom mangobox import Mango\n\nm = Mango()\nbus = int(m.config.get('oled_i2c_id'))\nsda = int(m.config.get('oled_sda_pin'))\nscl = int(m.config.get('oled_scl_pin'))\ni2c = I2C(bus, sda=Pin(sda), scl=Pin(scl))\nfound = i2c.scan()\nprint('I2C devices =', found)\nprint('hex =', [hex(x) for x in found])",
-        "host_python": "# Host Python: use Device Manager to verify OLED enablement,\n# I2C bus, SDA/SCL pins and address before changing application code."
+        "high_level_micropython": "from mangobox import Mango\n\nm = Mango()\nprint('OLED supported =', m.supports('oled'))\nm.clear()\nm.text('Hello MangoBox', 0, 0)",
+        "host_python": "from mangobox import Mango\n\nm = Mango()\nprint('OLED supported =', m.supports('oled'))\nm.clear()\nm.text('Hello MangoBox', 0, 0)"
       }
     },
     {
@@ -67,8 +68,8 @@
       "signal": "pwm_output",
       "summary": {"zh-TW": "播放提示音、音調、旋律與短音效。", "en": "Play beeps, tones, melodies, and short sound effects."},
       "diagnostic": {
-        "high_level_micropython": "from mangobox import Mango\n\nm = Mango()\nprint('Buzzer Pin =', m.config.get('buzzer_pin'))\nprint('Buzzer mode =', m.config.get('buzzer_mode'))\nm.tone(880, 500)",
-        "host_python": "# Verify m.supports('buzzer') and the Runtime connection.\n# Use Device Manager to inspect buzzer_pin / buzzer_mode, then try m.tone(880, 500)."
+        "high_level_micropython": "from mangobox import Mango\n\nm = Mango()\nprint('Buzzer supported =', m.supports('buzzer'))\nm.tone(880, 500)",
+        "host_python": "from mangobox import Mango\n\nm = Mango()\nprint('Buzzer supported =', m.supports('buzzer'))\nm.tone(880, 500)"
       }
     },
     {
@@ -78,10 +79,66 @@
       "gate": "enabled_modules.servo",
       "pins": ["servo_pin"],
       "signal": "pwm_output",
-      "summary": {"zh-TW": "控制位置型 Servo 的角度與掃動。", "en": "Control positional servo angle and sweep motion."},
+      "summary": {"zh-TW": "控制 Servo 角度、平滑移動與掃動；MangoX2 current contract 亦支援 named Servo。", "en": "Control servo angle, smooth motion and sweep; current MangoX2 contracts also support named servos."},
       "diagnostic": {
-        "high_level_micropython": "from mangobox import Mango\n\nm = Mango()\nprint('Servo enabled =', m.config.get('enabled_modules', {}).get('servo'))\nprint('Servo Pin =', m.config.get('servo_pin'))\nm.servo(90)",
-        "host_python": "# Verify m.supports('servo'), the Host connection,\n# and Device Manager servo enablement/pin before calling m.servo(90)."
+        "high_level_micropython": "from mangobox import Mango\n\nm = Mango()\nprint('Servo supported =', m.supports('servo'))\nm.servo(90)",
+        "host_python": "from mangobox import Mango\n\nm = Mango()\nprint('Servo supported =', m.supports('servo'))\nm.servo(90)"
+      }
+    },
+    {
+      "id": "motor",
+      "capability": "drive",
+      "labels": {"zh-TW": "Motor / Drive 馬達與車體", "en": "Motor / Drive"},
+      "gate": "enabled_modules.motor",
+      "pins": ["motor_a_in1_pin", "motor_a_in2_pin", "motor_b_in1_pin", "motor_b_in2_pin"],
+      "signal": "motor_driver",
+      "summary": {"zh-TW": "控制左右馬達、前後移動、轉向與 Tank Drive。", "en": "Control left/right motors, forward/backward motion, turning, and tank drive."},
+      "diagnostic": {
+        "high_level_micropython": "from mangobox import Mango\nimport time\n\nm = Mango()\nprint('Drive =', m.supports('drive'), 'Motor =', m.supports('motor'))\nm.forward(20)\ntime.sleep(0.5)\nm.stop()",
+        "host_python": "from mangobox import Mango\nimport time\n\nm = Mango()\nprint('Drive =', m.supports('drive'), 'Motor =', m.supports('motor'))\nm.forward(20)\ntime.sleep(0.5)\nm.stop()"
+      }
+    },
+    {
+      "id": "ultrasonic",
+      "capability": "distance",
+      "labels": {"zh-TW": "Ultrasonic 超音波測距", "en": "Ultrasonic Distance"},
+      "gate": "enabled_modules.ultrasonic_sensor",
+      "pins": ["ultrasonic_trigger_pin", "ultrasonic_echo_pin"],
+      "signal": "pulse_distance",
+      "summary": {"zh-TW": "讀取距離，並可在靠近或遠離門檻時觸發事件；目前 current shared contract 主要適用 MangoX2。", "en": "Read distance and react to near/far thresholds; the current shared contract primarily applies to MangoX2."},
+      "diagnostic": {
+        "high_level_micropython": "from mangobox import Mango\n\nm = Mango()\nprint('Distance supported =', m.supports('distance'))\nprint('Distance cm =', m.distance())",
+        "host_python": "from mangobox import Mango\n\nm = Mango()\nprint('Distance supported =', m.supports('distance'))\nprint('Distance cm =', m.distance())"
+      }
+    },
+    {
+      "id": "line_tracking",
+      "capability": "line_tracking",
+      "labels": {"zh-TW": "Line Tracking 循跡", "en": "Line Tracking"},
+      "gate": "enabled_modules.line_tracking",
+      "pins": ["line_left_pin", "line_right_pin"],
+      "signal": "dual_digital_input",
+      "summary": {"zh-TW": "讀取左右循跡感測器並判斷 none／left／right／both。", "en": "Read dual line sensors and resolve none/left/right/both states."},
+      "target_notes": {
+        "mangox2-pico": {"zh-TW": "預設 GP12/GP13 與 Host UART 衝突，因此目前只在 High-Level MicroPython profile 顯示。", "en": "Default GP12/GP13 conflict with active Host UART, so this is shown only in High-Level MicroPython profiles."},
+        "mangox2-pico2w": {"zh-TW": "預設 GP12/GP13 與 Host UART 衝突，因此目前只在 High-Level MicroPython profile 顯示。", "en": "Default GP12/GP13 conflict with active Host UART, so this is shown only in High-Level MicroPython profiles."}
+      },
+      "diagnostic": {
+        "high_level_micropython": "from mangobox import Mango\n\nm = Mango()\nprint('Line Tracking supported =', m.supports('line_tracking'))\nprint('Line state =', m.line_state())",
+        "host_python": "# Current Host UART profiles intentionally do not advertise line_tracking.\n# Use High-Level MicroPython or Device Manager MicroUSB diagnostics for the default GP12/GP13 profile."
+      }
+    },
+    {
+      "id": "obstacle",
+      "capability": "obstacle",
+      "labels": {"zh-TW": "Obstacle 障礙物感測", "en": "Obstacle Sensor"},
+      "gate": "enabled_modules.obstacle_sensor",
+      "pins": ["obstacle_sensor_pin"],
+      "signal": "digital_input_active_low",
+      "summary": {"zh-TW": "判斷 CLEAR／BLOCKED，並處理 blocked／clear 事件；current shared contract 主要適用 MangoX2。", "en": "Detect CLEAR/BLOCKED states and blocked/clear events; the current shared contract primarily applies to MangoX2."},
+      "diagnostic": {
+        "high_level_micropython": "from mangobox import Mango\n\nm = Mango()\nprint('Obstacle supported =', m.supports('obstacle'))\nprint('Blocked =', m.is_blocked())",
+        "host_python": "from mangobox import Mango\n\nm = Mango()\nprint('Obstacle supported =', m.supports('obstacle'))\nprint('Blocked =', m.is_blocked())"
       }
     },
     {
@@ -91,10 +148,10 @@
       "gate": "enabled_modules.pir_sensor",
       "pins": ["pir_sensor_pin"],
       "signal": "digital_input",
-      "summary": {"zh-TW": "判斷是否偵測到人體或熱源移動。", "en": "Detect motion from people or changing heat sources."},
+      "summary": {"zh-TW": "判斷是否偵測到人體或熱源移動，並可處理 detected／cleared 事件。", "en": "Detect motion from people or changing heat sources and react to detected/cleared events."},
       "diagnostic": {
-        "high_level_micropython": "from machine import Pin\nfrom mangobox import Mango\nimport time\n\nm = Mango()\npin_no = m.config.get('pir_sensor_pin')\np = Pin(pin_no, Pin.IN)\nprint('PIR raw Pin = GP', pin_no)\nwhile True:\n    print(p.value())\n    time.sleep(0.2)",
-        "host_python": "# Current Host profiles do not expose the PIR learner API.\n# Verify the compatibility profile before using this documentation."
+        "high_level_micropython": "from mangobox import Mango\n\nm = Mango()\nprint('Motion supported =', m.supports('motion'))\nprint('Motion =', m.is_motion_detected())",
+        "host_python": "from mangobox import Mango\n\nm = Mango()\nprint('Motion supported =', m.supports('motion'))\nprint('Motion =', m.is_motion_detected())"
       }
     },
     {
@@ -104,10 +161,10 @@
       "gate": "enabled_modules.light_sensor",
       "pins": ["light_sensor_pin"],
       "signal": "adc_input",
-      "summary": {"zh-TW": "讀取 0～100 的相對亮度。", "en": "Read normalized relative brightness from 0 to 100."},
+      "summary": {"zh-TW": "讀取 0～100 相對亮度；0=暗、100=亮，校準由 firmware/runtime 管理。", "en": "Read normalized relative brightness 0–100; 0=dark and 100=bright, with calibration owned by firmware/runtime."},
       "diagnostic": {
-        "high_level_micropython": "from machine import ADC\nfrom mangobox import Mango\nimport time\n\nm = Mango()\npin_no = m.config.get('light_sensor_pin')\nadc = ADC(pin_no)\nprint('Light raw ADC Pin = GP', pin_no)\nwhile True:\n    print(adc.read_u16())\n    time.sleep(0.2)",
-        "host_python": "# Current Host profiles do not expose the Light learner API.\n# Verify the compatibility profile before using this documentation."
+        "high_level_micropython": "from mangobox import Mango\n\nm = Mango()\nprint('Light supported =', m.supports('light'))\nprint('Light =', m.light())",
+        "host_python": "from mangobox import Mango\n\nm = Mango()\nprint('Light supported =', m.supports('light'))\nprint('Light =', m.light())"
       }
     },
     {
@@ -116,11 +173,11 @@
       "labels": {"zh-TW": "Sound 聲音感測器", "en": "Sound Sensor"},
       "gate": "enabled_modules.sound_sensor",
       "pins": ["sound_sensor_pin"],
-      "signal": "adc_input",
-      "summary": {"zh-TW": "讀取 0～100 的相對聲音強度。", "en": "Read normalized relative sound intensity from 0 to 100."},
+      "signal": "adc_peak_to_peak",
+      "summary": {"zh-TW": "讀取 0～100 相對聲音強度（不是 dB）；raw 為短時間窗 peak-to-peak，校準由 firmware/runtime 管理。", "en": "Read relative sound intensity 0–100 (not dB); raw uses short-window peak-to-peak sampling and calibration is firmware/runtime-owned."},
       "diagnostic": {
-        "high_level_micropython": "from machine import ADC\nfrom mangobox import Mango\nimport time\n\nm = Mango()\npin_no = m.config.get('sound_sensor_pin')\nadc = ADC(pin_no)\nprint('Sound raw ADC Pin = GP', pin_no)\nwhile True:\n    print(adc.read_u16())\n    time.sleep(0.05)",
-        "host_python": "# Current Host profiles do not expose the Sound learner API.\n# Verify the compatibility profile before using this documentation."
+        "high_level_micropython": "from mangobox import Mango\n\nm = Mango()\nprint('Sound supported =', m.supports('sound_level'))\nprint('Sound =', m.sound_level())",
+        "host_python": "from mangobox import Mango\n\nm = Mango()\nprint('Sound supported =', m.supports('sound_level'))\nprint('Sound =', m.sound_level())"
       }
     },
     {
@@ -130,10 +187,10 @@
       "gate": "enabled_modules.ps2",
       "pins": ["ps2_vrx_pin", "ps2_vry_pin", "ps2_sw_pin"],
       "signal": "mixed_adc_digital_input",
-      "summary": {"zh-TW": "讀取 X／Y 方向與搖桿按鍵。", "en": "Read X/Y direction and joystick push-button state."},
+      "summary": {"zh-TW": "讀取 X／Y -100～100 與搖桿按鍵，也支援中心校準。", "en": "Read normalized X/Y from -100 to 100 plus push-button state, with center calibration."},
       "diagnostic": {
-        "high_level_micropython": "from machine import ADC, Pin\nfrom mangobox import Mango\nimport time\n\nm = Mango()\nx_pin = m.config.get('ps2_vrx_pin')\ny_pin = m.config.get('ps2_vry_pin')\nsw_pin = m.config.get('ps2_sw_pin')\nx = ADC(x_pin)\ny = ADC(y_pin)\nsw = Pin(sw_pin, Pin.IN)\nprint('Joystick pins =', x_pin, y_pin, sw_pin)\nwhile True:\n    print(x.read_u16(), y.read_u16(), sw.value())\n    time.sleep(0.1)",
-        "host_python": "# Current Host profiles do not expose the Joystick learner API.\n# Verify the compatibility profile before using this documentation."
+        "high_level_micropython": "from mangobox import Mango\n\nm = Mango()\nprint('Joystick supported =', m.supports('joystick'))\nprint('XY =', m.joystick())\nprint('Pressed =', m.is_joystick_pressed())",
+        "host_python": "from mangobox import Mango\n\nm = Mango()\nprint('Joystick supported =', m.supports('joystick'))\nprint('XY =', m.joystick())\nprint('Pressed =', m.is_joystick_pressed())"
       }
     }
   ]
