@@ -1,134 +1,80 @@
 # Hardware Lab 基本操作
 
-Hardware Lab 是 MangoBox 的**韌體與裝置生命週期診斷工具**。目前正式版本重點不是一般 Sensor／GPIO 即時測試，而是處理：
-
-- 選擇正確的 MangoBox target；
-- firmware（韌體）更新；
-- Clean Flash（Factory Reset + 重新部署 firmware）；
-- Button + RESET 維護手勢；
-- execution mode（執行模式）偵測與切換；
-- MicroUSB / Host UART / Gateway 管理路徑；
-- 產生診斷報告。
-
-> 目前 Hardware Lab v0.2.0-rc3 **尚未提供一般 GPIO／ADC／RGB／Buzzer／OLED／Servo／Sensor production test**。如果你在 API 文件看到「檢查某個 Pin 是否真的有訊號」，目前應先使用文件提供的最小診斷程式，或 Device Manager 已支援的 Live Read / Monitor；不要以為 Hardware Lab 已經有所有 Sensor 測試功能。
-
----
-
-## 什麼時候要用 Hardware Lab？
-
-學生最常在以下情況使用：
-
-1. 要更新 MangoX2 / MangoLite firmware；
-2. 裝置的 execution mode 不確定；
-3. 一般更新後裝置沒有回到預期模式；
-4. 需要 Clean Flash；
-5. 要測試 Recovery / Deep Rescue 類維護手勢；
-6. 需要把裝置狀態整理成診斷報告。
-
-如果只是「Light Sensor 為什麼讀不到？」這種單一模組問題，先回到該模組 API 的**問題排除**頁，不要第一步就做 Clean Flash。
-
----
-
-# 1. 先選對 Hardware Target
-
-目前 Hardware Lab 支援三種 target：
+Hardware Lab 是 MangoBox 的**韌體與裝置生命週期工具**。目前公開正式版為 **v0.3.0**，支援 2026-09-06 已發布的五個正式 Runtime target：
 
 ```text
-MangoLite + Pico 2 W
-MangoX2 + Pico
-MangoX2 + Pico 2 W
+MangoX2 + Pico       → Runtime v0.2.6
+MangoX2 + Pico W     → Runtime v0.2.6
+MangoX2 + Pico 2 W   → Runtime v0.2.6
+MangoLite + Pico W   → Runtime v0.6.0
+MangoLite + Pico 2 W → Runtime v0.6.0
 ```
 
-這一步很重要，因為不同 target 的：
+Hardware Lab 主要處理 Firmware Update、Clean Flash、Factory Reset 輔助、Recovery / Deep Rescue、execution mode、管理 transport 與診斷報告。一般 GPIO / Pin 設定、校準與感測器監看請使用 Device Manager v0.5.0。
 
-- MCU；
-- Recovery Button；
-- Host UART Pin（腳位）；
-- Gateway 支援；
-- firmware UF2；
+正式版下載與 SHA-256 請以 [MangoBox 下載中心](../../../../releases/) 為準。
 
-都可能不同。
+---
 
-### 目前重要差異
+# 1. 先選對 Target
+
+v0.3.0 先選 MangoX2 / MangoLite，再選 Pico / Pico W / Pico 2 W。五個 target 的主要差異如下：
 
 | Target | MCU | Recovery Button | Host UART | Gateway |
 |---|---|---|---|---|
+| MangoX2 + Pico | RP2040 | GP7（標準預安裝、可拆） | GP12 TX / GP13 RX | 不支援 |
+| MangoX2 + Pico W | RP2040 | GP7（標準預安裝、可拆） | GP12 TX / GP13 RX | 支援 |
+| MangoX2 + Pico 2 W | RP2350 | GP7（標準預安裝、可拆） | GP12 TX / GP13 RX | 支援 |
+| MangoLite + Pico W | RP2040 | GP3 | GP4 TX / GP5 RX | 支援 |
 | MangoLite + Pico 2 W | RP2350 | GP3 | GP4 TX / GP5 RX | 支援 |
-| MangoX2 + Pico | RP2040 | GP7（預裝、可拆） | GP12 TX / GP13 RX | 不支援 |
-| MangoX2 + Pico 2 W | RP2350 | GP7（預裝、可拆） | GP12 TX / GP13 RX | 支援 |
 
-MangoX2 的 GP7 Button 是預裝可拆的，不是 PCB 固定元件。因此，如果 GP7 已被拆除，Button + RESET 手勢測試應該是 **N/A（不適用）**，不是 FAIL。
+MangoX2 的 GP7 Button 是預安裝可拆模組，不是 PCB 固定元件；若已拆除，Button + RESET gesture 應視為 N/A，而不是 FAIL。
 
 ---
 
-# 2. Firmware Update：保留目前設定
+# 2. Firmware Update
 
-一般 firmware 更新適合：
-
-> 「我只想更新 Runtime，不想把目前設定全部清掉。」
-
-基本流程：
+一般更新適合「只更新 Runtime、保留現有設定」：
 
 ```text
 選 Target
-   ↓
-選對應 .uf2
-   ↓
-Firmware Update
-   ↓
-Hardware Lab 檢查 target / MCU
-   ↓
-進入 UF2 bootloader
-   ↓
-複製 firmware
+→ 選完全相符的 UF2
+→ Firmware Update
+→ 確認 Target / MCU
+→ 進入 UF2 bootloader
+→ 複製 firmware
+→ 等待重新啟動與狀態確認
 ```
 
-### 注意
-
-一般 firmware update **不代表裝置更新後一定會回到 MicroPython 模式**。
-
-裝置原本儲存的 `execution_mode` 會影響重新開機後的行為。
+五個正式 UF2 都是獨立 target，請勿因為 MCU 相同就交換使用。
 
 ---
 
-# 3. Clean Flash：需要真正重置時才使用
+# 3. Clean Flash
 
-Clean Flash 不是一般除錯第一步。
+Clean Flash 用於需要真正重建裝置環境時，例如：
 
-它會把 Factory Reset 與 firmware deployment 組合成一個維護流程，適合：
+- 設定已混亂；
+- 一般 Firmware Update 無法恢復；
+- 教師要把設備整理回指定課堂狀態；
+- 需要 Factory Reset + firmware deployment 的完整流程。
 
-- 設定已經混亂；
-- 想重新建立乾淨 Runtime 環境；
-- 一般 firmware update 無法解決生命週期問題；
-- 教師要把設備整理回課堂指定狀態。
-
-請先確認你真的需要重置，再使用 Clean Flash。
+不要把 Clean Flash 當成一般模組除錯的第一步。
 
 ---
 
-# 4. Button + RESET 維護手勢
+# 4. Recovery / Deep Rescue 維護手勢
 
-Hardware Lab 可以協助驗證維護手勢，但畫面上的 PC timer（計時器）只是參考。
+維護手勢由 Runtime 判定，PC 畫面上的 timer 只作操作提示。
 
-真正決定 Recovery / Rescue 行為的是 firmware。
+- **MangoLite**：使用 GP3 + RESET。
+- **MangoX2**：使用 GP7 + RESET；GP7 為預安裝可拆模組。
 
-### MangoLite
-
-GP3、板載 RGB、Buzzer 等維護提示硬體是板載固定功能。
-
-### MangoX2
-
-GP7 Button 與 RGB Strip 可能被拆除。
-
-因此：
-
-- 固定板載 Buzzer 是較可靠的提示；
-- RGB 只有在模組仍安裝時才可作輔助提示；
-- GP7 不存在時，Gesture test 應標示 N/A。
+一般語意為短按正常啟動、較長按進入 Recovery，再延長進入 Deep Rescue；實際狀態以 Hardware Lab 與目前正式 Runtime 回報為準。
 
 ---
 
-# 5. Execution Mode 偵測與切換
+# 5. Execution Mode
 
 MangoBox 可能使用：
 
@@ -138,121 +84,78 @@ host_uart
 gateway
 ```
 
-但不是每一個 target 都有全部模式。
-
-例如 MangoX2 + Pico（RP2040）沒有 Wi-Fi，所以沒有 Gateway mode。
-
-Hardware Lab 的 `Auto` 會依 target 嘗試可用的管理路徑，而不是假設所有板子都有相同 transport（傳輸方式）。
+不是每一個 target 都有全部模式。普通 Raspberry Pi Pico 沒有 Wi-Fi，因此 **MangoX2 + Pico 不提供 Gateway mode**；Pico W / Pico 2 W target 才能使用 Gateway 路徑。
 
 ---
 
-# 6. 三種常見連線
+# 6. 三種管理連線
 
 ## MicroUSB
 
-主要用於：
-
-- MicroPython REPL 管理；
-- 進入 ROM bootloader；
-- 部分 firmware / mode 管理。
-
-如果 Thonny 正占用同一個 COM Port，請先停止程式並釋放連線。
+用於 MicroPython / REPL 管理、進入 bootloader 與部分 firmware / mode 工作。若 MangoThonny 正占用同一 COM Port，請先停止程式並釋放連線。
 
 ## Host UART
 
-使用 3.3 V USB-TTL adapter。
-
-除了 TX / RX，也一定要：
+使用 3.3 V USB-TTL adapter，baud rate 為 `115200`，並務必共地：
 
 ```text
 GND ↔ GND
 ```
 
-Runtime UART baud rate 目前為：
-
-```text
-115200
-```
-
-請依畫面顯示的 target 使用正確 TX / RX Pin，不要把 MangoLite 與 MangoX2 的 UART Pin 混用。
+MangoX2 與 MangoLite 的 UART Pin 不同，請依 target 選擇。
 
 ## Gateway
 
-只在支援 Wi-Fi / Gateway 的 target 上出現。
-
-MangoX2 + Pico（RP2040）沒有 Gateway path。
+僅 Wi-Fi target 使用。普通 MangoX2 + Pico 沒有 Gateway path。
 
 ---
 
-# 7. 發生問題時先存 Diagnostic Report
+# 7. Diagnostic Report
 
-Hardware Lab 的一個重要功能，是把裝置生命週期問題整理成診斷資訊。
+遇到生命週期問題時，建議先保存 JSON 診斷報告，再進行更大的裝置變更。報告可包含：
 
-報告可以包含：
-
-- target ID；
-- MCU family；
-- Hardware presence；
+- target / MCU；
+- Runtime identity；
 - Recovery Button；
-- UART Pin；
+- Host UART Pin；
 - COM Port；
-- Gateway configuration；
-- 選擇的 firmware；
-- Clean Flash mode；
+- Gateway 設定；
+- 選用 UF2；
+- execution mode；
+- Clean Flash / Recovery 狀態；
 - stable diagnostic code。
 
-如果要回報問題，建議：
-
-> **先存 JSON 診斷報告，再繼續改裝置狀態。**
-
-這樣比較容易還原問題發生時的現場。
-
 ---
 
-# 8. Sensor / GPIO 問題目前怎麼查？
+# 8. Sensor / GPIO 問題怎麼查？
 
-如果你的問題是：
-
-> 「我的 PIR / Light / Sound / IR / Joystick 為什麼沒有反應？」
-
-目前建議流程是：
+如果只是 PIR / Light / Sound / IR / Joystick 沒反應，先不要做 Clean Flash。建議：
 
 ```text
-Student API supports() / capability
-        ↓
-模組是否 Enable
-        ↓
-設定的 GPIO / Pin
-        ↓
-Device Manager Live Read / Monitor（若該功能支援）
-        ↓
-API 文件提供的最小 raw diagnostic 程式
-        ↓
-真機 VCC / GND / Signal 接線
+Student API supports()
+→ 模組 Enable
+→ GPIO / Pin
+→ Device Manager Read Once / Monitor
+→ 最小 raw diagnostic
+→ VCC / GND / Signal
+→ calibration
 ```
 
-例如 Digital input（數位輸入）可以用 `machine.Pin` 做最小檢查；ADC Sensor 可以用 `machine.ADC` 觀察 raw value（原始值）是否改變。
-
-**目前不要把 Hardware Lab 當成通用 GPIO / ADC 示波器。** 這項能力可以作為未來版本擴充，但文件在真正實作前不應假設它存在。
+Hardware Lab v0.3.0 的定位仍是 firmware / lifecycle，不是通用 GPIO / ADC 示波器。
 
 ---
 
-# 9. Hardware Lab 與 Device Manager 的分工
-
-可以先這樣記：
+# 9. 三個工具的分工
 
 | 工具 | 主要用途 |
 |---|---|
-| Device Manager | 模組 Enable、Pin 設定、配置、支援的 Live Read / Monitor、校準 |
-| Hardware Lab | firmware、Clean Flash、Recovery、execution mode、管理 transport、生命週期診斷 |
-| Student API 文件 | 教你寫程式，並提供最小診斷程式 |
-
-三者不是互相取代。
-
----
+| MangoThonny v0.4.0 | Python / MicroPython 教學、Host Student API、程式開發與匯出 |
+| Device Manager v0.5.0 | 模組 Enable、Pin、設定、校準、Read Once / Monitor |
+| Hardware Lab v0.3.0 | Firmware、Clean Flash、Recovery、execution mode、生命週期診斷 |
 
 ## 相關文件
 
 - [Device Manager 基本操作](device-manager.md)
-- API 各模組的「問題排除」頁
-- Online Documentation 的 target / mode / version selector
+- [Hardware Lab v0.3.0 完整安裝與使用說明](../../../../desktop/hardware-lab/guide/)
+- [MangoBox 下載中心](../../../../releases/)
+- Online Documentation 的 target / mode / stable version selector
