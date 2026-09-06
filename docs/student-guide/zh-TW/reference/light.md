@@ -1,78 +1,64 @@
 # Light Sensor API Reference
 
-> 本頁只應在 `light` capability 對選定 target/mode/version 成立時顯示。
-
 ## `light()`
 
 ```python
-light() -> int
+m.light(sensor=None) -> int | float
 ```
 
-回傳 0～100 的相對亮度。這是校準後的語意值，不是 lux。
+讀取校準後的 **0～100 相對亮度**。
 
-### Raises
+| 參數 | 預設值 | 說明 |
+|---|---:|---|
+| `sensor` | `None` | 命名光線感測器；省略時使用目前預設感測器。 |
 
-`RuntimeError`：Light Sensor 未啟用。
+### 回傳值
 
-## `on_light_above()`
+- `0`：校準範圍中的較暗端
+- `100`：校準範圍中的較亮端
+- 中間值：相對亮度
+
+這不是 lux（照度）值。
 
 ```python
-on_light_above(threshold, callback, hysteresis=5) -> None
+value = m.light()
+print("light =", value)
 ```
 
-亮度由低往上跨越 `threshold` 時執行 callback。
-
-## `on_light_below()`
-
-```python
-on_light_below(threshold, callback, hysteresis=5) -> None
-```
-
-亮度由高往下跨越 `threshold` 時執行 callback。
-
-`threshold` 與 `hysteresis` 都使用 0～100 語意範圍。
-
-### Raises
-
-`ValueError`：threshold 或 hysteresis 不在 0～100。
-
-## Execution lifecycle
-
-| API | High Level MicroPython 行為 | `m.run_forever()` |
-|---|---|---:|
-| `light()` | Immediate，同步取得目前校準值 | 不需要 |
-| `on_light_above()` / `on_light_below()` | 建立 threshold watcher 並啟動 sensor update；後續由 Scheduler 處理 | 需要 |
-
-Light callback 會自行啟動 watcher，不需要額外 `start_sensor()`。如果 `light()` 讀值正常但 callback 不觸發，先確認 event loop、threshold 與 hysteresis。
-
-## Configuration
-
-```text
-enabled_modules.light_sensor
-light_sensor_pin
-light_raw_bright
-light_raw_dark
-light_sample_count
-light_period_ms
-light_hysteresis
-```
-
-Bright/Dark calibration 屬 Device Manager／Runtime 維護責任，不是學生 API。
-
-## Example
+## 範例：太暗時自動亮燈
 
 ```python
 from mangobox import Mango
+import time
 
 m = Mango()
 
-def dark():
-    print("dark")
-
-m.on_light_below(30, dark)
-m.run_forever()
+while True:
+    value = m.light()
+    if value < 30:
+        m.led_all("white")
+    else:
+        m.led_off()
+    time.sleep(0.1)
 ```
 
-## Related
+## 校準語意
 
-`light()`, `on_light_above()`, `on_light_below()`, `run_forever()`
+Student API 只讀取標準化結果。ADC raw sampling、校準數值、validation 與 persistence 由 firmware / Runtime 負責；Host Python、Device Manager 與學生程式不應各自再實作一套不同換算。
+
+因此不同感測器或不同環境的 `50` 應理解為「目前校準範圍中的相對中間值」，不是固定物理照度。
+
+## Named sensor
+
+若設定多個光線感測器，使用：
+
+```python
+m.light("left")
+m.light("right")
+```
+
+名稱與 GPIO / ADC channel 由 Device Manager / Runtime config 管理。
+
+## 相關 API
+
+`light()`, `supports("light")`, `capabilities()`
