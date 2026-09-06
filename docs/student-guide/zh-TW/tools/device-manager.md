@@ -1,165 +1,92 @@
 # Device Manager 基本操作
 
-Device Manager 用來做 **MangoX2 / MangoLite 的裝置設定與維護**。它可以幫你確認 Runtime（執行環境）目前接受了哪些設定，再回到 MangoThonny／Python 使用 Student API。
-
-> 本頁以目前公開的 `v0.5.0-rc8` 多 target 設計為基礎。Windows 一般使用者建議使用繁體中文 Installer；需要免安裝環境時可使用 Portable ZIP。
-
-目前 `v0.5.0-rc8` 可辨識的主要組合包括：
+Device Manager 是 MangoBox 的**日常裝置設定、校準與即時監看工具**。目前公開正式版為 **v0.5.0**，支援 2026-09-06 已發布的五個正式 Runtime target：
 
 ```text
-MangoX2 + Pico
-MangoX2 + Pico 2 W
-MangoX2 + Pico W
-MangoLite + Pico 2 W
-MangoLite + Pico W
+MangoX2 + Pico       → Runtime v0.2.6
+MangoX2 + Pico W     → Runtime v0.2.6
+MangoX2 + Pico 2 W   → Runtime v0.2.6
+MangoLite + Pico W   → Runtime v0.6.0
+MangoLite + Pico 2 W → Runtime v0.6.0
 ```
+
+一般 Windows 使用者建議使用 Installer；需要免安裝部署時可使用 Portable ZIP。正式版下載與 SHA-256 請以 [MangoBox 下載中心](../../../../releases/) 為準。
 
 ---
 
-# 1. Device Manager 可以做什麼？
+# 1. Device Manager 負責什麼？
 
-學生最常用到：
+學生最常使用的功能包括：
 
 - 連接 MangoX2 / MangoLite；
-- 確認 target（目標裝置）與 Runtime／firmware（韌體）資訊；
+- 辨識 target、MCU 與 Runtime 版本；
 - Enable / Disable 選配模組；
-- 設定 GPIO（General-Purpose Input/Output，通用輸入輸出）／Pin（腳位）；
-- 套用設定，再重新讀回確認；
-- 使用目前版本已支援的 Live Read / Monitor；
-- 做 Light、Sound、Joystick 等已實作的 calibration（校準）／維護；
-- 匯入、匯出、還原設定；
-- 查看 Student API / JSON preview（若該頁面提供）。
+- 設定 GPIO / Pin；
+- 套用設定並重新讀回確認；
+- 使用支援模組的 Read Once / Monitor；
+- 執行 Light、Sound、Joystick 等校準流程；
+- 匯入、匯出與還原設定；
+- 檢視 Student API / JSON preview（該頁面有提供時）。
 
-Device Manager **不是**用來取代 Student API 寫作品。設定完成後，學生仍回到 MangoThonny／Python 寫程式。
+Device Manager **不負責韌體燒錄、Clean Flash、Factory Reset、Recovery / Deep Rescue**；這些生命週期工作由 Hardware Lab v0.3.0 負責。
 
 ---
 
-# 2. 先確認你用哪一種連線
+# 2. 連線方式
 
-目前常見的 Device Manager 管理方式有兩種。
+## MicroUSB / Pico
 
-## A. MicroUSB / Pico
+使用 Pico 原生 USB 與 MicroPython / RuntimeConfig 管理路徑。若 MangoThonny 正占用同一個 COM Port，請先停止程式並中斷裝置連線，再開 Device Manager。
 
-使用 Pico 的 USB 連線與 MicroPython REPL／RuntimeConfig 管理裝置。
+## Runtime UART
 
-這種方式適合教室的一條 USB 線工作流程。
-
-### 很重要：不要讓兩個程式同時占用同一個 COM Port
-
-如果 Thonny／MangoThonny 正連著 Pico，Device Manager 可能無法同時取得同一個 COM Port。
-
-建議：
-
-```text
-停止目前程式
-→ 關閉／中斷 Thonny 的裝置連線
-→ 再讓 Device Manager 連線
-```
-
-完成設定後，再回到 Thonny／MangoThonny。
-
-## B. Runtime UART
-
-使用 USB-to-TTL adapter 連接 Runtime UART。
-
-MangoLite 與 MangoX2 的 UART Pin 不相同，請以目前 target 的工具畫面／正式硬體文件為準，不要交換使用。
-
-另外一定要共地：
+使用 3.3 V USB-to-TTL adapter，baud rate 為 `115200`，並務必共地：
 
 ```text
 GND ↔ GND
 ```
 
-目前 Runtime UART baud rate 為 `115200`。
-
-`v0.5.0-rc8` 在 MangoX2 從 `MicroUSB / Pico` 切回 `Runtime UART` 時，會先等待 Runtime 正常 reboot，再進行單次 readiness / config refresh，避免同一輪恢復重複讀取多次裝置資訊。
+MangoX2 與 MangoLite 的 Host UART Pin 不同，請依 Device Manager 目前選取 target 的畫面為準，不要跨板型沿用設定。
 
 ---
 
-# 3. 連線成功後，先看「我是誰」
+# 3. 連線後先確認裝置身分
 
-不要一連上就直接改 Pin。
-
-先確認：
+先確認下列資訊，再修改 Pin 或模組設定：
 
 ```text
 Target
+MCU family
 Runtime / Firmware version
 目前連線方式
-目前設定是否成功讀取
+config 是否成功讀取
 ```
 
-例如要分清楚：
-
-```text
-MangoX2 + Pico
-MangoX2 + Pico 2 W
-MangoX2 + Pico W
-MangoLite + Pico 2 W
-MangoLite + Pico W
-```
-
-因為同一個「IR」、「Button」或「UART」在不同 target 可能有不同硬體規則。
-
-> COM Port 開啟不等於 Runtime 一定已準備完成。Device Manager 應以 Runtime 的實際回覆／system info 類資訊確認裝置狀態，而不是只看「Port 有開」。
+Device Manager v0.5.0 已完成五個正式 Runtime target 的 identity / system-info / config sanity 驗證；畫面顯示應與目前實機及 Runtime 相符。
 
 ---
 
-# 4. 設定模組的標準流程
+# 4. 模組設定標準流程
 
-以外接 IR Sensor 為例：
+以外接 IR 為例：
 
 ```text
 選擇 IR
-   ↓
-Enable
-   ↓
-選擇 Pin
-   ↓
-Apply / 送出設定
-   ↓
-重新讀取 config
-   ↓
-確認畫面仍顯示相同值
-   ↓
-再跑 Student API
+→ Enable
+→ 選擇 Pin
+→ Apply
+→ 重新讀取 config
+→ 確認值一致
+→ 再執行 Student API
 ```
 
-例如你設定：
-
-```text
-IR enabled = True
-IR Pin = GP4
-```
-
-真機也必須是：
-
-```text
-IR OUT / Signal → GP4
-```
-
-設定與接線缺一不可。
+設定與實體接線必須一致。API 存在也不等於模組目前已 Enable。
 
 ---
 
-# 5. Pin Config（腳位設定）怎麼看？
+# 5. GPIO / Pin 與 ADC 顯示
 
-Device Manager 的 Pin 設定應以 **Runtime 目前的 config 作為 source of truth（主要依據）**，不要再維護另一套偷偷不同的 GPIO 預設表。
-
-學生要注意兩件事：
-
-### ① 畫面顯示的是目前設定值
-
-例如：
-
-```text
-Servo → GP10
-Light Sensor → GP26 (AD0)
-Sound Sensor → GP27 (AD1)
-IR → GP4
-```
-
-`v0.5.0-rc8` 的 ADC 腳位顯示會對齊板上絲印：
+Device Manager 以 Runtime config 作為設定依據。ADC 腳位顯示與板上絲印一致：
 
 ```text
 GP26 (AD0)
@@ -167,161 +94,53 @@ GP27 (AD1)
 GP28 (AD2)
 ```
 
-括號中的 `AD0 / AD1 / AD2` 是 UI 顯示名稱；Runtime config 裡的 canonical GPIO 值仍然是 `26 / 27 / 28`。
-
-### ② 真機 Signal 也要接同一個 Pin
-
-例如畫面寫 `GP4`，你卻把 Signal 接 `GP17`，Python 程式本身再正確也不會有反應。
+括號中的 `AD0 / AD1 / AD2` 是 UI 顯示名稱；Runtime config 的 canonical GPIO 值仍是 `26 / 27 / 28`。
 
 ---
 
-# 6. MangoLite 與 MangoX2 不要混在一起
+# 6. MangoLite 與 MangoX2 的差異
 
-同一個功能可能有不同硬體性質。
+同一個 Student API 語意在不同板子可能對應不同硬體配置。例如：
 
-以 IR 為例：
+- **MangoLite IR**：板載固定 GP22。
+- **MangoX2 IR**：外接選配模組，Pin 由設定決定。
+- **MangoX2 OLED / RGB / Button**：屬標準預安裝模組，不應描述為 PCB 板載元件。
 
-### MangoLite + Pico 2 W / Pico W
-
-IR 是板載固定功能：
-
-```text
-GP22
-```
-
-學生不應把它當成一般可任意換 Pin 的外接 IR。
-
-### MangoX2 + Pico / Pico 2 W / Pico W
-
-IR 是選配模組，High Level MicroPython 使用：
-
-```text
-enabled_modules.ir_sensor
-ir_sensor_pin
-```
-
-因此 Device Manager 會依 `ir_sensor_pin` 顯示目前 Pin，而不是顯示 MangoLite 的固定 GP22。
+因此應先選正確 target，再看 Enable、Pin 與實際接線。
 
 ---
 
-# 7. Live Read / Monitor 怎麼用？
+# 7. Read Once / Monitor 與校準
 
-如果目前頁面提供 Live Read / Monitor，可以先用它做「高階路徑」測試。
-
-例如 Button：
+若模組頁提供即時讀值，可先用它確認 Runtime 路徑是否正常。若沒有反應，建議依序檢查：
 
 ```text
-放開 → 0
-按下 → 1
-```
-
-如果 Live Read 有正確變化，代表：
-
-- Runtime 設定大致合理；
-- Student API / Runtime 的讀取路徑大致有回應。
-
-如果 Live Read 沒反應，不要立刻重寫完整作品。
-
-先往下查：
-
-```text
-Enable
-→ Pin
+Student API supports()
+→ 模組 Enable
+→ GPIO / Pin
+→ Device Manager Read Once / Monitor
 → 最小 raw diagnostic
-→ 真機接線 / 供電
+→ VCC / GND / Signal 接線
+→ calibration
 ```
 
-> 不同 Runtime 版本與模組的 Live Read / Monitor 支援程度不同。文件只能說明「目前版本真正存在」的功能，不能假設每一頁都有相同 Monitor。
+Light、Sound、Joystick 等支援校準的模組，請先確認 raw signal 正常，再做校準；不要以校準取代接線檢查。
 
 ---
 
-# 8. Sensor 沒反應時的正確除錯順序
+# 8. Import / Export / Restore
 
-以 Light Sensor 為例：
+- **Export / Backup**：保存目前設定。
+- **Import**：將選定設定套回裝置。
+- **Restore / Defaults**：較大範圍的設定變更，使用前先確認影響。
 
-```text
-1. m.supports("light")
-2. light_sensor 是否 Enable
-3. light_sensor_pin 是哪一個 GPIO
-4. Device Manager 設定 / Live Read（若支援）
-5. 最小 machine.ADC raw test
-6. AO / VCC / GND 真機接線
-7. raw 會變但 0～100 不合理 → calibration
-```
-
-Digital Sensor 則可用 `machine.Pin` 做最小測試。
-
-這樣可以先分出：
-
-```text
-API / Runtime 問題
-設定問題
-Pin / 接線問題
-校準問題
-作品邏輯問題
-```
+需要重建整個 Runtime 或處理 Recovery / Deep Rescue 時，請改用 Hardware Lab。
 
 ---
 
-# 9. Import / Export / Restore 的概念
+# 9. 與 Online Documentation 的整合
 
-Device Manager 可用於保存或還原設定，但學生要分清楚：
-
-- **匯出／備份**：把目前設定保存起來；
-- **匯入**：把選擇的設定項目套回裝置；
-- **Restore / Defaults**：屬較大的設定變更，使用前應先確認影響範圍。
-
-完整 restore 能力可能受到 Runtime 版本影響，因此正式 online documentation 也應依 Device Manager version + Runtime version 顯示對應說明。
-
----
-
-# 10. OLED 字型管理的連線差異
-
-`v0.5.0-rc8` 的 OLED 字型頁在兩種連線模式都可使用既有的中文字分析／字模寫入路徑，但「目前學生自訂字庫」的持久字庫讀取／清除管理區塊只在 `MicroUSB / Pico` 模式顯示。
-
-```text
-Runtime UART
-→ 保留字模分析／寫入
-→ 隱藏持久字庫管理區塊
-
-MicroUSB / Pico
-→ 顯示完整持久字庫管理區塊
-```
-
-這是 UI 可用性設計，不代表 Runtime UART 的其他 OLED 功能被移除。
-
----
-
-# 11. 什麼時候不要再用 Device Manager 硬查？
-
-如果問題已經不是某個 Sensor／Pin，而是：
-
-```text
-Firmware 不確定
-Target / MCU 可能刷錯
-execution_mode 不對
-Recovery / Rescue
-Clean Flash
-更新後裝置進入錯誤模式
-MicroUSB / Host UART / Gateway 管理路徑問題
-```
-
-這時才進入 [Hardware Lab 基本操作](hardware-lab.md)。
-
-Hardware Lab 目前主要處理 firmware 與裝置生命週期，不是通用 GPIO／ADC Sensor 測試器。
-
----
-
-# 12. Device Manager 與 Student API 文件的關係
-
-未來每個模組頁面可以提供：
-
-```text
-[使用說明]
-[問題排除]
-```
-
-從 Device Manager 開啟時，可把目前已知資訊帶進 Online Documentation：
+Device Manager 可以把目前環境帶入 MangoBox Online Documentation，包括：
 
 ```text
 language
@@ -333,14 +152,11 @@ module_enabled
 configured Pin
 ```
 
-例如 MangoX2 IR 已設定 GP4，就可以直接開：
-
-> MangoX2 + Pico 2 W → High Level MicroPython → IR → 問題排除 → 目前設定 GP4
-
-而不用讓學生重新選一次。
+線上文件現在已對齊五個正式 target，並以正式 Runtime profile 過濾可用 Student API。
 
 ## 相關文件
 
 - [Hardware Lab 基本操作](hardware-lab.md)
-- 各模組的「問題排除」頁
-- [Tool → Documentation Deep-Link Contract](../../TOOL_HELP_DEEPLINK_CONTRACT_V1.md)
+- [Device Manager v0.5.0 完整安裝與使用說明](../../../../desktop/device-manager/guide/)
+- [MangoBox 下載中心](../../../../releases/)
+- 各模組的「使用指南／問題排除／API Reference」
