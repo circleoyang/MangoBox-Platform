@@ -13,6 +13,7 @@
     "程式", "程式碼", "api", "function", "method", "command", "code"
   ];
 
+  const ROLE_BONUS = {teaching:14, capability:8, advanced:-4, compatibility:-12};
   const METHOD_ID_PREFIX = "api-";
 
   function html(value) {
@@ -24,13 +25,13 @@
   function normalizeText(value) {
     return String(value || "")
       .toLowerCase()
-      .replace(/[()_.\-\/:,]+/g, " ")
-      .replace(/\s+/g, " ")
+      .replace(/[()_.\-\/:,]+/g," ")
+      .replace(/\s+/g," ")
       .trim();
   }
 
   function compact(value) {
-    return normalizeText(value).replace(/\s+/g, "");
+    return normalizeText(value).replace(/\s+/g,"");
   }
 
   function simplifyIntent(value) {
@@ -38,17 +39,22 @@
     for (const word of GENERIC_INTENT_WORDS) {
       text = text.split(word).join(" ");
     }
-    return text.replace(/\s+/g, " ").trim();
+    return text.replace(/\s+/g," ").trim();
   }
 
   function methodId(name) {
     return METHOD_ID_PREFIX + String(name || "")
       .trim()
       .toLowerCase()
-      .replace(/_/g, "-")
-      .replace(/[^a-z0-9-]/g, "-")
-      .replace(/-+/g, "-")
-      .replace(/^-|-$/g, "");
+      .replace(/_/g,"-")
+      .replace(/[^a-z0-9-]/g,"-")
+      .replace(/-+/g,"-")
+      .replace(/^-|-$/g,"");
+  }
+
+  function contractReady() {
+    const contract = window.MANGO_API_CONTRACT_OVERLAY;
+    return Boolean(contract && (contract.applied || contract.failed));
   }
 
   function moduleFor(entry) {
@@ -168,6 +174,10 @@
         matched = true;
       }
 
+      // Prefer learner-facing teaching/capability names over compatibility
+      // aliases when the textual match is otherwise similar.
+      if (matched) score += ROLE_BONUS[entry.role] || 0;
+
       if (matched && (best === null || score > best)) best = score;
     }
 
@@ -177,10 +187,10 @@
   function rankedResults(rawQuery) {
     return state.api
       .filter(entryAvailableInContext)
-      .map(entry => ({ entry, score: scoreEntry(entry, rawQuery) }))
+      .map(entry => ({entry, score:scoreEntry(entry, rawQuery)}))
       .filter(item => item.score !== null)
-      .sort((a, b) => b.score - a.score || a.entry.name.localeCompare(b.entry.name))
-      .slice(0, 16);
+      .sort((a,b) => b.score - a.score || a.entry.name.localeCompare(b.entry.name))
+      .slice(0,16);
   }
 
   function renderMethodSearch() {
@@ -209,7 +219,7 @@
     const openLabel = state.lang === "zh-TW" ? "直接開啟 API" : "Open API";
     const referenceLabel = "API Reference";
 
-    results.innerHTML = ranked.map(({ entry }) => {
+    results.innerHTML = ranked.map(({entry}) => {
       const module = moduleFor(entry);
       const moduleLabel = module?.labels?.[state.lang] || module?.labels?.en || entry.module;
       const summary = state.lang === "zh-TW" ? entry.zh : entry.en;
@@ -225,14 +235,14 @@
     results.querySelectorAll("[data-api-name]").forEach(button => {
       button.addEventListener("click", () => {
         const entry = state.api.find(item => item.name === button.dataset.apiName);
-        if (entry) openMethod(entry, true);
+        if (entry) openMethod(entry,true);
       });
     });
   }
 
   function methodNamesFromHeading(heading) {
     return [...heading.querySelectorAll("code")]
-      .map(code => String(code.textContent || "").trim().replace(/\(\)$/, ""))
+      .map(code => String(code.textContent || "").trim().replace(/\(\)$/,""))
       .filter(name => state.api.some(entry => entry.name === name));
   }
 
@@ -247,7 +257,7 @@
         anchor.id = id;
         anchor.className = "api-method-anchor";
         anchor.dataset.apiName = name;
-        heading.parentNode.insertBefore(anchor, heading);
+        heading.parentNode.insertBefore(anchor,heading);
       }
     });
   }
@@ -265,30 +275,30 @@
     if (!heading) return;
     document.querySelectorAll(".api-method-highlight").forEach(node => node.classList.remove("api-method-highlight"));
     heading.classList.add("api-method-highlight");
-    window.setTimeout(() => heading.classList.remove("api-method-highlight"), 2200);
+    window.setTimeout(() => heading.classList.remove("api-method-highlight"),2200);
   }
 
-  function scrollToMethod(name, attempt = 0) {
+  function scrollToMethod(name, attempt=0) {
     ensureMethodAnchors();
     const anchor = document.getElementById(methodId(name));
     const heading = findMethodHeading(name);
     if (anchor || heading) {
-      (anchor || heading).scrollIntoView({ behavior: "smooth", block: "start" });
+      (anchor || heading).scrollIntoView({behavior:"smooth",block:"start"});
       highlightHeading(heading);
       return;
     }
-    if (attempt < 30) window.setTimeout(() => scrollToMethod(name, attempt + 1), 80);
+    if (attempt < 30) window.setTimeout(() => scrollToMethod(name,attempt+1),80);
   }
 
   function replaceMethodUrl(entry) {
     const params = new URLSearchParams(location.search);
-    params.set("lang", state.lang);
-    if (state.target) params.set("target", state.target); else params.delete("target");
-    params.set("mode", state.mode);
-    params.set("module", entry.module);
-    params.set("view", "reference");
-    params.set("api", entry.name);
-    history.replaceState(null, "", `${location.pathname}?${params.toString()}#${methodId(entry.name)}`);
+    params.set("lang",state.lang);
+    if (state.target) params.set("target",state.target); else params.delete("target");
+    params.set("mode",state.mode);
+    params.set("module",entry.module);
+    params.set("view","reference");
+    params.set("api",entry.name);
+    history.replaceState(null,"",`${location.pathname}?${params.toString()}#${methodId(entry.name)}`);
   }
 
   function openMethod(entry, updateUrl) {
@@ -329,33 +339,37 @@
     // app.js has already bound its handlers when state.api is populated.
     // Registering these handlers afterwards intentionally makes this renderer
     // the final search presentation without modifying the stable shell.
-    input.addEventListener("input", renderMethodSearch);
-    hints.addEventListener("click", event => {
-      if (event.target.closest("button[data-q]")) window.setTimeout(renderMethodSearch, 0);
+    input.addEventListener("input",renderMethodSearch);
+    hints.addEventListener("click",event => {
+      if (event.target.closest("button[data-q]")) window.setTimeout(renderMethodSearch,0);
     });
-    clear.addEventListener("click", () => window.setTimeout(renderMethodSearch, 0));
+    clear.addEventListener("click",() => window.setTimeout(renderMethodSearch,0));
 
-    new MutationObserver(ensureMethodAnchors).observe(content, { childList: true, subtree: true });
+    new MutationObserver(ensureMethodAnchors).observe(content,{childList:true,subtree:true});
 
     const params = new URLSearchParams(location.search);
     const requested = params.get("api") || (location.hash.startsWith(`#${METHOD_ID_PREFIX}`)
-      ? location.hash.slice(METHOD_ID_PREFIX.length + 1).replace(/-/g, "_")
+      ? location.hash.slice(METHOD_ID_PREFIX.length + 1).replace(/-/g,"_")
       : null);
     if (requested) {
       const entry = state.api.find(item => item.name === requested);
-      if (entry && entryAvailableInContext(entry)) openMethod(entry, false);
+      if (entry && entryAvailableInContext(entry)) openMethod(entry,false);
     }
   }
 
   function waitForApp() {
-    if (typeof state !== "undefined" && Array.isArray(state.api) && state.api.length && typeof renderDocs === "function") {
-      // Timers cannot interleave with init()'s synchronous bind/render calls;
-      // reaching this point therefore means app.js has finished installing its
-      // own handlers for the resolved data set.
-      window.setTimeout(installSearchEnhancement, 0);
+    if (
+      typeof state !== "undefined" &&
+      Array.isArray(state.api) && state.api.length &&
+      typeof renderDocs === "function" &&
+      contractReady()
+    ) {
+      // The public contract must be resolved before URL deep-links/search are
+      // installed, otherwise overlay-only methods could be missed on first load.
+      window.setTimeout(installSearchEnhancement,0);
       return;
     }
-    window.setTimeout(waitForApp, 40);
+    window.setTimeout(waitForApp,40);
   }
 
   waitForApp();
