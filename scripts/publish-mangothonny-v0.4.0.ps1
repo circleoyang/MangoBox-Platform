@@ -59,11 +59,19 @@ if ($installerSidecar -notmatch [regex]::Escape($ExpectedInstallerHash)) {
     throw 'Installer SHA sidecar does not contain the expected final hash.'
 }
 
-& gh release view $Tag --repo $PublicRepo *> $null
-if ($LASTEXITCODE -eq 0) {
+# A missing release is the expected first-publication state. Windows PowerShell 5.1
+# can promote native stderr from `gh release view` into a terminating NativeCommandError
+# when $ErrorActionPreference='Stop', even when stderr is redirected. Run this one
+# existence probe through cmd.exe so only the native exit code is observed.
+$probeCommand = 'gh release view "{0}" --repo "{1}" >nul 2>nul' -f $Tag, $PublicRepo
+& $env:ComSpec /d /s /c $probeCommand
+$releaseProbeExitCode = $LASTEXITCODE
+
+if ($releaseProbeExitCode -eq 0) {
     throw "Release already exists: $Tag. Refusing to overwrite existing public release evidence."
 }
 
+Write-Host '[PASS] Public release tag does not exist yet; safe to create.' -ForegroundColor Green
 Write-Host '[CREATE] Creating stable GitHub Release...'
 & gh release create $Tag `
     --repo $PublicRepo `
