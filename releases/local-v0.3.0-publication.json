@@ -1,0 +1,76 @@
+{
+  "repository": "circleoyang/MangoBox-Platform",
+  "releases": [
+    {
+      "tag": "hardware-lab-v0.3.0",
+      "title": "MangoBox Hardware Lab v0.3.0",
+      "assets": [
+        {
+          "path": "desktop/MangoBox_Hardware_Lab_v0.3.0_Setup.exe",
+          "name": "MangoBox_Hardware_Lab_v0.3.0_Setup.exe",
+          "sha256": "5e28804f2f1d45a358ecf5858d0417896e317be62d6c4f215fa5cf82758af5a8"
+        },
+        {
+          "path": "desktop/MangoBox_Hardware_Lab_v0.3.0_Portable.zip",
+          "name": "MangoBox_Hardware_Lab_v0.3.0_Portable.zip",
+          "sha256": "0c3b5798619469c9e3deb2c41b5403046a63f66f13e4d2fd5df055f8420fc306"
+        }
+      ]
+    },
+    {
+      "tag": "mangox2-pico-v0.2.6",
+      "title": "MangoX2 Runtime v0.2.6 — Pico",
+      "assets": [
+        {
+          "path": "firmware/MangoBox_Runtime_v0.2.6_MangoX2_Pico.uf2",
+          "name": "MangoBox_Runtime_v0.2.6_MangoX2_Pico.uf2",
+          "sha256": "52357c7e830364717c86cc164e9e0dfc449c1093b95a04a7e7acb52e129b6e6f"
+        }
+      ]
+    },
+    {
+      "tag": "mangox2-picow-v0.2.6",
+      "title": "MangoX2 Runtime v0.2.6 — Pico W",
+      "assets": [
+        {
+          "path": "firmware/MangoBox_Runtime_v0.2.6_MangoX2_PicoW.uf2",
+          "name": "MangoBox_Runtime_v0.2.6_MangoX2_PicoW.uf2",
+          "sha256": "043c048183644da44b34b39189117d7f7518af4c1f4bc38d9830dce639fff9b2"
+        }
+      ]
+    },
+    {
+      "tag": "mangox2-pico2w-v0.2.6",
+      "title": "MangoX2 Runtime v0.2.6 — Pico 2 W",
+      "assets": [
+        {
+          "path": "firmware/MangoBox_Runtime_v0.2.6_MangoX2_Pico2W.uf2",
+          "name": "MangoBox_Runtime_v0.2.6_MangoX2_Pico2W.uf2",
+          "sha256": "4bbc48747726fe93ba042e3a7eb2d799aabc9859ec989cb03cf9c1563c758447"
+        }
+      ]
+    },
+    {
+      "tag": "mangolite-picow-v0.6.0",
+      "title": "MangoLite Runtime v0.6.0 — Pico W",
+      "assets": [
+        {
+          "path": "firmware/MangoLite_Runtime_v0.6.0_PicoW.uf2",
+          "name": "MangoLite_Runtime_v0.6.0_PicoW.uf2",
+          "sha256": "90ef66d8aac461a050c97a0e73f2f8f28d9a06763dc4c10530554e1fb31dd89c"
+        }
+      ]
+    },
+    {
+      "tag": "mangolite-pico2w-v0.6.0",
+      "title": "MangoLite Runtime v0.6.0 — Pico 2 W",
+      "assets": [
+        {
+          "path": "firmware/MangoLite_Runtime_v0.6.0_Pico2W.uf2",
+          "name": "MangoLite_Runtime_v0.6.0_Pico2W.uf2",
+          "sha256": "8154ab86b3d5cba1d24021c42013781f0817d09c6a65313ce0eae9e7d753e421"
+        }
+      ]
+    }
+  ]
+}

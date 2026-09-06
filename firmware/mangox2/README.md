@@ -1,12 +1,11 @@
-# MangoX2 Firmware / Runtime
+# MangoX2 Runtime
 
-Public release area for MangoX2 firmware and Runtime information.
+正式版 / Stable: v0.2.6
 
-During migration, active engineering source remains in the private MangoBox repository. Validated public binaries will be published through GitHub Releases rather than committed to Git history.
+- [MangoX2 + Pico](https://github.com/circleoyang/MangoBox-Platform/releases/tag/mangox2-pico-v0.2.6)
+- [MangoX2 + Pico W](https://github.com/circleoyang/MangoBox-Platform/releases/tag/mangox2-picow-v0.2.6)
+- [MangoX2 + Pico 2 W](https://github.com/circleoyang/MangoBox-Platform/releases/tag/mangox2-pico2w-v0.2.6)
 
-Targets include:
+每個 target 各自發布 UF2、SHA-256 與雙語說明。請依主板與控制板組合選擇檔案。
 
-- MangoX2 + Raspberry Pi Pico (RP2040)
-- MangoX2 + Raspberry Pi Pico 2 W (RP2350)
-
-Planned tag format: `mangox2-vX.Y.Z`.
+Each target has its own UF2, SHA-256 and bilingual release notes. Engineering source remains in the private repository; binaries are distributed through GitHub Releases.

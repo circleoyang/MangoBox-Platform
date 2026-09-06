@@ -1,7 +1,10 @@
-# MangoLite Firmware / Runtime
+# MangoLite Runtime
 
-Public release area for MangoLite + Raspberry Pi Pico 2 W firmware and Runtime information.
+正式版 / Stable: v0.6.0
 
-During migration, active engineering source remains in the private MangoBox repository. Validated public UF2 files will be published through GitHub Releases rather than committed to Git history.
+- [MangoLite + Pico W](https://github.com/circleoyang/MangoBox-Platform/releases/tag/mangolite-picow-v0.6.0)
+- [MangoLite + Pico 2 W](https://github.com/circleoyang/MangoBox-Platform/releases/tag/mangolite-pico2w-v0.6.0)
 
-Planned tag format: `mangolite-vX.Y.Z`.
+每個 target 各自發布 UF2、SHA-256 與雙語說明。請依主板與控制板組合選擇檔案。
+
+Each target has its own UF2, SHA-256 and bilingual release notes. Engineering source remains in the private repository; binaries are distributed through GitHub Releases.
