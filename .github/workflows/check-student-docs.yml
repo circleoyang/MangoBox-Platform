@@ -7,6 +7,7 @@ on:
       - "docs/student-guide/**"
       - "scripts/check_student_docs.py"
       - "scripts/check_student_search.py"
+      - "scripts/check_api_reference_completeness.py"
       - ".github/workflows/check-student-docs.yml"
   push:
     branches:
@@ -15,6 +16,7 @@ on:
       - "docs/student-guide/**"
       - "scripts/check_student_docs.py"
       - "scripts/check_student_search.py"
+      - "scripts/check_api_reference_completeness.py"
       - ".github/workflows/check-student-docs.yml"
 
 jobs:
@@ -29,3 +31,5 @@ jobs:
         run: python scripts/check_student_docs.py
       - name: Validate method-level API search contract
         run: python scripts/check_student_search.py
+      - name: Audit API Reference method coverage
+        run: python scripts/check_api_reference_completeness.py
