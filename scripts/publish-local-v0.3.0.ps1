@@ -22,6 +22,19 @@ function Read-PublicFile([string]$Path) {
     $raw = Invoke-Gh -Arguments @("api", "repos/$repo/contents/$($Path)?ref=$branch", "--jq", ".content")
     return [Text.Encoding]::UTF8.GetString([Convert]::FromBase64String(($raw -join "")))
 }
+function Find-Release([string]$Tag) {
+    # The tag endpoint does not find an unpublished draft. List drafts, then use ID.
+    $pageNumber = 1
+    do {
+        $pageItems = @((Invoke-Gh -Arguments @("api", "repos/$repo/releases?per_page=100&page=$pageNumber")) | ConvertFrom-Json)
+        $matches = @($pageItems | Where-Object { $_.tag_name -ceq $Tag })
+        if ($matches.Count -gt 1) { throw "Multiple releases found for tag: $Tag" }
+        if ($matches.Count -eq 1) { return $matches[0] }
+        $pageNumber++
+    } while ($pageItems.Count -eq 100)
+    return $null
+}
+$releaseIds = @{}
 $spec = (Read-PublicFile "releases/local-v0.3.0-publication.json") | ConvertFrom-Json
 # Validate all seven local artifacts before creating a release.
 foreach ($release in $spec.releases) {
@@ -39,29 +52,36 @@ foreach ($release in $spec.releases) {
     $sumPath = Join-Path $tempDir "$tag-SHA256SUMS.txt"
     $sumText = (($release.assets | ForEach-Object { "$($_.sha256)  $($_.name)" }) -join [Environment]::NewLine) + [Environment]::NewLine
     [IO.File]::WriteAllText($sumPath, $sumText, $utf8)
-    $existing = (Invoke-Gh -Arguments @("release","list","--repo",$repo,"--limit","1000","--json","tagName")) | ConvertFrom-Json
-    if (-not @($existing | Where-Object { $_.tagName -ceq $tag }).Count) {
+    $existing = Find-Release $tag
+    if ($null -eq $existing) {
         Invoke-Gh -Arguments @("release","create",$tag,"--repo",$repo,"--target","main","--draft","--title",$release.title,"--notes-file",$notes) | Out-Host
     }
+    $existing = Find-Release $tag
+    if ($null -eq $existing -or -not $existing.id) { throw "Cannot resolve release ID: $tag" }
+    $releaseIds[$tag] = $existing.id
+    Write-Host "Release $tag (ID $($existing.id))"
     $uploads = @()
     foreach ($asset in $release.assets) {
         $uploads += [pscustomobject]@{ Name=$asset.name; Path=(Join-Path $BundlePath $asset.path); Hash=$asset.sha256 }
     }
     $uploads += [pscustomobject]@{ Name=(Split-Path $sumPath -Leaf); Path=$sumPath; Hash=(Get-FileHash $sumPath -Algorithm SHA256).Hash.ToLowerInvariant() }
     foreach ($item in $uploads) {
-        $remote = (Invoke-Gh -Arguments @("api","repos/$repo/releases/tags/$tag")) | ConvertFrom-Json
+        $remote = (Invoke-Gh -Arguments @("api","repos/$repo/releases/$($releaseIds[$tag])")) | ConvertFrom-Json
         $found = @($remote.assets | Where-Object { $_.name -ceq $item.Name })
         if ($found.Count -gt 0) {
             if ($found.Count -ne 1 -or $found[0].digest -ne ("sha256:" + $item.Hash)) { throw "Existing remote asset differs or has no digest: $($item.Name)" }
         } else {
             if (-not $remote.draft) { throw "Published release is missing an asset; refusing to modify it: $tag" }
-            Invoke-Gh -Arguments @("release","upload",$tag,$item.Path,"--repo",$repo) | Out-Host
+            $assetName = [Uri]::EscapeDataString($item.Name)
+            $uploadUrl = "https://uploads.github.com/repos/$repo/releases/$($releaseIds[$tag])/assets?name=$assetName"
+            Write-Host "Uploading $($item.Name)"
+            Invoke-Gh -Arguments @("api",$uploadUrl,"--method","POST","--header","Content-Type: application/octet-stream","--input",$item.Path) | Out-Null
         }
     }
 }
 # Verify every remote binary and checksum file before publishing any draft.
 foreach ($release in $spec.releases) {
-    $remote = (Invoke-Gh -Arguments @("api","repos/$repo/releases/tags/$($release.tag)")) | ConvertFrom-Json
+    $remote = (Invoke-Gh -Arguments @("api","repos/$repo/releases/$($releaseIds[$release.tag])")) | ConvertFrom-Json
     foreach ($asset in $release.assets) {
         $found = @($remote.assets | Where-Object { $_.name -ceq $asset.name })
         if ($found.Count -ne 1 -or $found[0].digest -ne ("sha256:" + $asset.sha256)) { throw "Remote verification failed: $($asset.name)" }
@@ -72,7 +92,11 @@ foreach ($release in $spec.releases) {
     if ($foundSum.Count -ne 1 -or $foundSum[0].digest -ne ("sha256:" + $sumHash)) { throw "Remote checksum verification failed: $sumName" }
 }
 foreach ($release in $spec.releases) {
-    Invoke-Gh -Arguments @("release","edit",$release.tag,"--repo",$repo,"--draft=false","--prerelease=false","--latest=false") | Out-Host
+    $endpoint = "repos/$repo/releases/$($releaseIds[$release.tag])"
+    Invoke-Gh -Arguments @("api",$endpoint,"--method","PATCH","-F","draft=false","-F","prerelease=false","-f","make_latest=false") | Out-Null
+    $published = (Invoke-Gh -Arguments @("api",$endpoint)) | ConvertFrom-Json
+    if ($published.draft -or $published.prerelease) { throw "Release publication not confirmed: $($release.tag)" }
+    Write-Host $published.html_url
 }
 Write-Host "PUBLICATION PASS: Hardware Lab v0.3.0 and all five firmware releases."
 Write-Host "Website PR can now be verified and merged. No local build was run."
