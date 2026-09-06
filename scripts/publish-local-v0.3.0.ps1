@@ -55,10 +55,21 @@ foreach ($release in $spec.releases) {
     [IO.File]::WriteAllText($sumPath, $sumText, $utf8)
     $existing = Find-Release $tag
     if ($null -eq $existing) {
-        Invoke-Gh -Arguments @("release","create",$tag,"--repo",$repo,"--target","main","--draft","--title",$release.title,"--notes-file",$notes) | Out-Host
+        # Capture the authoritative ID from POST instead of immediately querying the list.
+        $createPath = Join-Path $tempDir "$tag-create.json"
+        $createBody = @{
+            tag_name = $tag
+            target_commitish = "main"
+            name = $release.title
+            body = [IO.File]::ReadAllText($notes, [Text.Encoding]::UTF8)
+            draft = $true
+            prerelease = $false
+            make_latest = "false"
+        } | ConvertTo-Json -Depth 5
+        [IO.File]::WriteAllText($createPath, $createBody, $utf8)
+        $existing = (Invoke-Gh -Arguments @("api","repos/$repo/releases","--method","POST","--input",$createPath)) | ConvertFrom-Json
     }
-    $existing = Find-Release $tag
-    if ($null -eq $existing -or -not $existing.id) { throw "Cannot resolve release ID: $tag" }
+    if ($null -eq $existing -or -not $existing.id -or $existing.tag_name -cne $tag) { throw "Cannot resolve release ID: $tag" }
     $releaseIds[$tag] = $existing.id
     Write-Host "Release $tag (ID $($existing.id))"
     $uploads = @()
