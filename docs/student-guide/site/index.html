@@ -1,10 +1,10 @@
 <!doctype html>
-<html lang="zh-Hant"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="MangoBox Student API 搜尋與使用文件"><title>MangoBox Documentation</title><link rel="stylesheet" href="styles.css"></head><body>
+<html lang="zh-Hant"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="MangoBox Student API 搜尋、使用指南與硬體整合文件"><title>MangoBox Documentation</title><link rel="stylesheet" href="styles.css"></head><body>
 <header class="topbar"><a class="brand" href="../../../" aria-label="MangoBox Platform home"><img class="brand-logo" src="../../../assets/brand/mangobox-core-refined-64.png" alt="MangoBox"><span><strong>MangoBox Docs</strong><small>Student API & Hardware Guide</small></span></a><div class="top-actions"><button id="contextButton" class="ghost-button" type="button">設定裝置</button><div class="language-switch" aria-label="Language"><button data-lang="zh-TW" type="button">繁中</button><button data-lang="en" type="button">EN</button></div></div></header>
 <section id="contextStrip" class="context-strip" aria-live="polite"></section>
 <main>
 <section id="homePanel" class="home-panel">
-  <div class="home-hero"><p class="eyebrow">MANGOBOX STUDENT API</p><h1 id="homeTitle">找 API，不用先選一堆設定</h1><p id="homeLead">直接搜尋 API、功能或中文用途。只有在查看接線、Pin 或硬體差異時，才需要指定 MangoX2 / MangoLite。</p>
+  <div class="home-hero"><p class="eyebrow">MANGOBOX STUDENT API</p><h1 id="homeTitle">MangoBox Student API 開發文件</h1><p id="homeLead">查詢 API、程式範例與各功能模組的使用方式；如需接線、Pin 或硬體差異資訊，可再指定 MangoX2 / MangoLite 裝置環境。</p>
     <div class="search-box"><span>⌕</span><input id="apiSearch" type="search" autocomplete="off" placeholder="搜尋 API、功能或關鍵字，例如 servo、蜂鳴器、前進、light"><button id="clearSearch" type="button" aria-label="Clear">×</button></div>
     <div id="searchHints" class="search-hints"><button data-q="servo">servo</button><button data-q="蜂鳴器">蜂鳴器</button><button data-q="前進">前進</button><button data-q="light">light</button><button data-q="紅外線">紅外線</button></div>
   </div>
@@ -17,4 +17,4 @@
 <section id="docsShell" class="docs-shell hidden"><aside class="sidebar"><div class="sidebar-heading"><span id="moduleNavTitle">功能模組</span><small id="moduleCount"></small></div><nav id="moduleNav" class="module-nav"></nav><div class="tool-links"><strong id="toolsTitle">工具操作</strong><a href="../zh-TW/tools/device-manager.md" id="deviceManagerLink">Device Manager</a><a href="../zh-TW/tools/hardware-lab.md" id="hardwareLabLink">Hardware Lab</a></div></aside><article class="doc-panel"><div class="doc-header"><div><p id="moduleCapability" class="eyebrow"></p><h1 id="moduleTitle"></h1></div><span id="availabilityBadge" class="availability-badge"></span></div><div id="deviceNotice" class="notice hidden"></div><div id="modeTabs" class="mode-tabs"><button data-mode="high_level_micropython" type="button">MicroPython</button><button data-mode="host_python" type="button">PC Python</button></div><div id="viewTabs" class="view-tabs" role="tablist"><button data-view="guide" type="button">使用指南</button><button data-view="troubleshooting" type="button">問題排除</button><button data-view="reference" type="button">API Reference</button></div><div id="docContent" class="doc-content" aria-live="polite"></div></article></section>
 </main>
 <footer><span>MangoBox Online Documentation v2 · API-first</span><span id="footerNote">預設使用通用 Student API；硬體 context 只在需要時套用。</span><span id="copyrightLine">© 2026 歐陽芳泉 · 國立臺北商業大學 · MangoBox 平台。版權所有。</span></footer>
-<script src="app.js" defer></script></body></html>
+<script src="app.js" defer></script><script src="copy-overrides.js" defer></script></body></html>
