@@ -1,29 +1,59 @@
 # Line Tracking API Reference
 
-## 讀值
+## `line_state()`
 
 ```python
-line_left()   # -> bool
-line_right()  # -> bool
-line_state()  # -> 'none' | 'left' | 'right' | 'both'
+m.line_state() -> str
 ```
 
-## 事件
+一次讀取左右循跡感測器，回傳整理後的語意狀態：
+
+```text
+none
+left
+right
+both
+```
+
+| 回傳值 | 意義 |
+|---|---|
+| `none` | 左右皆未進入有效線條狀態。 |
+| `left` | 左側感測器偵測到線條。 |
+| `right` | 右側感測器偵測到線條。 |
+| `both` | 左右兩側都偵測到線條。 |
 
 ```python
-on_line_change(callback, period=50)
-on_line_left(callback, period=50)
-on_line_right(callback, period=50)
-on_line_both(callback, period=50)
-on_line_clear(callback, period=50)
+state = m.line_state()
+print(state)
 ```
 
-`period` 最低會限制為 20 ms。所有事件共用 Runtime monitor；新 callback 若要求更快 period，monitor 會調整為較快值。
+## 範例：基本循線判斷
 
-`on_line_change(callback)` 的 callback 接收一個 `state` 參數；其餘特定狀態 callbacks 不帶參數。
+```python
+from mangobox import Mango
+import time
 
-事件程式需執行 `m.run_forever()`。
+m = Mango()
 
-## Host 限制
+while True:
+    state = m.line_state()
+    if state == "left":
+        m.pivot_left(25)
+    elif state == "right":
+        m.pivot_right(25)
+    elif state == "both":
+        m.forward(30)
+    else:
+        m.stop()
+    time.sleep(0.02)
+```
 
-目前 MangoX2 預設 GP12/GP13 由 Host UART 使用，因此 Host Python profile 不宣告 `line_tracking`。這是 transport ownership 限制，不代表 High-Level MicroPython API 不存在。
+實際「黑線是 0 還是 1」的 active level 應由 Runtime / module configuration 統一處理；學生程式應依 `line_state()` 的語意值寫邏輯，不需要再反轉 raw GPIO。
+
+## Availability
+
+目前 MangoX2 預設循跡 Pin GP12 / GP13 會與 Host UART 使用情境衝突，因此 current shared contract 主要在 High-Level MicroPython profile 顯示。切換程式模式前應依 Device Manager / capability resolver 判斷，不要只看硬體有接模組就假設 Host Python 一定支援。
+
+## 相關 API
+
+`line_state()`, `supports("line_tracking")`, `forward()`, `pivot_left()`, `pivot_right()`, `stop()`
