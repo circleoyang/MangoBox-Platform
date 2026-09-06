@@ -26,7 +26,8 @@ function Find-Release([string]$Tag) {
     # The tag endpoint does not find an unpublished draft. List drafts, then use ID.
     $pageNumber = 1
     do {
-        $pageItems = @((Invoke-Gh -Arguments @("api", "repos/$repo/releases?per_page=100&page=$pageNumber")) | ConvertFrom-Json)
+        $pageItems = (Invoke-Gh -Arguments @("api", "repos/$repo/releases?per_page=100&page=$pageNumber")) | ConvertFrom-Json
+        $pageItems = @($pageItems)
         $matches = @($pageItems | Where-Object { $_.tag_name -ceq $Tag })
         if ($matches.Count -gt 1) { throw "Multiple releases found for tag: $Tag" }
         if ($matches.Count -eq 1) { return $matches[0] }
