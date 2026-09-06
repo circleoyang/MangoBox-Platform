@@ -1,41 +1,80 @@
 # Buzzer API Reference — Host Python
 
-適用：Host package `0.4.6` + 相容 Runtime。
+Host Python 與 High-Level MicroPython 使用相同的 Student API 名稱與主要參數；命令由 PC 傳到 Runtime。
 
 ## `bee()` / `tone()`
 
 ```python
-bee() -> None
-tone(frequency, duration=300) -> None
+m.bee()
+m.tone(frequency, duration=300)
 ```
 
-Host 送出蜂鳴器命令，由 Runtime 實際播放。
-
-## `play_song()` / `play_sound()`
+| 參數 | 說明 |
+|---|---|
+| `frequency` | 頻率 Hz。 |
+| `duration` | 播放時間 ms，預設 300。 |
 
 ```python
-play_song(song, tempo=None, default_duration_ms=180, gap_ms=35) -> None
-play_sound(name) -> None
+m.tone(880, 500)
 ```
 
-`song` 可使用 preset 名稱、音符字串或音符清單。`play_sound()` 對未知 preset 會拋出 `ValueError`。
-
-## `stop_song()`
+## `play_song()`
 
 ```python
-stop_song() -> None
+m.play_song(song, tempo=None, default_duration_ms=180, gap_ms=35)
 ```
 
-## Execution lifecycle
+`song` 可為 preset 名稱、音符字串或音符 list；`tempo` 為 BPM，`default_duration_ms` 與 `gap_ms` 皆為 ms。
 
-| API | Host `m.run_forever()` |
-|---|---:|
-| `bee()` / `tone()` | 不需要 |
-| `play_song()` / `play_sound()` | 不需要用它播放後續 note |
-| `stop_song()` | 不需要 |
+```python
+m.play_song("twinkle_star")
+```
 
-Host 將完整命令／旋律送給 Runtime；後續播放由 Runtime 處理。`run_forever()` 只在 PC process 需要持續等待事件時才是典型做法。
+## `music()`
 
-## Availability
+```python
+m.music(notes, default_duration_ms=180, gap_ms=35)
+```
 
-使用 `m.supports("buzzer")` 與 compatibility profile 判定。設定與硬體檢查以 Device Manager 的 `buzzer_pin`、`buzzer_mode`、Enable 狀態為準。
+播放已整理好的音符清單。
+
+## `play_sound()` / `sound()`
+
+```python
+m.play_sound(name)
+m.sound(name)
+```
+
+內建短音效名稱：`coin`, `jump`, `power_up`, `win`, `game_over`, `alert`。未知名稱會產生 `ValueError`。
+
+## `start_bee()` / `stop_bee()`
+
+```python
+m.start_bee(period=1000, duration=3000)
+m.stop_bee()
+```
+
+`period` 是週期間隔 ms；`duration` 是週期蜂鳴工作維持時間 ms。
+
+## `stop_song()` / `stop_music()`
+
+```python
+m.stop_song()
+m.stop_music()
+```
+
+停止目前旋律。
+
+## Host lifecycle
+
+旋律與週期工作由 Runtime 端執行，不需要靠 Host `m.run_forever()` 推進 Scheduler；只有需要讓 PC process 持續存活或接收 callback 時才需要 Host event loop。
+
+## 範例
+
+```python
+from mangobox import Mango
+
+m = Mango()
+m.tone(880, 150)
+m.play_sound("coin")
+```

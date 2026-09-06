@@ -1,29 +1,47 @@
-# Host Python IR API Reference
+# IR Remote API Reference — Host Python
 
-## `is_ir_pressed(key)`
+Host Python 的 IR learner path 必須由目前 Host package + Runtime compatibility resolver 確認；不能只因 Runtime config 有 IR Pin 就假設完整 API 可用。
 
-同步要求 Runtime 回傳目前 IR state，若指定 key 正處於 pressed 狀態則回傳 `True`。
+## `on_ir_pressed()` / `on_ir_released()`
 
 ```python
-m.is_ir_pressed('ok')
+m.on_ir_pressed(key, callback)
+m.on_ir_released(key, callback)
 ```
 
-## `on_ir_pressed(key, callback)`
+| 參數 | 說明 |
+|---|---|
+| `key` | NEC teaching remote 的按鍵名稱，例如 `"ok"`, `"up"`, `"1"`, `"*"`。 |
+| `callback` | 按下／放開事件時執行的 callable。 |
 
-指定 NEC key 由未按下轉為按下時執行 callback。
+```python
+def ok():
+    print("OK")
 
-## `on_ir_released(key, callback)`
+m.on_ir_pressed("ok", ok)
+m.run_forever()
+```
 
-指定 NEC key 放開時執行 callback。
+Host process 必須持續接收 Runtime 事件，因此 callback 程式需要保持事件服務流程。
 
-## Key 名稱
+## `is_ir_pressed()`
+
+```python
+m.is_ir_pressed(key) -> bool
+```
+
+讀取 Runtime 維護的 held state。
+
+## 標準 key
 
 ```text
 1 2 3 4 5 6 7 8 9 * 0 # up left ok right down
 ```
 
-名稱不分大小寫，其他名稱會拋出 `ValueError`。
+## Capability
 
-## Target gate
+```python
+print(m.supports("ir"))
+```
 
-MangoLite 固定 IR 不由 `enabled_modules.ir_sensor` 控制；MangoX2 若 live Runtime snapshot 顯示 `ir_sensor=false`，API 會拋出 `RuntimeError`。
+MangoLite 的固定板載 IR 與 MangoX2 選配外接 IR 是不同硬體情境，線上文件以 target / resolver 顯示為準。

@@ -1,23 +1,40 @@
-# Host Python PIR API Reference
+# PIR Motion API Reference — Host Python
 
 ## `is_motion_detected()`
 
-同步讀取目前 PIR 狀態並回傳 `bool`。此 read 不會因為呼叫一次就永久啟動 streaming。
+```python
+m.is_motion_detected(sensor=None) -> bool
+```
 
-## `on_motion_detected(callback)`
+讀取目前 PIR motion 狀態。`sensor=None` 使用預設 PIR；回傳 `True` 只代表偵測到熱源變化／移動，不代表距離或人數。
 
-PIR 轉為 active 時觸發 callback。
-
-## `on_motion_cleared(callback)`
-
-PIR 回到 inactive 時觸發 callback。
-
-事件 callback 需要 Host 程式保持執行，例如：
+## 事件
 
 ```python
+m.on_motion_detected(callback, sensor=None, period=100)
+m.on_motion_cleared(callback, sensor=None, period=100)
+```
+
+| 參數 | 說明 |
+|---|---|
+| `callback` | detected / cleared 邊緣事件執行的函式。 |
+| `sensor` | 命名 PIR。 |
+| `period` | Runtime 監看更新間隔（ms），預設 100。 |
+
+```python
+def detected():
+    print("motion")
+
+m.on_motion_detected(detected)
 m.run_forever()
 ```
 
-## Runtime gate
+PIR 模組本身常有保持時間，因此 `cleared` 不一定等於人體停止移動的瞬間。
 
-`enabled_modules.pir_sensor` 必須在 live Runtime config 中啟用。若已取得 snapshot 且模組停用，API 會拋出 `RuntimeError`。
+## Capability
+
+```python
+print(m.supports("motion"))
+```
+
+PIR 是否存在、名稱與 GPIO 由 target / Device Manager / Runtime config 管理。

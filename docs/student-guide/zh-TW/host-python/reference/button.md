@@ -1,61 +1,54 @@
 # Button API Reference — Host Python
 
-適用：Host package `0.4.6` + 相容 Runtime。
-
-## `read_button()`
+## 讀取
 
 ```python
-read_button() -> int | None
+m.read_button() -> int | None
+m.read_sensor(sensor)
 ```
 
-Host 0.4.6 會送出 Runtime read command，等待新的 Button reply，再回傳目前值。若在 timeout 內沒有收到新的有效回覆，可能回傳目前已知值或 `None`。
+`read_button()` 通常回傳 `0`（released）或 `1`（pressed）。`read_sensor(sensor)` 可讀命名數位感測器。
 
-一般語意：
-
-- `0`：released（放開）
-- `1`：pressed（按下）
-
-## `on_pressed()` / `on_released()`
+## 事件
 
 ```python
-on_pressed(sensor, callback) -> None
-on_released(sensor, callback) -> None
+m.on_pressed(sensor, callback)
+m.on_released(sensor, callback)
+m.when_pressed(sensor="button", callback=...)
+m.when_released(sensor="button", callback=...)
 ```
 
-板載 Button 使用 `sensor="button"`。
-
-## `start_button()` / `stop_button()`
+| 參數 | 說明 |
+|---|---|
+| `sensor` | 感測器名稱；板載／預設 Button 使用 `"button"`。 |
+| `callback` | 事件發生時執行的 callable。 |
 
 ```python
-start_button(period=100) -> None
-stop_button() -> None
-```
+def pressed():
+    print("pressed")
 
-`start_button()` 要求 Runtime 開始回報 Button 狀態。
-
-## Execution lifecycle
-
-Host callback 路徑如下：
-
-```text
-Runtime Button event
-→ Host UART listener
-→ semantic pressed/released 判定
-→ callback thread
-```
-
-因此 callback 範例通常需要：
-
-```python
-m.on_pressed("button", callback)
-m.start_button(100)
+m.on_pressed("button", pressed)
 m.run_forever()
 ```
 
-這裡的 `run_forever()` 只是讓 PC process 保持存活；它不驅動 Runtime Sensor Scheduler。
+## Host lifecycle
 
-直接 `read_button()` 是同步讀值，不需要 `run_forever()`。
+Host Python 的 callback 需要 PC process 持續接收 Runtime 事件，因此事件式程式應保持 `m.run_forever()` 或目前 Host package 對應的事件服務流程。
 
-## Availability
+High-Level MicroPython 的 `start_button()` polling 細節不要直接套到 Host transport；Host 端由目前相容 Host package / Runtime event path 決定資料傳輸。
 
-使用 `m.supports("button")` / `m.capabilities()`。Host capability discovery 使用啟動時已取得的 Runtime configuration snapshot，不會因 `supports()` 額外開 port 或送 probe。
+## 通用 sensor API
+
+```python
+m.read_sensor(sensor)
+m.start_sensor(sensor, period=200)
+m.stop_sensor(sensor)
+```
+
+`period` 單位為 ms。是否需要顯式 `start_sensor()` 應依目前 Host package contract；若使用高階專用 callback，優先依該 API 的文件與 capability resolver。
+
+## Capability
+
+```python
+print(m.supports("button"))
+```

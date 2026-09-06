@@ -1,24 +1,34 @@
-# Host Python Light API Reference
+# Light Sensor API Reference — Host Python
 
 ## `light()`
 
-同步回傳整數 `0..100`：
+```python
+m.light(sensor=None) -> int | float
+```
 
-- `0`：校正後較暗端
-- `100`：校正後較亮端
+讀取 Runtime 校準後的 **0～100 相對亮度**；`0` 表示較暗端、`100` 表示較亮端。這不是 lux。
 
-這不是 lux。
+| 參數 | 說明 |
+|---|---|
+| `sensor` | 命名光線感測器；`None` 使用目前預設。 |
 
-## `on_light_above(threshold, callback, hysteresis=5, period=100)`
+```python
+value = m.light()
+if value < 30:
+    m.led_all("white")
+```
 
-當 normalized light 進入高於 threshold 的區域時觸發 callback。
+校準數學、raw ADC sampling 與 persistence 由 firmware / Runtime 擁有。Host Python 只取得 canonical normalized value，不應另做一套不同的換算。
 
-## `on_light_below(threshold, callback, hysteresis=5, period=100)`
+多裝置可用：
 
-當 normalized light 進入低於 threshold 的區域時觸發 callback。
+```python
+m.light("left")
+m.light("right")
+```
 
-`threshold` 與 `hysteresis` 必須在 `0..100`。`period` 最低為 20 ms。
+## Capability
 
-## Calibration ownership
-
-Host 不執行 Bright/Dark raw endpoint calibration；校正與持久化由 firmware/runtime 管理。
+```python
+print(m.supports("light"))
+```

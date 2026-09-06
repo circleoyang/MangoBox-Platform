@@ -1,78 +1,65 @@
 # Sound Sensor API Reference
 
-> 本頁只應在 `sound_level` capability 對選定 target/mode/version 成立時顯示。
-
 ## `sound_level()`
 
 ```python
-sound_level() -> int
+m.sound_level(sensor=None) -> int | float
 ```
 
-回傳 0～100 的相對聲音強度。這不是 dB。
+讀取校準後的 **0～100 相對聲音強度**。
 
-目前語意值以 sampling window 中的 peak-to-peak ADC 幅度正規化。
+| 參數 | 預設值 | 說明 |
+|---|---:|---|
+| `sensor` | `None` | 命名聲音感測器；省略時使用目前預設感測器。 |
 
-### Raises
+### 回傳值
 
-`RuntimeError`：Sound Sensor 未啟用。
+- `0`：校準範圍中的較安靜端
+- `100`：校準範圍中的較大聲端
+- 中間值：相對聲音活動量
 
-## `on_sound_above()`
+**這個值不是 dB（分貝）**，不要把 `70` 寫成 `70 dB`。
 
 ```python
-on_sound_above(threshold, callback, hysteresis=5) -> None
+value = m.sound_level()
+print("sound =", value)
 ```
 
-聲音強度往上跨越 threshold 時執行 callback。
-
-## `on_sound_below()`
-
-```python
-on_sound_below(threshold, callback, hysteresis=5) -> None
-```
-
-聲音強度往下跨越 threshold 時執行 callback。
-
-### Raises
-
-`ValueError`：threshold 或 hysteresis 不在 0～100。
-
-## Execution lifecycle
-
-| API | High Level MicroPython 行為 | `m.run_forever()` |
-|---|---|---:|
-| `sound_level()` | Immediate，同步進行一次目前聲音強度讀取 | 不需要 |
-| `on_sound_above()` / `on_sound_below()` | 建立 threshold watcher 並啟動週期採樣；後續由 Scheduler 執行 | 需要 |
-
-Sound callback 會自行啟動 watcher，不需要額外 `start_sensor()`。如果直接讀值會變但 callback 不觸發，先確認 event loop、threshold、hysteresis 與 sampling window。
-
-## Configuration
-
-```text
-enabled_modules.sound_sensor
-sound_sensor_pin
-sound_noise_floor
-sound_reference_level
-sound_window_ms
-sound_period_ms
-sound_hysteresis
-```
-
-Quiet/Reference calibration 屬 Device Manager／Runtime 維護責任。
-
-## Example
+## 範例：拍手／大聲時變色
 
 ```python
 from mangobox import Mango
+import time
 
 m = Mango()
 
-def loud():
-    print("loud")
-
-m.on_sound_above(60, loud)
-m.run_forever()
+while True:
+    level = m.sound_level()
+    if level > 65:
+        m.led_all("red")
+    else:
+        m.led_all("blue")
+    time.sleep(0.05)
 ```
 
-## Related
+## raw signal 與校準
 
-`sound_level()`, `on_sound_above()`, `on_sound_below()`, `run_forever()`
+目前 Runtime 的 raw 聲音量測使用短時間窗的 peak-to-peak 變化，再依 calibration 轉成 0～100。Student API 故意不暴露一套與 Runtime 分離的自行換算公式。
+
+因此：
+
+- `sound_level()` 適合教學中的「安靜／普通／較大聲」相對判斷。
+- 不適合當成聲級計或法規 dB 量測。
+- 校準由 firmware / Runtime 擁有；Device Manager 負責操作與視覺化，不另做一份數學模型。
+
+## Named sensor
+
+```python
+m.sound_level("mic1")
+```
+
+多裝置名稱、ADC Pin 與校準參數由 Device Manager / Runtime config 管理。
+
+## 相關 API
+
+`sound_level()`, `supports("sound_level")`, `capabilities()`

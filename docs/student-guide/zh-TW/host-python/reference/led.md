@@ -1,62 +1,84 @@
 # RGB LED API Reference — Host Python
 
-適用：Host package `0.4.6` + resolver 認可的相容 Runtime。
-
-## `led_all()`
+適用：Host Python Student API + resolver 認可的相容 Runtime。方法名稱、顏色格式與主要參數語意與 High-Level MicroPython 對齊；差別是命令由 PC 傳給 Runtime，持續燈效由裝置端 Scheduler 執行。
 
 ```python
-led_all(color="#ffffff", duration=0, strip=None) -> None
+from mangobox import Mango
+m = Mango()
 ```
 
-控制指定 LED Strip 全部 LED。
+## 常用 API
 
-## `led()` / `led_range()`
+| API | 主要參數 | 功能 |
+|---|---|---|
+| `led(index, color="#ffffff", duration=0, strip=None)` | `index`, `color`, `duration`, `strip` | 單顆 LED |
+| `led_all(color="#ffffff", duration=0, strip=None)` | `color`, `duration`, `strip` | 全部 LED |
+| `led_range(start, end, color="#ffffff", duration=0, strip=None)` | `start`, `end`, `color`, `duration`, `strip` | 範圍 LED |
+| `brightness(power=30, duration=0, strip=None)` | `power` 0..100 | 整體亮度 |
+| `breath(color="#ff00ff", period=50, duration=0, strip=None)` | `color`, `period`, `duration` | 呼吸燈 |
+| `rainbow(period=20, duration=0, strip=None)` | `period`, `duration` | 彩虹循環 |
+| `led_off(strip=None)` | `strip` | 停止燈效並熄燈 |
+
+`duration` 與 `period` 單位皆為 ms。`duration=0` 表示不設定自動停止／還原時間；`period` 是動畫更新間隔，不是完整一次循環時間。
+
+## 呼吸燈
 
 ```python
-led(index, color="#ffffff", duration=0, strip=None) -> None
-led_range(start, end, color="#ffffff", duration=0, strip=None) -> None
+m.breath("#0080ff", period=80)
 ```
 
-## `brightness()`
+完整名稱亦可使用：
 
 ```python
-brightness(power=30, duration=0, strip=None) -> None
+m.led_start_breathing(color="#ff00ff", period=50, duration=0, strip=None)
 ```
 
-## `rainbow()` / `breath()`
+搜尋「呼吸燈、漸亮漸暗、breathing、pulse、fade」都應導向這個 API。
+
+## 進階燈效
 
 ```python
-rainbow(period=20, duration=0, strip=None) -> None
-breath(color="#ff00ff", period=50, duration=0, strip=None) -> None
+m.led_start_meteor(color="#ffffff", size=5, period=50, duration=0, strip=None)
+m.led_start_color_wipe(colors=None, period=50, duration=0, strip=None)
+m.led_start_random_sparkle(color="#ffffff", period=50, duration=0, strip=None)
+m.led_start_fire_flicker(color="#ff6600", period=50, duration=0, strip=None)
 ```
 
-## `led_off()`
+- `size`：流星拖尾長度。
+- `colors`：顏色 list；省略時使用 Runtime 預設。
+- `period`：更新間隔（ms）。
+- `duration=0`：持續執行。
+
+## 顏色
+
+可使用支援的英文名稱，例如 `red`, `green`, `blue`, `yellow`, `cyan`, `magenta`, `white`, `orange`, `pink`, `purple`，或 `#RRGGBB`。
+
+格式不合法時可能拋出 `ValueError`。
+
+## Host lifecycle
+
+LED animation 由 Runtime Scheduler 執行，因此 Host 端不需要靠 `m.run_forever()` 驅動呼吸燈或彩虹燈本身。Host `run_forever()` 的用途是保持 PC process 存活與接收事件 callback。
 
 ```python
-led_off(strip=None) -> None
+from mangobox import Mango
+
+m = Mango()
+m.breath("purple", period=80)
 ```
 
-## Execution lifecycle
+## 多燈條
 
-Host API 呼叫會透過 `send_command()` 將命令送到 Runtime。持續燈效由 Runtime Scheduler 執行。
+```python
+m.select_led_strip("external")
+m.led_all("blue")
+```
 
-| API | Host `m.run_forever()` |
-|---|---:|
-| `led()` / `led_all()` / `led_range()` | 不需要 |
-| `brightness()` | 不需要 |
-| `rainbow()` / `breath()` / 其他燈效 | 不需要用它驅動燈效 |
-| `led_off()` | 不需要 |
+或在單次呼叫指定 `strip="external"`。
 
-Host `run_forever()` 是保持 PC process 存活、接收事件的工具，不是 LED animation loop。
+## Capability
 
-## Raises
+```python
+print(m.supports("led"))
+```
 
-顏色格式錯誤時可拋出 `ValueError`。
-
-## Availability
-
-以 `m.supports("led")` / `m.capabilities()` 與選定 Host + Runtime compatibility profile 為準。Runtime config key 不能單獨建立 API 支援。
-
-## Configuration / diagnostics
-
-Host 端不要使用 `machine.Pin`。Pin、LED 數量、Enable 狀態請以 Device Manager / Runtime configuration snapshot 為準。
+是否支援以 Host package + Runtime compatibility profile 為準，不要僅因 config 裡有 LED Pin 就假設 API 一定可用。
