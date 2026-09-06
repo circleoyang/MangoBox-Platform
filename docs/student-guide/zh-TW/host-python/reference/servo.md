@@ -1,66 +1,83 @@
 # Servo API Reference — Host Python
 
-適用：Host package `0.4.6` + 相容 Runtime。
+Host Python 與 High-Level MicroPython 使用同一組 learner-facing Servo method 名稱；命令由 PC 傳給 Runtime 執行。
 
-## 共同單 Servo / default Servo 語法
-
-```python
-servo(angle) -> None
-servo_set_angle(angle) -> None
-servo_move_to(angle, step=5, period=60) -> None
-servo_sweep(min_angle=0, max_angle=180, step=5, period=50) -> None
-servo_stop() -> None
-servo_get_angle() -> int | float | None
-servo_release() -> None
-```
-
-角度會由 Student API 驗證；無效角度或 sweep 範圍會拋出 `ValueError`。
-
-## MangoX2 named Servo
-
-Host 0.4.6 的 MangoX2 current contract 支援可選 `name`：
+## `servo()`
 
 ```python
-servo(angle, name=None) -> None
-servo_set_angle(angle, name=None) -> None
-servo_move_to(angle, step=5, period=60, name=None) -> None
-servo_sweep(min_angle=0, max_angle=180, step=5, period=50, name=None) -> None
-servo_stop(name=None) -> None
-servo_get_angle(name=None) -> int | float | None
-servo_release(name=None) -> None
+m.servo(angle)
 ```
 
-`name=None` 使用 default/current Servo。指定 `name` 時，Host 會把該名稱帶入 Servo Runtime command。
+立即設定角度。
+
+| 參數 | 範圍 | 說明 |
+|---|---|---|
+| `angle` | `0..180` | 目標角度（degree）。 |
 
 ```python
-from mangobox import Mango
-
-m = Mango()
-m.servo(90, name="arm")
-print(m.servo_get_angle(name="arm"))
-m.servo_release(name="arm")
+m.servo(90)
 ```
 
-MangoLite 目前仍使用既有單一／default Servo learner path；在 MangoLite profile 下請使用不帶 `name` 的共同語法。
+超出範圍會產生 `ValueError`。
 
-## `servo_get_angle()` reply path
-
-Host 0.4.6 送出 `get_angle`，等待 Runtime 的 `SERVO_ANGLE` 回覆。MangoX2 named Servo 使用對應名稱的 reply key；未收到有效新回覆時回傳 `None`。
-
-## Execution lifecycle
-
-`servo()`、`servo_move_to()`、`servo_sweep()` 都是 Host command。漸進移動與 sweep 的後續步進由 Runtime 處理，所以 Host 不需要以 `m.run_forever()` 作為 Servo motion engine。
-
-`servo_get_angle()` 是有 timeout 的同步 reply path。
-
-## Availability / configuration
-
-先檢查：
+## `servo_move_to()`
 
 ```python
-m.supports("servo")
+m.servo_move_to(angle, step=5, period=60)
 ```
 
-MangoX2 current named-device 設定主要使用 `servos` 與 `current_servo_setting`；每個 instance 可有自己的 Pin、角度與 PWM 範圍。MangoLite 目前仍使用既有單 Servo 設定。
+| 參數 | 預設值 | 說明 |
+|---|---:|---|
+| `angle` | 必填 | 目標角度 `0..180`。 |
+| `step` | `5` | 每次更新改變的角度。 |
+| `period` | `60` | 更新間隔（ms）。 |
 
-`supports("servo") == True` 代表 learner path 可用，不代表實體 Servo 已正確接線或供電。
+```python
+m.servo_move_to(150, step=3, period=50)
+```
+
+持續動作由 Runtime Scheduler 執行，Host 不需要用自己的 loop 推進 Servo 動畫。
+
+## `servo_sweep()`
+
+```python
+m.servo_sweep(min_angle=0, max_angle=180, step=5, period=50)
+```
+
+讓 Servo 在兩個角度間持續掃動。`min_angle` 必須小於 `max_angle`。
+
+```python
+m.servo_sweep(30, 150, step=5, period=80)
+```
+
+## `servo_stop()`
+
+```python
+m.servo_stop()
+```
+
+停止 sweep 工作，但不等同釋放 PWM。
+
+## `servo_get_angle()`
+
+```python
+m.servo_get_angle()
+```
+
+取得目前 Host / Runtime contract 可回報的最近 Servo 角度資訊；若尚無有效值，可能得到 `None`。
+
+## `servo_release()`
+
+```python
+m.servo_release()
+```
+
+釋放 Servo PWM。這不是「回到 0 度」。
+
+## Capability
+
+```python
+print(m.supports("servo"))
+```
+
+實際可用性以 Host package + Runtime compatibility resolver、目前 Device Manager 設定與 target capability 為準。
