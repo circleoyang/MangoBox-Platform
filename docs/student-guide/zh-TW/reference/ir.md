@@ -1,51 +1,65 @@
 # IR Remote API Reference
 
-工程導向參考。實際可見內容應由 target／mode／version resolver 篩選。
+IR Student API 以 NEC teaching remote 的「按鍵名稱」為主，不要求學生處理 raw pulse 或 NEC frame。
 
 ## `on_ir_pressed()`
 
 ```python
-on_ir_pressed(key: str, callback) -> None
+m.on_ir_pressed(key, callback)
 ```
 
-當指定 NEC IR key（按鍵）由未按下狀態轉為 pressed 時執行 callback（回呼函式）。
-
-### Parameters
+指定按鍵由未按下狀態轉為 pressed 時執行 callback。
 
 | 參數 | 型別 | 說明 |
 |---|---|---|
-| `key` | `str` | 例如 `"ok"`, `"up"`, `"1"`, `"*"`。 |
-| `callback` | callable | 按下事件觸發時執行的函式。 |
+| `key` | `str` | 按鍵名稱，例如 `"ok"`、`"up"`、`"1"`、`"*"`。 |
+| `callback` | callable | 按下事件發生時執行的無參數函式。 |
 
-### Raises
+```python
+def ok_pressed():
+    print("OK")
 
-- `ValueError`：`key` 不在支援的 IR key map。
-- `TypeError`：`callback` 不可呼叫。
-- `RuntimeError`：MangoX2 High Level MicroPython 的 IR module 尚未 Enable。
+m.on_ir_pressed("ok", ok_pressed)
+m.run_forever()
+```
 
-MangoLite 板載 IR 不以 legacy `enabled_modules.ir_sensor` 作為 Student API gate（啟用條件）。
+可能的錯誤：未知 `key` 會產生 `ValueError`；callback 不可呼叫會產生 `TypeError`；需要 Enable 的外接 IR 尚未啟用時可產生 `RuntimeError`。
 
 ## `on_ir_released()`
 
 ```python
-on_ir_released(key: str, callback) -> None
+m.on_ir_released(key, callback)
 ```
 
-當指定 key 被判定 released 時執行 callback。
+指定按鍵由 held / pressed 轉為 released 時執行 callback。
 
-NEC repeat frame（重複碼）用來維持 held state（按住狀態），不應在長按期間持續重複觸發 pressed callback。release 由接收器在 repeat 停止後依 timeout 判定。
+```python
+def ok_released():
+    print("released")
+
+m.on_ir_released("ok", ok_released)
+```
+
+NEC repeat frame 用來維持「按住」狀態，不應在長按期間不斷重複觸發 pressed callback；release 由 receiver 在 repeat 停止後依 timeout 判斷。
 
 ## `is_ir_pressed()`
 
 ```python
-is_ir_pressed(key: str) -> bool
+m.is_ir_pressed(key) -> bool
 ```
 
-回傳指定 IR key 目前是否處於按住狀態。
+回傳指定 IR key 目前是否處於 held 狀態。
 
-## Supported key names
+```python
+if m.is_ir_pressed("up"):
+    print("UP is held")
+```
 
-目前標準 17-key NEC teaching remote mapping：
+IR decoder 必須持續被 Scheduler 更新；若要自己 polling，需在 loop 中規律呼叫 `m.run_once()`。一般教學建議 callback + `m.run_forever()`。
+
+## 支援的標準按鍵名稱
+
+標準 17-key NEC teaching remote：
 
 ```text
 1 2 3
@@ -55,56 +69,45 @@ is_ir_pressed(key: str) -> bool
 up left ok right down
 ```
 
-## Availability
+## Execution lifecycle
 
-| Target | High Level MicroPython | Host Python |
-|---|---:|---:|
-| MangoX2 + Pico | 支援；IR 為選配 | 目前不要宣告完整 IR learner path |
-| MangoX2 + Pico 2 W | 支援；IR 為選配 | 目前不要宣告完整 IR learner path |
-| MangoLite + Pico 2 W | 支援；板載 IR | 目前 Host capability resolver 仍以 learner method 存在為必要條件 |
+| API | 行為 | `m.run_forever()` |
+|---|---|---:|
+| `on_ir_pressed()` / `on_ir_released()` | 建立／啟動 receiver 並註冊事件 | 需要 |
+| `is_ir_pressed()` | 讀 decoder 維護的 held state | decoder 仍需持續更新 |
 
-Host Python 不得因 Runtime config 中存在 `ir_sensor` 就自動顯示 IR Student API。
+IR callback 與 Button 不同：IR API 會建立／啟動 receiver，不需要另外呼叫 `start_button()` 類型的方法，但仍必須持續服務 Scheduler。
 
-## Hardware/config notes
+## Target / config notes
 
 ### MangoLite
 
-- onboard IR receiver（板載紅外線接收器）
-- fixed GP22
-- Student API 可直接建立 receiver
+- 固定板載 IR receiver
+- current hardware baseline 為 GP22
+- 不以 legacy `enabled_modules.ir_sensor` 當作固定板載 IR 是否存在的 gate
 
 ### MangoX2
 
-- optional external IR receiver（選配外接紅外線接收器）
-- `enabled_modules.ir_sensor` 必須為 `True`
-- 實際接收 GPIO／Pin 由 `ir_sensor_pin` 決定
-- semantic IR path 不使用舊的 `ir_receiver_pin` 作為腳位來源
+- IR 為選配外接模組
+- 是否啟用與 GPIO 由目前 Runtime config / Device Manager 決定
 
-## Execution lifecycle
-
-| API | High Level MicroPython 行為 | `m.run_forever()` |
-|---|---|---:|
-| `on_ir_pressed()` / `on_ir_released()` | 自動建立／啟動 IR receiver，並排程 receiver `update()` | 需要 |
-| `is_ir_pressed()` | 讀取 decoder 維護的 held state；decoder 本身仍需被 Scheduler 更新 | 單次 one-shot 讀取不足以做完整 IR 測試 |
-
-因此 IR callback 不需要像 Button 一樣另外呼叫 `start_button()` 類型的 API，但仍需要 event loop 持續服務 Scheduler。
-
-若一定要自行 polling `is_ir_pressed()`，應在自訂 loop 中規律呼叫 `m.run_once()`，或改用 callback + `m.run_forever()`。不建議用單次 `print(m.is_ir_pressed("ok"))` 判定 IR 收訊是否正常。
-
-## Example
+## 完整範例：遙控器控制車體
 
 ```python
 from mangobox import Mango
 
 m = Mango()
 
-def pressed():
-    print("OK")
+m.on_ir_pressed("up", lambda: m.forward(35))
+m.on_ir_released("up", lambda: m.stop())
+m.on_ir_pressed("left", lambda: m.spin_left(30))
+m.on_ir_released("left", lambda: m.stop())
+m.on_ir_pressed("right", lambda: m.spin_right(30))
+m.on_ir_released("right", lambda: m.stop())
 
-m.on_ir_pressed("ok", pressed)
 m.run_forever()
 ```
 
-## Related APIs
+## 相關 API
 
-`on_ir_released()`, `is_ir_pressed()`, `supports("ir")`, `capabilities()`, `run_once()`, `run_forever()`
+`on_ir_pressed()`, `on_ir_released()`, `is_ir_pressed()`, `supports("ir")`, `run_once()`, `run_forever()`
