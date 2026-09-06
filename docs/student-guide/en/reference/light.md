@@ -15,7 +15,7 @@ Raises `RuntimeError` when the module is disabled.
 ## `on_light_above()`
 
 ```python
-on_light_above(threshold, callback, hysteresis=5) -> None
+on_light_above(threshold, callback, hysteresis=5, period=100) -> None
 ```
 
 Runs the callback when the value crosses upward through `threshold`.
@@ -23,14 +23,14 @@ Runs the callback when the value crosses upward through `threshold`.
 ## `on_light_below()`
 
 ```python
-on_light_below(threshold, callback, hysteresis=5) -> None
+on_light_below(threshold, callback, hysteresis=5, period=100) -> None
 ```
 
 Runs the callback when the value crosses downward through `threshold`.
 
-Threshold and hysteresis use the 0–100 semantic range.
+Threshold and hysteresis use the 0–100 semantic range. `period` is the watcher update interval in milliseconds.
 
-Raises `ValueError` for values outside 0–100.
+Raises `ValueError` for threshold/hysteresis values outside 0–100.
 
 ## Execution lifecycle
 
@@ -39,7 +39,7 @@ Raises `ValueError` for values outside 0–100.
 | `light()` | Immediate synchronous calibrated-value read | not required |
 | `on_light_above()` / `on_light_below()` | create a threshold watcher and start sensor updates; later work is Scheduler-driven | required |
 
-Light callbacks start their own watcher, so no separate `start_sensor()` call is required. If `light()` reads correctly but callbacks do not fire, inspect the event loop, threshold, and hysteresis first.
+Light callbacks start their own watcher, so no separate `start_sensor()` call is required. If `light()` reads correctly but callbacks do not fire, inspect the event loop, threshold, hysteresis, and period first.
 
 ## Configuration
 

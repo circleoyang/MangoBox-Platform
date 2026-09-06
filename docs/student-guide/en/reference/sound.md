@@ -17,7 +17,7 @@ Raises `RuntimeError` when the module is disabled.
 ## `on_sound_above()`
 
 ```python
-on_sound_above(threshold, callback, hysteresis=5) -> None
+on_sound_above(threshold, callback, hysteresis=5, period=100) -> None
 ```
 
 Runs a callback when sound crosses upward through the threshold.
@@ -25,10 +25,12 @@ Runs a callback when sound crosses upward through the threshold.
 ## `on_sound_below()`
 
 ```python
-on_sound_below(threshold, callback, hysteresis=5) -> None
+on_sound_below(threshold, callback, hysteresis=5, period=100) -> None
 ```
 
 Runs a callback when sound crosses downward through the threshold.
+
+Threshold and hysteresis use the 0–100 semantic range. `period` is the sampling/watcher update interval in milliseconds.
 
 Raises `ValueError` for threshold/hysteresis outside 0–100.
 
@@ -39,7 +41,7 @@ Raises `ValueError` for threshold/hysteresis outside 0–100.
 | `sound_level()` | Immediate synchronous current sound-level read | not required |
 | `on_sound_above()` / `on_sound_below()` | create a threshold watcher and start periodic sampling; later work is Scheduler-driven | required |
 
-Sound callbacks start their own watcher, so no separate `start_sensor()` call is required. If direct values change but callbacks never fire, inspect the event loop, threshold, hysteresis, and sampling window first.
+Sound callbacks start their own watcher, so no separate `start_sensor()` call is required. If direct values change but callbacks never fire, inspect the event loop, threshold, hysteresis, period, and sampling window first.
 
 ## Configuration
 

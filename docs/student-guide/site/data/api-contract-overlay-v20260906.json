@@ -1,0 +1,71 @@
+{
+  "schema_version": 1,
+  "source_status": "public-stable",
+  "source_date": "2026-09-06",
+  "source_private_pr": "circleoyang/MangoBox#91",
+  "source_head": "1a69dda526ebccd383ef2f5985f6ef62f46f2d4f",
+  "base_method_count": 77,
+  "expected_public_methods": 112,
+  "deferred_not_promoted": ["show_image", "start_image_loop", "stop_image_loop"],
+  "notes": "Temporary public documentation bridge until the merged private canonical method catalog is consumed automatically. Existing names are patched by name; new names are appended.",
+  "entries": [
+    {"module":"button","name":"when_pressed","signature":"m.when_pressed(sensor='button', callback=None)","zh":"註冊按下事件的便利寫法","en":"Beginner-friendly wrapper for a pressed callback","aliases":["按下事件","when pressed","button callback"],"role":"compatibility"},
+    {"module":"button","name":"when_released","signature":"m.when_released(sensor='button', callback=None)","zh":"註冊放開事件的便利寫法","en":"Beginner-friendly wrapper for a released callback","aliases":["放開事件","when released","button callback"],"role":"compatibility"},
+    {"module":"servo","name":"servo","signature":"m.servo(angle, name=None)","zh":"立即設定預設或命名 Servo 的角度","en":"Set the default or named servo angle immediately","aliases":["伺服馬達","角度","angle","servo position"],"role":"teaching"},
+    {"module":"servo","name":"servo_move_to","signature":"m.servo_move_to(angle, step=5, period=60, name=None)","zh":"讓預設或命名 Servo 分段平滑移動到指定角度","en":"Move the default or named servo smoothly to an angle","aliases":["平滑移動","慢慢轉","servo move","step","period"],"role":"teaching"},
+    {"module":"servo","name":"servo_sweep","signature":"m.servo_sweep(min_angle=0, max_angle=180, step=5, period=50, name=None)","zh":"讓預設或命名 Servo 在兩個角度間持續掃動","en":"Sweep the default or named servo between two angles","aliases":["掃動","來回轉","servo sweep","擺動","scan"],"role":"teaching"},
+    {"module":"servo","name":"servo_stop","signature":"m.servo_stop(name=None)","zh":"停止預設或命名 Servo 的掃動工作","en":"Stop sweeping the default or named servo","aliases":["停止servo","stop sweep","停止掃動"],"role":"teaching"},
+    {"module":"servo","name":"servo_get_angle","signature":"m.servo_get_angle(name=None)","zh":"取得預設或命名 Servo 最近可確認的角度","en":"Get the latest confirmed angle for the default or named servo","aliases":["servo angle","讀角度","get angle"],"role":"teaching"},
+    {"module":"servo","name":"servo_release","signature":"m.servo_release(name=None)","zh":"釋放預設或命名 Servo 的 PWM 輸出","en":"Release PWM output for the default or named servo","aliases":["servo release","釋放伺服","關閉servo pwm"],"role":"teaching"},
+    {"module":"pir","name":"is_motion_detected","signature":"m.is_motion_detected()","zh":"判斷 PIR 是否偵測到人體或熱源移動","en":"Check whether PIR motion is detected","aliases":["pir","人體感測","移動","motion","人","有人"],"role":"capability"},
+    {"module":"pir","name":"on_motion_detected","signature":"m.on_motion_detected(callback)","zh":"PIR 由無移動變成偵測到移動時觸發事件","en":"Trigger a callback when PIR motion is detected","aliases":["人體事件","有人事件","motion event","detected"],"role":"capability"},
+    {"module":"pir","name":"on_motion_cleared","signature":"m.on_motion_cleared(callback)","zh":"PIR 由偵測到移動回到無移動時觸發事件","en":"Trigger a callback when PIR motion clears","aliases":["沒人了","motion cleared","pir clear"],"role":"capability"},
+    {"module":"light","name":"light","signature":"m.light()","zh":"讀取校準後 0–100 相對亮度；0=暗、100=亮","en":"Read calibrated relative light level from 0 to 100","aliases":["light","光線","亮度","brightness","光敏","暗","亮","0 100"],"role":"capability"},
+    {"module":"sound","name":"sound_level","signature":"m.sound_level()","zh":"讀取 0–100 相對聲音強度，不是 dB","en":"Read relative sound level from 0 to 100; not dB","aliases":["sound","聲音","音量","麥克風","microphone","noise","吵","安靜","0 100","不是db"],"role":"capability"},
+    {"module":"joystick","name":"joystick","signature":"m.joystick()","zh":"讀取搖桿 X/Y，回傳標準化 (x, y)","en":"Read normalized joystick X/Y as (x, y)","aliases":["joystick","搖桿","x y","方向","PS2"],"role":"capability"},
+
+    {"module":"led","name":"led_set_brightness","signature":"m.led_set_brightness(power=30, duration=0, strip=None)","zh":"設定 RGB 亮度的相容名稱；等同 brightness()","en":"Compatibility name for brightness()","aliases":["亮度","brightness"],"role":"compatibility"},
+    {"module":"led","name":"led_show_one","signature":"m.led_show_one(index, color='#ffffff', duration=0, strip=None)","zh":"顯示單顆 RGB 的相容名稱；等同 led()","en":"Compatibility name for led()","aliases":["單顆燈","led one"],"role":"compatibility"},
+    {"module":"led","name":"led_show_all","signature":"m.led_show_all(color='#ffffff', duration=0, strip=None)","zh":"顯示全部 RGB 的相容名稱；等同 led_all()","en":"Compatibility name for led_all()","aliases":["全部燈","led all"],"role":"compatibility"},
+    {"module":"led","name":"led_show_range","signature":"m.led_show_range(start, end, color='#ffffff', duration=0, strip=None)","zh":"顯示 RGB 範圍的相容名稱；等同 led_range()","en":"Compatibility name for led_range()","aliases":["範圍燈","led range"],"role":"compatibility"},
+    {"module":"led","name":"led_turn_off","signature":"m.led_turn_off(strip=None)","zh":"關閉 RGB 的相容名稱；委派給 led_off()","en":"Compatibility name that delegates to led_off()","aliases":["關燈","熄燈"],"role":"compatibility"},
+    {"module":"led","name":"led_clear","signature":"m.led_clear(strip=None)","zh":"停止目前 RGB 動畫；與 led_off() 的停止並清黑語意不同","en":"Stop the current RGB animation without the stronger clear-to-black semantics of led_off()","aliases":["停止燈效","clear animation"],"role":"advanced"},
+
+    {"module":"buzzer","name":"sound","signature":"m.sound(name)","zh":"依名稱播放內建短音效","en":"Play a built-in short sound effect by name","aliases":["音效","sound effect","coin","jump"],"role":"teaching"},
+    {"module":"buzzer","name":"stop_music","signature":"m.stop_music()","zh":"停止目前歌曲或旋律播放","en":"Stop current song or melody playback","aliases":["停止音樂","stop music"],"role":"teaching"},
+    {"module":"buzzer","name":"beep","signature":"m.beep()","zh":"bee() 的相容名稱","en":"Compatibility name for bee()","aliases":["嗶","beep"],"role":"compatibility"},
+    {"module":"buzzer","name":"play_tone","signature":"m.play_tone(frequency, duration=300)","zh":"tone() 的相容名稱","en":"Compatibility name for tone()","aliases":["音調","tone"],"role":"compatibility"},
+
+    {"module":"servo","name":"servo_set_angle","signature":"m.servo_set_angle(angle, name=None)","zh":"servo() 的底層／相容名稱","en":"Low-level/compatibility name for servo()","aliases":["servo angle","設定角度"],"role":"compatibility"},
+
+    {"module":"oled","name":"clear_oled","signature":"m.clear_oled()","zh":"clear() 的底層名稱","en":"Low-level name for clear()","aliases":["清除oled","clear oled"],"role":"compatibility"},
+    {"module":"oled","name":"clear_screen","signature":"m.clear_screen()","zh":"clear() 的相容名稱","en":"Compatibility name for clear()","aliases":["清屏","clear screen"],"role":"compatibility"},
+    {"module":"oled","name":"send_text","signature":"m.send_text(text, x=0, y=0, size=1)","zh":"送出 OLED 單行文字命令","en":"Send a low-level OLED text command","aliases":["oled text","顯示文字"],"role":"advanced"},
+    {"module":"oled","name":"start_flash_text","signature":"m.start_flash_text(text, x=0, y=0, size=1, period=500, duration=0)","zh":"flash_text() 的底層名稱","en":"Low-level name for flash_text()","aliases":["閃爍文字","flash text"],"role":"compatibility"},
+
+    {"module":"button","name":"on","signature":"m.on(event_name, callback)","zh":"相容層事件 API；感測器更新時執行 callback","en":"Compatibility event API that runs a callback on sensor updates","aliases":["event","事件","callback"],"role":"compatibility"},
+    {"module":"button","name":"on_enter","signature":"m.on_enter(sensor, callback)","zh":"數位狀態由 0 轉 1 時執行 callback；相容於 on_pressed()","en":"Run a callback when a digital state changes 0 to 1; compatible with on_pressed()","aliases":["進入事件","enter event"],"role":"compatibility"},
+    {"module":"button","name":"on_leave","signature":"m.on_leave(sensor, callback)","zh":"數位狀態由 1 轉 0 時執行 callback；相容於 on_released()","en":"Run a callback when a digital state changes 1 to 0; compatible with on_released()","aliases":["離開事件","leave event"],"role":"compatibility"},
+
+    {"module":"light","name":"on_light_above","signature":"m.on_light_above(threshold, callback, hysteresis=5, period=100)","zh":"光線向上跨越門檻時觸發 callback","en":"Trigger when light rises across a threshold","aliases":["光線事件","太亮","light above"],"role":"capability"},
+    {"module":"light","name":"on_light_below","signature":"m.on_light_below(threshold, callback, hysteresis=5, period=100)","zh":"光線向下跨越門檻時觸發 callback","en":"Trigger when light falls across a threshold","aliases":["光線事件","太暗","light below"],"role":"capability"},
+    {"module":"sound","name":"on_sound_above","signature":"m.on_sound_above(threshold, callback, hysteresis=5, period=100)","zh":"聲音強度向上跨越門檻時觸發 callback","en":"Trigger when sound level rises across a threshold","aliases":["聲音事件","太大聲","sound above"],"role":"capability"},
+    {"module":"sound","name":"on_sound_below","signature":"m.on_sound_below(threshold, callback, hysteresis=5, period=100)","zh":"聲音強度向下跨越門檻時觸發 callback","en":"Trigger when sound level falls across a threshold","aliases":["聲音事件","安靜","sound below"],"role":"capability"},
+
+    {"module":"joystick","name":"is_joystick_pressed","signature":"m.is_joystick_pressed()","zh":"判斷搖桿 SW 按鍵目前是否按下","en":"Check whether the joystick switch is pressed","aliases":["搖桿按鈕","joystick button","pressed"],"role":"capability"},
+    {"module":"joystick","name":"on_joystick_pressed","signature":"m.on_joystick_pressed(callback, period=50)","zh":"搖桿 SW 按下時觸發 callback","en":"Trigger a callback when the joystick switch is pressed","aliases":["搖桿按下事件","joystick press"],"role":"capability"},
+    {"module":"joystick","name":"on_joystick_released","signature":"m.on_joystick_released(callback, period=50)","zh":"搖桿 SW 放開時觸發 callback","en":"Trigger a callback when the joystick switch is released","aliases":["搖桿放開事件","joystick release"],"role":"capability"},
+    {"module":"joystick","name":"calibrate_joystick","signature":"m.calibrate_joystick(samples=16)","zh":"以多次取樣校正搖桿中心值","en":"Calibrate the joystick center from repeated samples","aliases":["搖桿校正","joystick calibration","中心"],"role":"capability"},
+
+    {"module":"line_tracking","name":"line_left","signature":"m.line_left()","zh":"讀取左側循跡感測狀態","en":"Read the left line-tracking sensor state","aliases":["左循跡","line left"],"role":"capability"},
+    {"module":"line_tracking","name":"line_right","signature":"m.line_right()","zh":"讀取右側循跡感測狀態","en":"Read the right line-tracking sensor state","aliases":["右循跡","line right"],"role":"capability"},
+    {"module":"line_tracking","name":"on_line_change","signature":"m.on_line_change(callback, period=50)","zh":"任一循跡狀態改變時觸發 callback","en":"Trigger when either line-tracking state changes","aliases":["循跡改變","line change"],"role":"capability"},
+    {"module":"line_tracking","name":"on_line_left","signature":"m.on_line_left(callback, period=50)","zh":"進入 left 循跡狀態時觸發 callback","en":"Trigger when the line state becomes left","aliases":["左線事件","line left event"],"role":"capability"},
+    {"module":"line_tracking","name":"on_line_right","signature":"m.on_line_right(callback, period=50)","zh":"進入 right 循跡狀態時觸發 callback","en":"Trigger when the line state becomes right","aliases":["右線事件","line right event"],"role":"capability"},
+    {"module":"line_tracking","name":"on_line_both","signature":"m.on_line_both(callback, period=50)","zh":"進入 both 循跡狀態時觸發 callback","en":"Trigger when the line state becomes both","aliases":["雙線事件","both lines"],"role":"capability"},
+    {"module":"line_tracking","name":"on_line_clear","signature":"m.on_line_clear(callback, period=50)","zh":"進入 none／離線狀態時觸發 callback","en":"Trigger when the line state becomes none/clear","aliases":["離線事件","line clear"],"role":"capability"},
+
+    {"module":"button","name":"close","signature":"m.close()","zh":"停止 Runtime 或背景資源並關閉 Mango 物件","en":"Stop runtime/background resources and close the Mango object","aliases":["close","關閉"],"role":"advanced"},
+    {"module":"button","name":"send_command","signature":"m.send_command(command)","zh":"送出進階 Runtime 命令；一般學生程式不需直接使用","en":"Send an advanced Runtime command; ordinary learner code normally does not need this","aliases":["runtime command","進階命令"],"role":"advanced"}
+  ]
+}

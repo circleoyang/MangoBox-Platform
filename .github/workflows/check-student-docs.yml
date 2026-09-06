@@ -7,6 +7,7 @@ on:
       - "docs/student-guide/**"
       - "scripts/check_student_docs.py"
       - "scripts/check_student_search.py"
+      - "scripts/check_api_reference_completeness.py"
       - ".github/workflows/check-student-docs.yml"
   push:
     branches:
@@ -15,6 +16,7 @@ on:
       - "docs/student-guide/**"
       - "scripts/check_student_docs.py"
       - "scripts/check_student_search.py"
+      - "scripts/check_api_reference_completeness.py"
       - ".github/workflows/check-student-docs.yml"
 
 jobs:
@@ -27,5 +29,12 @@ jobs:
           python-version: "3.11"
       - name: Validate profile/module/document coverage
         run: python scripts/check_student_docs.py
-      - name: Validate method-level API search contract
+      - name: Validate merged method-level API search contract
         run: python scripts/check_student_search.py
+      - name: Validate structured API Reference coverage
+        run: python scripts/check_api_reference_completeness.py
+      - name: Check documentation JavaScript syntax
+        run: |
+          node --check docs/student-guide/site/api-contract-overlay-v20260906.js
+          node --check docs/student-guide/site/api-reference-details.js
+          node --check docs/student-guide/site/method-search.js
