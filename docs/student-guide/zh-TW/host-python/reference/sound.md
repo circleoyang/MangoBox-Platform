@@ -3,32 +3,63 @@
 ## `sound_level()`
 
 ```python
-m.sound_level(sensor=None) -> int | float
+m.sound_level() -> int
 ```
 
-讀取 Runtime 校準後的 **0～100 相對聲音強度**。這不是 dB（分貝）。
-
-| 參數 | 說明 |
-|---|---|
-| `sensor` | 命名聲音感測器；`None` 使用目前預設。 |
+同步取得 Runtime 校準後的 **0～100 相對聲音強度**。這不是 SPL / dB（分貝）。
 
 ```python
 level = m.sound_level()
 print(level)
 ```
 
-目前 raw 聲音量測以短時間窗 peak-to-peak 變化為基礎，再由 Runtime calibration 轉為 0～100。Host Python 不應再建立另一套獨立換算。
-
-適合：「安靜／普通／較大聲」相對判斷；不適合聲級計或法規 dB 測量。
-
-多裝置：
+## `on_sound_above()`
 
 ```python
-m.sound_level("mic1")
+m.on_sound_above(threshold, callback, hysteresis=5, period=100)
 ```
+
+聲音強度進入高於門檻的區域時執行 callback。
+
+## `on_sound_below()`
+
+```python
+m.on_sound_below(threshold, callback, hysteresis=5, period=100)
+```
+
+聲音強度進入低於門檻的區域時執行 callback。
+
+`threshold` 與 `hysteresis` 使用 0～100；`period` 最低會限制在 20 ms。
+
+## Host Python 語意
+
+Runtime 的 raw 聲音量測使用短時間窗 peak-to-peak amplitude，再依 calibration 正規化為 0～100。Host Python 不重新實作 calibration 數學。
+
+這個值適合「安靜／普通／較大聲」相對判斷，不適合作為聲級計或法規 dB 量測。
+
+目前 Student API 不提供 `sound_level("name")` 這類 named-sensor 參數。ADC Pin 與校準設定由 Runtime / Device Manager 管理。
+
+## 範例
+
+```python
+from mangobox import Mango
+
+m = Mango()
+
+def loud():
+    m.led_all("red")
+
+m.on_sound_above(60, loud)
+```
+
+Host callback 的事件由 Runtime 傳回；不需要為了 callback 額外在 PC 端呼叫 `m.run_forever()`。
 
 ## Capability
 
 ```python
 print(m.supports("sound_level"))
 ```
+
+## 相關 API
+
+`sound_level()`, `on_sound_above()`, `on_sound_below()`
