@@ -35,6 +35,8 @@ m.on_sound_below(threshold, callback, hysteresis=5, period=100)
 
 Runtime 的 raw 聲音量測使用短時間窗 peak-to-peak amplitude，再依 calibration 正規化為 0～100。Host Python 不重新實作 calibration 數學。
 
+callback 的 threshold watcher 由 Runtime 執行，不需要 PC 自己寫取樣迴圈；但 **Host 程序／連線必須持續存活** 才能接收事件並執行 callback。需要一個明確的長時間執行入口時，可在程式最後使用 `m.run_forever()`。
+
 這個值適合「安靜／普通／較大聲」相對判斷，不適合作為聲級計或法規 dB 量測。
 
 目前 Student API 不提供 `sound_level("name")` 這類 named-sensor 參數。ADC Pin 與校準設定由 Runtime / Device Manager 管理。
@@ -50,9 +52,8 @@ def loud():
     m.led_all("red")
 
 m.on_sound_above(60, loud)
+m.run_forever()
 ```
-
-Host callback 的事件由 Runtime 傳回；不需要為了 callback 額外在 PC 端呼叫 `m.run_forever()`。
 
 ## Capability
 
@@ -62,4 +63,4 @@ print(m.supports("sound_level"))
 
 ## 相關 API
 
-`sound_level()`, `on_sound_above()`, `on_sound_below()`
+`sound_level()`, `on_sound_above()`, `on_sound_below()`, `run_forever()`
