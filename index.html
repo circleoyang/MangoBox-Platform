@@ -36,6 +36,7 @@ footer{border-top:1px solid var(--line);padding:28px;color:var(--muted);backgrou
 @media(max-width:1100px){.computing-grid{grid-template-columns:1fr}.computing-card{grid-template-columns:minmax(0,1fr) minmax(140px,.45fr)}}
 @media(max-width:640px){.computing-card{padding:18px;grid-template-columns:minmax(0,1fr) minmax(100px,.45fr);gap:12px}.computing-card h3{font-size:20px}.hero .hero-intro{font-size:16px}}
 @media(max-width:380px){.computing-card{grid-template-columns:1fr}.computing-visual{min-height:180px}}
+.hero-visual.hero-art{min-height:0;min-width:0;border-radius:18px;overflow:hidden;box-shadow:var(--shadow)}.hero-art img{display:block;width:100%;height:auto;object-fit:contain}
 </style>
 </head>
 <body>
@@ -57,7 +58,7 @@ footer{border-top:1px solid var(--line);padding:28px;color:var(--muted);backgrou
       <div class="developer-credit"><strong>平台研發｜歐陽芳泉 副教授</strong><span>國立臺北商業大學 數位多媒體設計系</span></div>
       <div class="actions"><a class="btn primary" href="#computing">認識 MangoBox</a><a class="btn" href="docs/student-guide/site/">線上文件</a></div>
     </div>
-    <div class="placeholder hero-visual" data-image="assets/home/mangobox-hero.png" aria-label="Hero 插圖預留區"><div><div class="icon">▧</div><strong>Hero 插圖預留區</strong><span>主視覺將於後續補上</span></div></div>
+    <div class="hero-visual hero-art"><img src="assets/home/mangobox-hero.png" width="1448" height="1086" fetchpriority="high" decoding="async" alt="男女學生在教室使用筆電與 MangoX2 電路板，練習程式設計、光敏電阻測試與接線的插圖"></div>
   </section>
 
   <section class="section" id="computing">
