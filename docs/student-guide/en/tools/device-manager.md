@@ -1,165 +1,92 @@
 # Device Manager Basics
 
-Device Manager is used for **MangoX2 / MangoLite configuration and maintenance**. It helps you confirm what the Runtime currently accepts before returning to MangoThonny/Python to build a project with the Student API.
-
-> This page follows the current public `v0.5.0-rc8` multi-target design. The Traditional-Chinese Windows Installer is recommended for normal users; use the Portable ZIP when a no-install deployment is preferred.
-
-The main combinations recognized by `v0.5.0-rc8` include:
+Device Manager is MangoBox's **day-to-day device configuration, calibration, and live-monitoring tool**. The current public stable release is **v0.5.0**, aligned with the five Runtime targets published on 2026-09-06:
 
 ```text
-MangoX2 + Pico
-MangoX2 + Pico 2 W
-MangoX2 + Pico W
-MangoLite + Pico 2 W
-MangoLite + Pico W
+MangoX2 + Pico       → Runtime v0.2.6
+MangoX2 + Pico W     → Runtime v0.2.6
+MangoX2 + Pico 2 W   → Runtime v0.2.6
+MangoLite + Pico W   → Runtime v0.6.0
+MangoLite + Pico 2 W → Runtime v0.6.0
 ```
+
+Use the Windows Installer for normal installations or the Portable ZIP for no-install deployment. Stable downloads and SHA-256 values are listed in the [MangoBox Download Center](../../../../releases/).
 
 ---
 
-# 1. What can Device Manager do?
+# 1. What Device Manager is for
 
 Common learner tasks include:
 
 - connect MangoX2 / MangoLite;
-- confirm target and Runtime/firmware information;
+- identify the target, MCU, and Runtime version;
 - enable or disable optional modules;
-- configure GPIO/Pin assignments;
+- configure GPIO / Pin assignments;
 - apply settings and read them back;
-- use Live Read / Monitor where the selected version supports it;
-- perform implemented calibration/maintenance for Light, Sound, Joystick and similar modules;
-- import, export, or restore configuration;
-- inspect Student API / JSON previews where provided.
+- use Read Once / Monitor where supported;
+- calibrate supported modules such as Light, Sound, and Joystick;
+- import, export, and restore configuration;
+- inspect Student API / JSON previews where available.
 
-Device Manager does **not** replace the Student API. After configuration, return to MangoThonny/Python to write the project.
+Device Manager does **not** handle firmware flashing, Clean Flash, Factory Reset, Recovery, or Deep Rescue. Those device-lifecycle tasks belong to Hardware Lab v0.3.0.
 
 ---
 
-# 2. Choose the correct connection path
+# 2. Connection paths
 
-Two common management paths are used today.
+## MicroUSB / Pico
 
-## A. MicroUSB / Pico
+Uses the Pico's native USB connection and the MicroPython / RuntimeConfig management path. If MangoThonny currently owns the same COM port, stop the program and release the device connection before opening Device Manager.
 
-Uses the Pico USB connection and MicroPython REPL/RuntimeConfig management path.
+## Runtime UART
 
-This supports a one-cable classroom workflow.
-
-### Do not let two programs own the same COM port
-
-If Thonny/MangoThonny currently owns the Pico COM port, Device Manager may not be able to use it simultaneously.
-
-Recommended flow:
-
-```text
-stop the current program
-→ release/disconnect the device in Thonny
-→ connect with Device Manager
-```
-
-When configuration is complete, return to Thonny/MangoThonny.
-
-## B. Runtime UART
-
-Uses a USB-to-TTL adapter connected to the Runtime UART.
-
-MangoLite and MangoX2 do not use the same UART pins. Follow the selected target's current tool/hardware documentation rather than reusing another board's pin assignment.
-
-Always share ground:
+Uses a 3.3 V USB-to-TTL adapter at `115200` baud. Always share ground:
 
 ```text
 GND ↔ GND
 ```
 
-Current Runtime UART baud rate is `115200`.
-
-In `v0.5.0-rc8`, when MangoX2 returns from `MicroUSB / Pico` to `Runtime UART`, Device Manager waits through the normal Runtime reboot and then performs one readiness/config refresh round instead of repeatedly reading the same device information.
+MangoX2 and MangoLite use different Host UART pins. Follow the currently selected target in Device Manager instead of reusing another board's pin assignment.
 
 ---
 
-# 3. After connecting, confirm device identity first
+# 3. Confirm device identity first
 
-Do not change pins immediately.
-
-First verify:
+Before changing pins or module settings, verify:
 
 ```text
 Target
-Runtime / firmware version
-Connection path
-Configuration read succeeded
+MCU family
+Runtime / Firmware version
+Active connection path
+Whether config was read successfully
 ```
 
-Distinguish among:
-
-```text
-MangoX2 + Pico
-MangoX2 + Pico 2 W
-MangoX2 + Pico W
-MangoLite + Pico 2 W
-MangoLite + Pico W
-```
-
-because IR, Button, UART and other hardware rules can differ by target.
-
-> An open COM port is not proof that the Runtime is ready. Runtime replies/system-info style handshakes are the meaningful readiness evidence.
+Device Manager v0.5.0 passed identity / system-info / config sanity checks against all five stable Runtime targets. The UI should match the actual board and Runtime currently connected.
 
 ---
 
 # 4. Standard module-configuration flow
 
-For an external IR Sensor, for example:
+For an external IR module, for example:
 
 ```text
-Choose IR
-   ↓
-Enable
-   ↓
-Choose Pin
-   ↓
-Apply settings
-   ↓
-Read config again
-   ↓
-Confirm the same values were accepted
-   ↓
-Run the Student API
+choose IR
+→ Enable
+→ choose Pin
+→ Apply
+→ read config back
+→ confirm the value
+→ run the Student API
 ```
 
-If Device Manager reports:
-
-```text
-IR enabled = True
-IR Pin = GP4
-```
-
-the physical module must also use:
-
-```text
-IR OUT / Signal → GP4
-```
-
-Configuration and wiring must agree.
+Configuration and physical wiring must agree. API availability is also separate from the module's current Enable state.
 
 ---
 
-# 5. Understanding Pin Config
+# 5. GPIO / Pin and ADC labels
 
-Device Manager should treat the **Runtime's current configuration as the source of truth** instead of maintaining a second hidden GPIO default map.
-
-Learners should verify both:
-
-### ① The displayed setting
-
-For example:
-
-```text
-Servo → GP10
-Light Sensor → GP26 (AD0)
-Sound Sensor → GP27 (AD1)
-IR → GP4
-```
-
-`v0.5.0-rc8` mirrors the Pico ADC silkscreen labels in the UI:
+Device Manager treats the Runtime config as the configuration source of truth. ADC labels match the board silkscreen:
 
 ```text
 GP26 (AD0)
@@ -167,154 +94,53 @@ GP27 (AD1)
 GP28 (AD2)
 ```
 
-`AD0 / AD1 / AD2` are presentation aliases. Canonical Runtime configuration values remain GPIO `26 / 27 / 28`.
-
-### ② The real Signal wire
-
-If the UI says `GP4` while the sensor is physically connected to `GP17`, correct Python code still cannot receive the signal.
+`AD0 / AD1 / AD2` are UI labels; canonical Runtime GPIO values remain `26 / 27 / 28`.
 
 ---
 
-# 6. Do not mix MangoLite and MangoX2 hardware rules
+# 6. MangoLite and MangoX2 differences
 
-The same feature name may represent different hardware.
+The same Student API semantics may map to different board hardware. For example:
 
-### MangoLite + Pico 2 W / Pico W IR
+- **MangoLite IR** is a fixed onboard GP22 function.
+- **MangoX2 IR** is an optional external module whose pin is configurable.
+- **MangoX2 OLED / RGB / Button** are standard pre-installed modules, not PCB-mounted components.
 
-The IR receiver is fixed onboard hardware on:
-
-```text
-GP22
-```
-
-It should not be presented like an arbitrary external IR pin.
-
-### MangoX2 + Pico / Pico 2 W / Pico W IR
-
-IR is optional and High Level MicroPython uses:
-
-```text
-enabled_modules.ir_sensor
-ir_sensor_pin
-```
-
-Therefore Device Manager displays the current `ir_sensor_pin`, not MangoLite's fixed GP22.
+Select the correct target first, then verify Enable state, pin assignment, and physical wiring.
 
 ---
 
-# 7. Using Live Read / Monitor
+# 7. Read Once / Monitor and calibration
 
-When a page provides Live Read / Monitor, use it as a quick high-level path check.
-
-For a Button, for example:
+When a module page provides live reading, use it to confirm the Runtime path before rewriting a full project. A useful troubleshooting order is:
 
 ```text
-released → 0
-pressed  → 1
-```
-
-If Live Read changes correctly, Runtime configuration and the high-level read path are probably healthy.
-
-If it does not respond, do not rewrite the full project first. Check:
-
-```text
-enablement
-→ configured Pin
+Student API supports()
+→ module Enable state
+→ GPIO / Pin
+→ Device Manager Read Once / Monitor
 → minimal raw diagnostic
-→ physical wiring / power
+→ VCC / GND / Signal wiring
+→ calibration
 ```
 
-> Live Read / Monitor support varies by module and Runtime version. Documentation must only promise controls that the selected Device Manager/Runtime combination really implements.
+For Light, Sound, Joystick, and other calibrated modules, confirm that the raw signal behaves correctly before calibrating.
 
 ---
 
-# 8. Correct troubleshooting order for a Sensor
+# 8. Import / Export / Restore
 
-For a Light Sensor:
+- **Export / Backup** saves the current configuration.
+- **Import** applies selected settings back to the device.
+- **Restore / Defaults** performs a broader configuration change and should be used with awareness of its scope.
 
-```text
-1. m.supports("light")
-2. light_sensor enabled?
-3. light_sensor_pin = ?
-4. Device Manager config / Live Read (when supported)
-5. minimal machine.ADC raw test
-6. AO / VCC / GND physical wiring
-7. raw changes but 0–100 is poor → calibration
-```
-
-Use `machine.Pin` for a small digital-input check where appropriate.
-
-This helps separate:
-
-```text
-API / Runtime issue
-configuration issue
-Pin / wiring issue
-calibration issue
-project-logic issue
-```
+If the Runtime itself must be rebuilt or Recovery / Deep Rescue is required, use Hardware Lab instead.
 
 ---
 
-# 9. Import / Export / Restore
+# 9. Online Documentation integration
 
-Think of these as different operations:
-
-- **Export / backup** — save the current settings;
-- **Import** — apply selected settings to a device;
-- **Restore / Defaults** — broader configuration changes that require understanding their effect.
-
-Full restore behavior may depend on Runtime version, so production documentation should resolve instructions by Device Manager version + Runtime version.
-
----
-
-# 10. OLED font-management differences by connection mode
-
-In `v0.5.0-rc8`, the OLED Font Manager keeps the existing Chinese-glyph analysis/upload path in both connection modes, but the persistent `Current Student Custom Font Cache` read/clear management block is shown only in `MicroUSB / Pico`.
-
-```text
-Runtime UART
-→ glyph analysis/upload remains available
-→ persistent font-cache management block is hidden
-
-MicroUSB / Pico
-→ full persistent font-cache management block is shown
-```
-
-This is a UI availability decision; it does not remove other Runtime UART OLED capabilities.
-
----
-
-# 11. When should I switch from Device Manager to Hardware Lab?
-
-Use Hardware Lab when the problem is no longer just one Sensor/Pin and instead involves:
-
-```text
-unknown firmware
-possible target / MCU mismatch
-wrong execution_mode
-Recovery / Rescue
-Clean Flash
-unexpected mode after an update
-MicroUSB / Host UART / Gateway lifecycle-management path
-```
-
-See [Hardware Lab Basics](hardware-lab.md).
-
-The current Hardware Lab focuses on firmware and device lifecycle; it is not a general GPIO/ADC Sensor tester.
-
----
-
-# 12. Relationship to Student API documentation
-
-A future Device Manager module page can provide:
-
-```text
-[Guide]
-[Troubleshooting]
-```
-
-and pass known context into Online Documentation:
+Device Manager can deep-link the current environment into MangoBox Online Documentation, including:
 
 ```text
 language
@@ -326,14 +152,11 @@ module_enabled
 configured Pin
 ```
 
-For example, MangoX2 IR configured on GP4 can open directly at:
-
-> MangoX2 + Pico 2 W → High Level MicroPython → IR → Troubleshooting → configured GP4
-
-without asking the learner to choose everything again.
+The online documentation now follows the five stable Runtime targets and filters Student API content by the selected stable compatibility profile.
 
 ## Related documentation
 
 - [Hardware Lab Basics](hardware-lab.md)
-- each module's Troubleshooting view
-- [Tool → Documentation Deep-Link Contract](../../TOOL_HELP_DEEPLINK_CONTRACT_V1.md)
+- [Device Manager v0.5.0 full installation and user guide](../../../../desktop/device-manager/guide/)
+- [MangoBox Download Center](../../../../releases/)
+- Module Guide / Troubleshooting / API Reference pages

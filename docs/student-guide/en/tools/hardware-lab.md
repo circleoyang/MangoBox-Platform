@@ -1,116 +1,80 @@
 # Hardware Lab Basics
 
-Hardware Lab is MangoBox's **firmware and device-lifecycle diagnostic tool**. The current release is not a general-purpose Sensor/GPIO live-test tool. Its main responsibilities are:
-
-- selecting the correct MangoBox target;
-- firmware updates;
-- Clean Flash (Factory Reset + firmware deployment);
-- Button + RESET maintenance gestures;
-- execution-mode detection and switching;
-- MicroUSB / Host UART / Gateway management paths;
-- diagnostic reporting.
-
-> Hardware Lab v0.2.0-rc3 does **not** yet provide general GPIO/ADC/RGB/Buzzer/OLED/Servo/Sensor production tests. When an API troubleshooting page says to verify a real Pin signal, use the minimal diagnostic program in the documentation or a supported Device Manager Live Read / Monitor path. Do not assume Hardware Lab already contains every Sensor test.
-
----
-
-## When should I use Hardware Lab?
-
-Typical learner or classroom-maintenance situations include:
-
-1. updating MangoX2 / MangoLite firmware;
-2. checking an unknown execution mode;
-3. recovering a board that did not return to the expected mode after an update;
-4. performing a Clean Flash;
-5. validating Recovery / Deep Rescue style gestures;
-6. saving a diagnostic report before changing the device again.
-
-If the problem is only "Why does my Light Sensor return no value?", start with that module's **Troubleshooting** page instead of performing a Clean Flash.
-
----
-
-# 1. Select the correct hardware target first
-
-Current Hardware Lab targets are:
+Hardware Lab is MangoBox's **firmware and device-lifecycle tool**. The current public stable release is **v0.3.0**, aligned with the five Runtime targets published on 2026-09-06:
 
 ```text
-MangoLite + Pico 2 W
-MangoX2 + Pico
-MangoX2 + Pico 2 W
+MangoX2 + Pico       → Runtime v0.2.6
+MangoX2 + Pico W     → Runtime v0.2.6
+MangoX2 + Pico 2 W   → Runtime v0.2.6
+MangoLite + Pico W   → Runtime v0.6.0
+MangoLite + Pico 2 W → Runtime v0.6.0
 ```
 
-This matters because MCU family, Recovery Button, Host UART pins, Gateway support and firmware UF2 are not identical across targets.
+Hardware Lab handles Firmware Update, Clean Flash, Factory Reset assistance, Recovery / Deep Rescue, execution modes, management transports, and diagnostic reports. Normal GPIO / Pin configuration, calibration, and sensor monitoring belong to Device Manager v0.5.0.
+
+Stable downloads and SHA-256 values are listed in the [MangoBox Download Center](../../../../releases/).
+
+---
+
+# 1. Select the correct target first
+
+In v0.3.0, first select MangoX2 / MangoLite, then select Pico / Pico W / Pico 2 W. The five stable targets differ as follows:
 
 | Target | MCU | Recovery Button | Host UART | Gateway |
 |---|---|---|---|---|
+| MangoX2 + Pico | RP2040 | GP7 (standard pre-installed, removable) | GP12 TX / GP13 RX | No |
+| MangoX2 + Pico W | RP2040 | GP7 (standard pre-installed, removable) | GP12 TX / GP13 RX | Yes |
+| MangoX2 + Pico 2 W | RP2350 | GP7 (standard pre-installed, removable) | GP12 TX / GP13 RX | Yes |
+| MangoLite + Pico W | RP2040 | GP3 | GP4 TX / GP5 RX | Yes |
 | MangoLite + Pico 2 W | RP2350 | GP3 | GP4 TX / GP5 RX | Yes |
-| MangoX2 + Pico | RP2040 | GP7 (pre-installed, removable) | GP12 TX / GP13 RX | No |
-| MangoX2 + Pico 2 W | RP2350 | GP7 (pre-installed, removable) | GP12 TX / GP13 RX | Yes |
 
-On MangoX2, GP7 is a removable pre-installed Button rather than a PCB-fixed control. If it has been removed, a Button + RESET gesture test is **N/A**, not FAIL.
+The MangoX2 GP7 button is a removable pre-installed module rather than a fixed PCB-mounted component. If it has been removed, a Button + RESET gesture test should be treated as N/A rather than FAIL.
 
 ---
 
-# 2. Firmware Update — keep current settings
+# 2. Firmware Update
 
-Use the normal firmware update when you want a newer Runtime without intentionally clearing the current device configuration.
-
-Typical flow:
+Use a normal Firmware Update when you want to update the Runtime while preserving the current device configuration:
 
 ```text
-Select target
-   ↓
-Select matching .uf2
-   ↓
-Firmware Update
-   ↓
-Hardware Lab validates target / MCU
-   ↓
-Enter UF2 bootloader
-   ↓
-Copy firmware
+select Target
+→ select the exact matching UF2
+→ Firmware Update
+→ confirm Target / MCU
+→ enter UF2 bootloader
+→ copy firmware
+→ wait for reboot and status verification
 ```
 
-A normal firmware update does **not** guarantee that the board will reboot into MicroPython mode. The persisted `execution_mode` still matters.
+All five stable UF2 files are independent targets. Do not interchange them just because two targets use the same MCU family.
 
 ---
 
-# 3. Clean Flash — use only when a real reset is required
+# 3. Clean Flash
 
-Clean Flash combines Factory Reset and firmware deployment.
-
-It is appropriate when:
+Use Clean Flash only when the device environment really needs to be rebuilt, for example when:
 
 - configuration is badly inconsistent;
-- you need a clean Runtime environment;
-- a normal firmware update cannot resolve a lifecycle problem;
-- a teacher needs to return equipment to a known classroom state.
+- a normal Firmware Update does not recover the device;
+- a teacher needs to return classroom hardware to a known deployment state;
+- a full Factory Reset + firmware deployment workflow is required.
 
-Do not use Clean Flash as the first response to an ordinary sensor-wiring problem.
-
----
-
-# 4. Button + RESET maintenance gestures
-
-Hardware Lab can guide maintenance-gesture validation, but the PC-side timer is only a reference. Firmware determines the real gesture timing and behavior.
-
-### MangoLite
-
-GP3 and the maintenance cue hardware are board-fixed.
-
-### MangoX2
-
-GP7 and the RGB strip may be removed.
-
-Therefore:
-
-- the fixed onboard Buzzer is the more reliable cue;
-- RGB is an extra cue only when the module is still installed;
-- when GP7 is absent, the gesture test should be marked N/A.
+Do not use Clean Flash as the first response to an ordinary module problem.
 
 ---
 
-# 5. Execution-mode detection and switching
+# 4. Recovery / Deep Rescue gestures
+
+Maintenance gestures are interpreted by the Runtime; the PC timer is only an operational guide.
+
+- **MangoLite** uses GP3 + RESET.
+- **MangoX2** uses GP7 + RESET; GP7 is a removable pre-installed module.
+
+The general progression is normal boot, Recovery after a longer hold, and Deep Rescue after a still longer hold. Follow Hardware Lab and the current stable Runtime status rather than relying only on the timer.
+
+---
+
+# 5. Execution modes
 
 MangoBox may use:
 
@@ -120,111 +84,78 @@ host_uart
 gateway
 ```
 
-but not every target supports every mode.
-
-For example, MangoX2 + Pico (RP2040) has no Wi-Fi and therefore has no Gateway mode.
-
-Hardware Lab's `Auto` path probes management transports that make sense for the selected target instead of assuming all boards behave the same way.
+Not every target provides every mode. A standard Raspberry Pi Pico has no Wi-Fi, so **MangoX2 + Pico does not provide Gateway mode**. Pico W / Pico 2 W targets can use the Gateway path.
 
 ---
 
-# 6. Three common connection paths
+# 6. Management connections
 
 ## MicroUSB
 
-Used for MicroPython REPL management, ROM-bootloader entry and selected firmware/mode-management paths.
-
-If Thonny owns the same COM port, stop/release the connection first.
+Used for MicroPython / REPL management, bootloader access, and some firmware / mode operations. If MangoThonny owns the same COM port, stop the program and release the connection first.
 
 ## Host UART
 
-Use a 3.3 V USB-TTL adapter.
-
-In addition to TX/RX, always connect:
+Use a 3.3 V USB-to-TTL adapter at `115200` baud and always share ground:
 
 ```text
 GND ↔ GND
 ```
 
-Current Runtime UART baud rate:
-
-```text
-115200
-```
-
-Use the target-specific TX/RX pins shown by Hardware Lab. Do not mix MangoLite and MangoX2 UART pin assignments.
+MangoX2 and MangoLite use different UART pins, so follow the selected target.
 
 ## Gateway
 
-Only available on wireless-capable targets. MangoX2 + Pico (RP2040) has no Gateway path.
+Available only on Wi-Fi targets. Standard MangoX2 + Pico has no Gateway path.
 
 ---
 
-# 7. Save the Diagnostic Report before changing more things
+# 7. Diagnostic Report
 
-Hardware Lab can record lifecycle diagnostics such as:
+When a lifecycle problem occurs, save the JSON diagnostic report before making larger device changes. A report may include:
 
-- target ID;
-- MCU family;
-- hardware-presence information;
-- Recovery Button;
-- UART pins;
-- COM ports;
+- target / MCU;
+- Runtime identity;
+- Recovery Button state;
+- Host UART pins;
+- COM port;
 - Gateway configuration;
-- selected firmware;
-- Clean Flash mode;
+- selected UF2;
+- execution mode;
+- Clean Flash / Recovery state;
 - stable diagnostic code.
 
-When reporting a difficult problem, a good rule is:
-
-> **Save the JSON diagnostic report before changing device state again.**
-
-This preserves evidence about the original failure state.
-
 ---
 
-# 8. How do I diagnose Sensor / GPIO problems today?
+# 8. Sensor / GPIO troubleshooting
 
-For problems such as:
-
-> "Why does my PIR / Light / Sound / IR / Joystick not respond?"
-
-use this current flow:
+For a PIR / Light / Sound / IR / Joystick problem, do not start with Clean Flash. Use this order instead:
 
 ```text
-Student API supports() / capability
-        ↓
-module enabled?
-        ↓
-configured GPIO / Pin
-        ↓
-Device Manager Live Read / Monitor (when supported)
-        ↓
-minimal raw diagnostic program from the API docs
-        ↓
-physical VCC / GND / Signal wiring
+Student API supports()
+→ module Enable state
+→ GPIO / Pin
+→ Device Manager Read Once / Monitor
+→ minimal raw diagnostic
+→ VCC / GND / Signal wiring
+→ calibration
 ```
 
-A Digital input can be checked with `machine.Pin`; an ADC sensor can be checked with `machine.ADC` to see whether its raw value changes.
-
-**Do not treat the current Hardware Lab as a general GPIO/ADC oscilloscope.** That can be a future capability, but documentation should not promise it until it exists.
+Hardware Lab v0.3.0 remains a firmware / lifecycle tool, not a general GPIO / ADC oscilloscope.
 
 ---
 
-# 9. Hardware Lab vs Device Manager
+# 9. Tool responsibilities
 
-| Tool | Main purpose |
+| Tool | Primary role |
 |---|---|
-| Device Manager | module enablement, Pin configuration, configuration management, supported Live Read / Monitor, calibration |
-| Hardware Lab | firmware, Clean Flash, Recovery, execution mode, management transports, lifecycle diagnostics |
-| Student API documentation | learner programming and minimal diagnostic programs |
-
-These tools complement one another rather than replacing one another.
-
----
+| MangoThonny v0.4.0 | Python / MicroPython teaching, Host Student API, project development and export |
+| Device Manager v0.5.0 | Module Enable state, pins, configuration, calibration, Read Once / Monitor |
+| Hardware Lab v0.3.0 | Firmware, Clean Flash, Recovery, execution mode, lifecycle diagnostics |
 
 ## Related documentation
 
 - [Device Manager Basics](device-manager.md)
-- each API module's Troubleshooting view
-- the Online Documentation target / mode / version selector
+- [Hardware Lab v0.3.0 full installation and user guide](../../../../desktop/hardware-lab/guide/)
+- [MangoBox Download Center](../../../../releases/)
+- Online Documentation target / mode / stable-version selector
