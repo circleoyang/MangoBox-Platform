@@ -16,6 +16,7 @@
     "colors": {"zh-TW": "要依序使用的顏色清單；None 使用 Runtime 預設顏色序列。", "en": "Sequence of colors to use; None selects the Runtime default sequence."},
     "sensor": {"zh-TW": "命名感測器名稱；None 通常表示目前預設或 board 感測器。", "en": "Named sensor identifier; None normally selects the current default/board sensor."},
     "callback": {"zh-TW": "事件發生時要呼叫的 Python 函式；傳入可呼叫函式，不要寫成函式執行結果。", "en": "Python callable to run when the event occurs; pass the function itself, not the result of calling it."},
+    "event_name": {"zh-TW": "相容事件名稱；用來指定 on() 要監聽的事件。一般新教材優先使用具名事件 API。", "en": "Compatibility event name used by on(); new learner material should prefer named event APIs."},
     "frequency": {"zh-TW": "音調頻率，單位 Hz。", "en": "Tone frequency in hertz (Hz)."},
     "song": {"zh-TW": "預設歌曲名稱、音符字串，或 Student API 接受的音符序列。", "en": "Preset song name, note string, or note sequence accepted by the Student API."},
     "tempo": {"zh-TW": "速度（BPM）；None 表示沿用音符本身或預設 duration 語意。", "en": "Tempo in BPM; None keeps note/default-duration timing semantics."},
