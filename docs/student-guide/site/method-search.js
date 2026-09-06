@@ -55,6 +55,13 @@
     return state.modules.find(module => module.id === entry.module);
   }
 
+  function entryAvailableInContext(entry) {
+    const profile = activeProfile();
+    if (!profile) return true;
+    const module = moduleFor(entry);
+    return Boolean(module && profile.capabilities.includes(module.capability));
+  }
+
   function searchableFields(entry) {
     const module = moduleFor(entry);
     return [
@@ -68,6 +75,18 @@
       module?.summary?.["zh-TW"],
       module?.summary?.en
     ].filter(Boolean);
+  }
+
+  function intentAtoms(entry) {
+    const module = moduleFor(entry);
+    return [...new Set([
+      entry.name,
+      entry.zh,
+      entry.en,
+      ...(entry.aliases || []),
+      module?.labels?.["zh-TW"],
+      module?.labels?.en
+    ].filter(Boolean).map(compact).filter(atom => atom.length >= 2 && atom.length <= 18))];
   }
 
   function queryVariants(raw) {
@@ -87,6 +106,7 @@
     const titles = [entry.zh, entry.en].filter(Boolean).map(normalizeText);
     const hay = normalizeText(searchableFields(entry).join(" "));
     const hayCompact = compact(searchableFields(entry).join(" "));
+    const atoms = intentAtoms(entry);
 
     let best = null;
     for (const query of variants) {
@@ -139,6 +159,15 @@
         matched = true;
       }
 
+      // Also support compact Chinese combinations such as "馬達前進" when
+      // the index stores those learner intents as separate aliases.
+      const coveredAtoms = atoms.filter(atom => qCompact.includes(atom));
+      const coveredLength = coveredAtoms.reduce((sum, atom) => sum + atom.length, 0);
+      if (coveredAtoms.length && coveredLength >= Math.max(2, Math.ceil(qCompact.length * 0.6))) {
+        score += 36 + Math.min(30, coveredLength * 4);
+        matched = true;
+      }
+
       if (matched && (best === null || score > best)) best = score;
     }
 
@@ -147,6 +176,7 @@
 
   function rankedResults(rawQuery) {
     return state.api
+      .filter(entryAvailableInContext)
       .map(entry => ({ entry, score: scoreEntry(entry, rawQuery) }))
       .filter(item => item.score !== null)
       .sort((a, b) => b.score - a.score || a.entry.name.localeCompare(b.entry.name))
@@ -177,7 +207,7 @@
     }
 
     const openLabel = state.lang === "zh-TW" ? "直接開啟 API" : "Open API";
-    const referenceLabel = state.lang === "zh-TW" ? "API Reference" : "API Reference";
+    const referenceLabel = "API Reference";
 
     results.innerHTML = ranked.map(({ entry }) => {
       const module = moduleFor(entry);
@@ -313,7 +343,7 @@
       : null);
     if (requested) {
       const entry = state.api.find(item => item.name === requested);
-      if (entry) openMethod(entry, false);
+      if (entry && entryAvailableInContext(entry)) openMethod(entry, false);
     }
   }
 
