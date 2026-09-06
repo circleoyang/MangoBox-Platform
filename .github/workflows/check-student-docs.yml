@@ -6,6 +6,7 @@ on:
     paths:
       - "docs/student-guide/**"
       - "scripts/check_student_docs.py"
+      - "scripts/check_student_search.py"
       - ".github/workflows/check-student-docs.yml"
   push:
     branches:
@@ -13,6 +14,7 @@ on:
     paths:
       - "docs/student-guide/**"
       - "scripts/check_student_docs.py"
+      - "scripts/check_student_search.py"
       - ".github/workflows/check-student-docs.yml"
 
 jobs:
@@ -25,3 +27,5 @@ jobs:
           python-version: "3.11"
       - name: Validate profile/module/document coverage
         run: python scripts/check_student_docs.py
+      - name: Validate method-level API search contract
+        run: python scripts/check_student_search.py

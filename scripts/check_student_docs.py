@@ -11,7 +11,7 @@ SITE = ROOT / "docs" / "student-guide" / "site"
 PROFILES_PATH = SITE / "data" / "profiles.json"
 MODULES_PATH = SITE / "data" / "modules.json"
 LANGS = ("zh-TW", "en")
-CURRENT_SOURCE_STATUS = "public-current"
+PUBLIC_SOURCE_STATUSES = {"public-current", "public-stable"}
 
 
 def load(path: Path):
@@ -33,10 +33,16 @@ def main() -> int:
     modules = modules_data.get("modules", [])
     errors: list[str] = []
 
-    if profiles_data.get("source_status") != CURRENT_SOURCE_STATUS:
-        errors.append(f"profiles.json source_status must be {CURRENT_SOURCE_STATUS!r}")
-    if modules_data.get("source_status") != CURRENT_SOURCE_STATUS:
-        errors.append(f"modules.json source_status must be {CURRENT_SOURCE_STATUS!r}")
+    if profiles_data.get("source_status") not in PUBLIC_SOURCE_STATUSES:
+        errors.append(
+            "profiles.json source_status must be one of "
+            f"{sorted(PUBLIC_SOURCE_STATUSES)!r}"
+        )
+    if modules_data.get("source_status") not in PUBLIC_SOURCE_STATUSES:
+        errors.append(
+            "modules.json source_status must be one of "
+            f"{sorted(PUBLIC_SOURCE_STATUSES)!r}"
+        )
 
     module_ids = set()
     capabilities = set()
@@ -64,7 +70,7 @@ def main() -> int:
         profile_ids.add(profile_id)
 
         if "candidate" in profile_id.lower():
-            errors.append(f"public-current profile id must not contain candidate: {profile_id}")
+            errors.append(f"public profile id must not contain candidate: {profile_id}")
         if str(profile.get("release_status", "")).startswith("source_candidate"):
             errors.append(f"stale candidate release_status: {profile_id}")
 
