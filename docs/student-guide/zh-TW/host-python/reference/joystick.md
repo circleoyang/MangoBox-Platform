@@ -1,29 +1,34 @@
-# Host Python Joystick API Reference
+# Joystick API Reference — Host Python
 
 ## `joystick()`
 
-回傳：
-
 ```python
-(x, y)
+m.joystick(sensor=None)
 ```
 
-X、Y 都是整數 `-100..100`。
+一次取得目前 Joystick 的 X、Y 與 switch / button 狀態。
 
-## `is_joystick_pressed()`
+| 參數 | 說明 |
+|---|---|
+| `sensor` | 命名 Joystick；`None` 使用目前預設。 |
 
-同步讀取 SW state，回傳 `bool`。
+```python
+value = m.joystick()
+print(value)
+```
 
-## `on_joystick_pressed(callback, period=50)`
+實際回傳結構由 current Student API contract 定義；Host 程式應使用 Runtime 回傳的 canonical 結果，不直接假設 ADC Pin 或固定 raw center。
 
-搖桿按鍵按下時觸發 callback。
+多裝置：
 
-## `on_joystick_released(callback, period=50)`
+```python
+m.joystick("controller1")
+```
 
-搖桿按鍵放開時觸發 callback。
+中心值、ADC 範圍與 switch Pin 的校準／mapping 由 Runtime / Device Manager 管理。
 
-## `calibrate_joystick(samples=16)`
+## Capability
 
-要求 Runtime 執行 center calibration，回傳 `(center_x, center_y)` raw center values。
-
-`period` 最低 20 ms。Joystick 必須在 `enabled_modules.ps2` 啟用。
+```python
+print(m.supports("joystick"))
+```
