@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "source_status": "public-stable",
+  "source_date": "2026-09-06",
+  "entries": [
+    {"module":"led","name":"led_all","signature":"m.led_all(color)","zh":"設定全部 RGB LED 顏色","en":"Set all RGB LEDs to one color","aliases":["led","rgb","燈","燈光","顏色","color"]},
+    {"module":"led","name":"led_off","signature":"m.led_off()","zh":"關閉 RGB LED","en":"Turn RGB LEDs off","aliases":["off","關燈","關閉led"]},
+    {"module":"button","name":"read_button","signature":"m.read_button()","zh":"讀取按鈕狀態","en":"Read button state","aliases":["button","按鈕","pressed","read"]},
+    {"module":"button","name":"on_button_pressed","signature":"m.on_button_pressed(callback)","zh":"按鈕按下事件","en":"Run a callback when the button is pressed","aliases":["button event","按下事件","callback"]},
+    {"module":"buzzer","name":"tone","signature":"m.tone(frequency, duration)","zh":"播放指定頻率與時間的音調","en":"Play a tone at a frequency for a duration","aliases":["buzzer","蜂鳴器","聲音","音調","beep","music"]},
+    {"module":"servo","name":"servo","signature":"m.servo(angle)","zh":"設定 Servo 角度","en":"Set servo angle","aliases":["servo","伺服馬達","角度","angle"]},
+    {"module":"motor","name":"forward","signature":"m.forward(speed)","zh":"車體向前移動","en":"Drive forward","aliases":["motor","馬達","車子","前進","forward","drive"]},
+    {"module":"motor","name":"backward","signature":"m.backward(speed)","zh":"車體向後移動","en":"Drive backward","aliases":["motor","馬達","後退","backward","reverse"]},
+    {"module":"motor","name":"left","signature":"m.left(speed)","zh":"車體向左轉","en":"Turn left","aliases":["左轉","turn left","drive"]},
+    {"module":"motor","name":"right","signature":"m.right(speed)","zh":"車體向右轉","en":"Turn right","aliases":["右轉","turn right","drive"]},
+    {"module":"motor","name":"stop","signature":"m.stop()","zh":"停止馬達／車體","en":"Stop the motors","aliases":["停止","stop motor","煞車"]},
+    {"module":"oled","name":"text","signature":"m.text(text, x, y)","zh":"在 OLED 顯示文字","en":"Draw text on the OLED","aliases":["oled","顯示器","文字","display","screen"]},
+    {"module":"oled","name":"clear","signature":"m.clear()","zh":"清除 OLED 畫面","en":"Clear the OLED display","aliases":["oled","清除畫面","clear screen"]},
+    {"module":"ir","name":"is_ir_pressed","signature":"m.is_ir_pressed(key)","zh":"判斷 IR 遙控器按鍵是否按下","en":"Check whether an IR remote key is pressed","aliases":["ir","紅外線","遙控器","remote","按鍵"]},
+    {"module":"ultrasonic","name":"distance","signature":"m.distance()","zh":"讀取超音波距離（cm）","en":"Read ultrasonic distance in centimeters","aliases":["distance","距離","超音波","ultrasonic","測距"]},
+    {"module":"obstacle","name":"is_blocked","signature":"m.is_blocked()","zh":"判斷前方是否有障礙物","en":"Check whether an obstacle is detected","aliases":["障礙物","obstacle","blocked","避障"]},
+    {"module":"line_tracking","name":"line_state","signature":"m.line_state()","zh":"讀取左右循跡感測器狀態","en":"Read the dual line-tracking state","aliases":["循跡","line","tracking","黑線","巡線"]},
+    {"module":"pir","name":"is_motion_detected","signature":"m.is_motion_detected()","zh":"判斷 PIR 是否偵測到移動","en":"Check whether PIR motion is detected","aliases":["pir","人體感測","移動","motion","人"]},
+    {"module":"light","name":"light","signature":"m.light()","zh":"讀取 0–100 相對亮度","en":"Read normalized light level from 0 to 100","aliases":["light","光線","亮度","brightness","光敏"]},
+    {"module":"sound","name":"sound_level","signature":"m.sound_level()","zh":"讀取 0–100 相對聲音強度","en":"Read normalized sound level from 0 to 100","aliases":["sound","聲音","音量","麥克風","microphone","noise"]},
+    {"module":"joystick","name":"joystick","signature":"m.joystick()","zh":"讀取搖桿 X/Y 與按鍵狀態","en":"Read joystick X/Y and switch state","aliases":["joystick","搖桿","x y","方向"]},
+    {"module":"led","name":"supports","signature":"m.supports(\"led\")","zh":"確認目前環境是否支援指定能力","en":"Check whether the current environment supports a capability","aliases":["supports","支援","capability","功能是否支援"]}
+  ]
+}
