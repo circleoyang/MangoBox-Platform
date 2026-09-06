@@ -1,68 +1,109 @@
 # OLED API Reference
 
-工程導向 Reference。學生入門請先看 [OLED 使用指南](../guides/oled.md)。
-
-## `clear_oled()`
-
 ```python
-clear_oled() -> None
+from mangobox import Mango
+m = Mango()
 ```
-
-清除 OLED 顯示內容。
 
 ## `text()`
 
 ```python
-text(text, x=0, y=0, size=1) -> None
+m.text(text, x=0, y=0, size=1)
 ```
 
-| 參數 | 型別 | 說明 |
-|---|---|---|
-| `text` | `str` | 要顯示的文字。High Level MicroPython 可使用 `\n` 分行。 |
-| `x` | `int` | X 座標。 |
-| `y` | `int` | Y 座標。 |
-| `size` | `int` | 字型倍率。 |
+在 OLED 顯示文字。High-Level MicroPython 的 `text()` 支援字串中的 `\n`，會自動分行送到 Runtime。
 
-## `flash_text()`
+| 參數 | 型別 | 預設值 | 說明 |
+|---|---|---:|---|
+| `text` | 任意可轉字串值 | 必填 | 要顯示的文字。 |
+| `x` | `int` | `0` | 左上角 X 座標。 |
+| `y` | `int` | `0` | 左上角 Y 座標。 |
+| `size` | `int` | `1` | 文字倍率。 |
 
 ```python
-flash_text(text, x=0, y=0, size=1, period=500, duration=0) -> None
+m.text("Hello", 0, 0)
+m.text("Line 1\nLine 2", 0, 0, 1)
 ```
 
-啟動文字閃爍效果。
+`text()` 不會自動清除既有畫面；需要乾淨畫面時先呼叫 `clear()`。
+
+## `clear()` / `clear_oled()` / `clear_screen()`
+
+```python
+m.clear()
+m.clear_oled()
+m.clear_screen()
+```
+
+三者目前都用來清除整個 OLED。學生程式建議使用最短的 `clear()`。
+
+```python
+m.clear()
+m.text("Ready", 0, 0)
+```
+
+## `flash_text()` / `start_flash_text()`
+
+```python
+m.flash_text(text, x=0, y=0, size=1, period=500, duration=0)
+m.start_flash_text(text, x=0, y=0, size=1, period=500, duration=0)
+```
+
+讓文字週期顯示／隱藏，形成閃爍效果。
+
+| 參數 | 預設值 | 說明 |
+|---|---:|---|
+| `text` | 必填 | 要閃爍的文字。 |
+| `x` / `y` | `0` | 文字位置。 |
+| `size` | `1` | 文字倍率。 |
+| `period` | `500` | 閃爍更新間隔（ms）。 |
+| `duration` | `0` | 效果時間（ms）；`0` 代表不自動停止。 |
+
+```python
+m.flash_text("WARNING", x=0, y=20, period=300, duration=5000)
+m.run_forever()
+```
+
+持續效果需要 High-Level MicroPython Scheduler，因此程式必須維持 event loop。
+
+## `send_text()`
+
+```python
+m.send_text(text, x=0, y=0, size=1)
+```
+
+較底層的單行文字送出方法。一般學生程式優先使用 `text()`，因為 `text()` 會處理多行字串。
+
+## 影像 API 狀態
+
+目前 Student API 類別內仍保留：
+
+```python
+m.show_image(...)
+m.start_image_loop(...)
+```
+
+但目前 Runtime 會拋出 `NotImplementedError`，因此**線上教學不應把它們當成可用功能**。`stop_image_loop()` 為相容 Runtime 命令，但在目前影像功能未完成前不列為初學者建議 API。
 
 ## Execution lifecycle
 
-目前 High Level MicroPython 的 OLED 執行語意有 target 差異：
+| API | `m.run_forever()` |
+|---|---:|
+| `text()` / `clear()` | 不需要 |
+| `flash_text()` | 需要 |
 
-| Target / API | 現況 | `m.run_forever()` |
-|---|---|---:|
-| MangoLite + Pico 2 W `clear_oled()` / `text()`（Runtime 0.6.0-rc22） | 指令先進 OLED queue，由 Scheduler 處理 | **目前需要** |
-| MangoX2 + Pico / Pico 2 W `clear_oled()` / `text()`（Runtime 0.2.6-rc10） | handler 使用 immediate 路徑 | 不需要 |
-| `flash_text()` | 持續閃爍，由 Scheduler 更新 | 需要 |
+## 完整範例
 
-為了讓同一份學生範例可跨硬體執行，目前 Guide 的靜態 OLED 範例暫時保留 `m.run_forever()`。
+```python
+from mangobox import Mango
 
-已核定後續 Runtime 工作：MangoLite 的靜態 `clear_oled()` 與 `text()` 要改成 immediate，與 MangoX2 統一。完成 build 與三條硬體路徑實機驗證後，本 Reference 與 Guide 才移除靜態 OLED 的暫時 `run_forever()` 要求。
-
-`flash_text()` 不受這項調整影響，仍屬 Scheduler-driven。
-
-## Availability
-
-是否可用必須由 target、Programming Mode、版本、Runtime module enablement 與實際 Student API method 一起判定。MangoLite OLED 為選配；MangoX2 預設 profile 通常啟用 OLED。Host Python 不可只因 Runtime 有 OLED config key 就宣告支援。
-
-## Configuration
-
-```text
-enabled_modules.oled
-oled_i2c_id
-oled_sda_pin
-oled_scl_pin
-oled_addr
-oled_width
-oled_height
+m = Mango()
+m.clear()
+m.text("MangoBox", 0, 0, 1)
+m.flash_text("READY", 0, 24, 1, period=400)
+m.run_forever()
 ```
 
-## Related
+## 相關 API
 
-`supports("oled")`, `clear_oled()`, `text()`, `flash_text()`, `run_forever()`
+`text()`, `clear()`, `flash_text()`, `send_text()`, `run_forever()`
