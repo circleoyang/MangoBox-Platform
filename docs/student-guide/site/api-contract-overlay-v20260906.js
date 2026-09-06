@@ -4,33 +4,39 @@
 (() => {
   "use strict";
 
+  const overlayPromise = fetch("data/api-contract-overlay-v20260906.json")
+    .then(response => {
+      if (!response.ok) throw new Error(`api-contract-overlay-v20260906.json: ${response.status}`);
+      return response.json();
+    });
+
   let overlayData = null;
 
-  async function loadOverlay() {
-    if (overlayData) return overlayData;
-    const response = await fetch("data/api-contract-overlay-v20260906.json");
-    if (!response.ok) throw new Error(`api-contract-overlay-v20260906.json: ${response.status}`);
-    overlayData = await response.json();
-    return overlayData;
-  }
-
   async function applyOverlay() {
+    if (window.MANGO_API_CONTRACT_OVERLAY?.applied || window.MANGO_API_CONTRACT_OVERLAY?.failed) return;
+
+    if (!overlayData) {
+      try {
+        overlayData = await overlayPromise;
+      } catch (error) {
+        console.error(error);
+        window.MANGO_API_CONTRACT_OVERLAY = {
+          applied: false,
+          failed: true,
+          fallback: "base-api-index"
+        };
+        window.dispatchEvent(new CustomEvent("mango-api-contract-ready"));
+        return;
+      }
+    }
+
     if (typeof state === "undefined" || !Array.isArray(state.api) || !state.api.length) {
       window.setTimeout(applyOverlay, 25);
       return;
     }
-    if (window.MANGO_API_CONTRACT_OVERLAY?.applied) return;
-
-    let data;
-    try {
-      data = await loadOverlay();
-    } catch (error) {
-      console.error(error);
-      return;
-    }
 
     const byName = new Map(state.api.map(entry => [entry.name, entry]));
-    for (const patch of data.entries || []) {
+    for (const patch of overlayData.entries || []) {
       if (!patch?.name) continue;
       byName.set(patch.name, {...(byName.get(patch.name) || {}), ...patch});
     }
@@ -38,17 +44,18 @@
 
     window.MANGO_API_CONTRACT_OVERLAY = {
       applied: true,
-      source: data.source_private_pr,
-      source_head: data.source_head,
-      source_date: data.source_date,
-      expected_public_methods: data.expected_public_methods,
-      deferred_not_promoted: data.deferred_not_promoted || [],
+      failed: false,
+      source: overlayData.source_private_pr,
+      source_head: overlayData.source_head,
+      source_date: overlayData.source_date,
+      expected_public_methods: overlayData.expected_public_methods,
+      deferred_not_promoted: overlayData.deferred_not_promoted || [],
       count: state.api.length
     };
 
-    if (data.expected_public_methods && state.api.length !== data.expected_public_methods) {
+    if (overlayData.expected_public_methods && state.api.length !== overlayData.expected_public_methods) {
       console.error(
-        `MangoBox API contract overlay count mismatch: ${state.api.length} != ${data.expected_public_methods}`
+        `MangoBox API contract overlay count mismatch: ${state.api.length} != ${overlayData.expected_public_methods}`
       );
     }
 
@@ -59,6 +66,8 @@
       document.querySelector("[data-generated-api-details]")?.remove();
       renderDocs();
     }
+
+    window.dispatchEvent(new CustomEvent("mango-api-contract-ready"));
   }
 
   applyOverlay();
