@@ -12,7 +12,7 @@
     "end": {"zh-TW": "範圍結束 LED 索引。", "en": "Last LED index in the range."},
     "power": {"zh-TW": "亮度百分比；目前 RGB 亮度語意為 0～100。", "en": "Brightness percentage; current RGB brightness semantics use 0 to 100."},
     "period": {"zh-TW": "週期性工作或動畫的更新間隔，單位 ms；不是完整一次效果循環的時間。", "en": "Update/poll interval in milliseconds; it is not the duration of a complete animation cycle."},
-    "size": {"zh-TW": "效果大小；在流星燈效中表示拖尾使用的 LED 數量。", "en": "Effect size; for the meteor effect this is the LED tail length."},
+    "size": {"zh-TW": "尺寸／效果大小，依 method 而定；OLED 文字使用顯示倍率，流星燈效則表示拖尾 LED 數量。", "en": "Size/effect scale depends on the method; OLED text uses a display scale, while the meteor effect uses LED tail length."},
     "colors": {"zh-TW": "要依序使用的顏色清單；None 使用 Runtime 預設顏色序列。", "en": "Sequence of colors to use; None selects the Runtime default sequence."},
     "sensor": {"zh-TW": "命名感測器名稱；None 通常表示目前預設或 board 感測器。", "en": "Named sensor identifier; None normally selects the current default/board sensor."},
     "callback": {"zh-TW": "事件發生時要呼叫的 Python 函式；傳入可呼叫函式，不要寫成函式執行結果。", "en": "Python callable to run when the event occurs; pass the function itself, not the result of calling it."},
