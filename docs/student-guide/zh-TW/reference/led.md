@@ -1,118 +1,260 @@
 # RGB LED API Reference
 
-工程導向參考。實際可見內容應由 target／mode／version resolver 篩選。
-
-## `led_all()`
+適用於 MangoBox High-Level MicroPython Student API。以下名稱與預設值依目前 Runtime 公開介面整理；一般學生建議優先使用短名稱 `led()`、`led_all()`、`led_range()`、`brightness()`、`rainbow()`、`breath()`、`led_off()`。
 
 ```python
-led_all(color: str = "#ffffff", duration: int = 0, strip: str | None = None) -> None
+from mangobox import Mango
+m = Mango()
 ```
 
-讓指定 LED Strip 的所有 LED 顯示相同顏色。
+## 快速索引
 
-### Parameters
+| 想做什麼 | 建議 API |
+|---|---|
+| 點亮一顆 LED | `led()` |
+| 全部顯示同一顏色 | `led_all()` |
+| 點亮一段範圍 | `led_range()` |
+| 調整亮度 | `brightness()` |
+| 彩虹循環 | `rainbow()` |
+| 呼吸燈／漸亮漸暗 | `breath()` / `led_start_breathing()` |
+| 流星拖尾 | `led_start_meteor()` |
+| 逐顆擦入顏色 | `led_start_color_wipe()` |
+| 隨機星光閃爍 | `led_start_random_sparkle()` |
+| 火焰閃爍 | `led_start_fire_flicker()` |
+| 停止燈效並熄燈 | `led_off()` |
 
-| 參數 | 型別 | 說明 |
-|---|---|---|
-| `color` | `str` | 支援顏色名稱或 `#RRGGBB`。 |
-| `duration` | `int` | 傳給 Runtime 的持續時間參數；`0` 表示不設定自動結束時間。 |
-| `strip` | `str | None` | 指定 LED Strip；`None` 使用目前預設 strip。 |
+## 共用參數
 
-### Raises
+| 參數 | 型別 | 預設值 | 說明 |
+|---|---|---:|---|
+| `color` | `str` | 視 API 而定 | 支援顏色名稱或 `#RRGGBB`，例如 `"red"`、`"#0080ff"`。 |
+| `duration` | `int` | `0` | 單位 ms。`0` 代表不設定自動停止／還原時間，不是「執行 0 ms」。 |
+| `period` | `int` | 視 API 而定 | 動畫更新間隔，單位 ms；通常越小越快。它不是完整一次動畫循環的時間。 |
+| `strip` | `str | None` | `None` | 指定 LED strip 名稱。省略時使用目前預設 strip。 |
 
-`ValueError`：顏色字串不是支援名稱，也不是合法 `#RRGGBB`。
+目前 Student API 支援的顏色名稱包含：`red`、`green`、`blue`、`yellow`、`cyan`、`magenta`、`white`、`orange`、`pink`、`purple`、`black`、`off`。其他顏色請使用 `#RRGGBB`。
 
-## `led()`
+---
+
+## `led()` — 單顆 LED
 
 ```python
-led(index: int, color: str = "#ffffff", duration: int = 0, strip: str | None = None) -> None
+m.led(index, color="#ffffff", duration=0, strip=None)
 ```
 
-控制指定 index 的單顆 LED。
+設定指定索引的 LED 顏色。
 
-## `led_range()`
+| 參數 | 說明 |
+|---|---|
+| `index` | LED 索引，從 `0` 開始。 |
+| `color` | 顏色名稱或 `#RRGGBB`。 |
+| `duration` | 顯示多久（ms）；`0` 表示不自動還原。 |
+| `strip` | LED strip 名稱；通常可省略。 |
 
 ```python
-led_range(start: int, end: int, color: str = "#ffffff", duration: int = 0, strip: str | None = None) -> None
+m.led(0, "red")
+m.led(3, "#0080ff", duration=1000)
 ```
 
-控制指定範圍的 LED。
+`duration` 到期時 Runtime 會回復該 LED 先前的 frame 狀態。
 
-## `led_off()`
+## `led_all()` — 全部 LED
 
 ```python
-led_off(strip: str | None = None) -> None
+m.led_all(color="#ffffff", duration=0, strip=None)
 ```
 
-停止目前 LED effect（燈效）並清除 LED。
-
-## `brightness()`
+把指定燈條全部 LED 設成同一顏色。
 
 ```python
-brightness(power: int = 30, duration: int = 0, strip: str | None = None) -> None
+m.led_all("green")
+m.led_all("#ff6600", duration=2000)
 ```
 
-設定 LED brightness（亮度／功率比例）。
-
-## `rainbow()` / `breath()`
+## `led_range()` — 一段範圍
 
 ```python
-rainbow(period: int = 20, duration: int = 0, strip: str | None = None) -> None
-breath(color: str = "#ff00ff", period: int = 50, duration: int = 0, strip: str | None = None) -> None
+m.led_range(start, end, color="#ffffff", duration=0, strip=None)
 ```
 
-啟動高階燈效。實作由 Runtime Scheduler（排程器）處理，不要求學生自行寫 blocking loop（阻塞式迴圈）。
+設定 `start` 到 `end` 範圍內的 LED。Runtime 會處理範圍邊界；`start > end` 時會交換順序。
 
-## Execution lifecycle
+```python
+m.led_range(1, 4, "blue")
+```
 
-| API / 使用方式 | High Level MicroPython 行為 | `m.run_forever()` |
-|---|---|---:|
-| `led()` / `led_all()` / `led_range()`，`duration=0` | Immediate，立即寫入 LED frame | 不需要 |
-| `brightness(..., duration=0)` | Immediate | 不需要 |
-| `led_off()` | Immediate，停止 effect 並清除 | 不需要 |
-| 靜態 LED API 使用 `duration > 0` | 立即顯示，但之後恢復動作由 Scheduler 排程 | 需要，若要讓 timed restore 發生 |
-| `rainbow()` / `breath()` | 持續 Scheduler effect | 需要 |
-| meteor / color wipe / sparkle / fire flicker | 持續 Scheduler effect | 需要 |
+## `brightness()` — 整體亮度
 
-因此「LED 能亮」和「燈效會持續動」是兩種不同測試。若靜態 `led_all()` 正常但動畫不動，優先檢查 event loop，而不是先懷疑 GPIO。
+```python
+m.brightness(power=30, duration=0, strip=None)
+```
 
-## Availability
+| 參數 | 說明 |
+|---|---|
+| `power` | 亮度百分比，Runtime 實際限制為 `0..100`。 |
+| `duration` | 暫時使用此亮度的時間（ms）；設定後到期會恢復先前亮度。 |
 
-| Target | High Level MicroPython | Host Python |
-|---|---:|---:|
-| MangoX2 + Pico | 支援 | 支援（依 Host/Runtime 相容版本） |
-| MangoX2 + Pico 2 W | 支援 | 支援（依 Host/Runtime 相容版本） |
-| MangoLite + Pico 2 W | 支援 | 依 Host package/Runtime capability resolver |
+```python
+m.brightness(20)
+m.brightness(100, duration=1000)
+```
 
-網站不得只依 config key 判斷可用性，必須同時確認 learner method（學生 API 方法）與 compatibility metadata（相容性資料）。
+---
 
-## Hardware/config notes
+## `breath()` / `led_start_breathing()` — 呼吸燈
 
-- MangoX2 板載 LED baseline 使用可設定的 LED Strip configuration；目前 default board strip 為 GP6、8 顆。
-- MangoLite 板載 LED 是固定產品配置；目前 board strip 為 GP2、6 顆。
-- 外接 strip 應以裝置目前設定為準，不要求學生死背 Pin（腳位）。
+```python
+m.breath(color="#ff00ff", period=50, duration=0, strip=None)
+m.led_start_breathing(color="#ff00ff", period=50, duration=0, strip=None)
+```
 
-## Example
+讓整條 RGB LED 持續漸亮、漸暗。兩個方法對應同一種效果；`breath()` 是學生較容易記憶的短名稱。
 
-立即型：
+| 參數 | 型別 | 預設值 | 說明 |
+|---|---|---:|---|
+| `color` | `str` | `"#ff00ff"` | 呼吸燈顏色。 |
+| `period` | `int` | `50` | 每次更新亮度的間隔（ms）。不是一次完整呼吸週期。 |
+| `duration` | `int` | `0` | 效果持續時間（ms）；`0` 表示持續執行。 |
+| `strip` | `str | None` | `None` | 要控制的燈條。 |
+
+```python
+m.breath("#0080ff", period=100)
+```
+
+較大的 `period` 會讓亮度更新較慢。RGB Runtime 排程的實際最小更新間隔為 20 ms，因此把 `period` 設得更小不會得到低於 20 ms 的更新週期。
+
+如果 `duration=0`，效果會持續執行。要確實停止效果並熄燈：
+
+```python
+m.led_off()
+```
+
+> `duration` 到期代表停止呼吸動畫更新，不應理解為「時間到後一定自動熄燈」。
+
+---
+
+## `rainbow()` / `led_start_rainbow()` — 彩虹循環
+
+```python
+m.rainbow(period=20, duration=0, strip=None)
+m.led_start_rainbow(period=20, duration=0, strip=None)
+```
+
+讓各顆 LED 依序顯示不同色相並持續移動。
+
+```python
+m.rainbow(period=40)
+```
+
+`period` 為畫面更新間隔（ms），數值越小通常越快。
+
+## `led_start_meteor()` — 流星拖尾
+
+```python
+m.led_start_meteor(color="#ffffff", size=5, period=50, duration=0, strip=None)
+```
+
+| 參數 | 說明 |
+|---|---|
+| `color` | 流星主色。 |
+| `size` | 拖尾包含的 LED 數量；至少會產生 1 顆。 |
+| `period` | 流星往前移動一次的間隔（ms）。 |
+| `duration` | 自動停止時間（ms）；`0` 表示持續。 |
+
+```python
+m.led_start_meteor("cyan", size=4, period=80)
+```
+
+## `led_start_color_wipe()` — 逐顆擦色
+
+```python
+m.led_start_color_wipe(colors=None, period=50, duration=0, strip=None)
+```
+
+`colors` 為顏色清單。省略時預設使用 `red → green → blue`。
+
+```python
+m.led_start_color_wipe(["red", "yellow", "blue"], period=100)
+```
+
+## `led_start_random_sparkle()` — 隨機星光
+
+```python
+m.led_start_random_sparkle(color="#ffffff", period=50, duration=0, strip=None)
+```
+
+每次更新隨機選一顆 LED 閃一下，適合星光、雪花或粒子感效果。
+
+```python
+m.led_start_random_sparkle("white", period=120)
+```
+
+## `led_start_fire_flicker()` — 火焰閃爍
+
+```python
+m.led_start_fire_flicker(color="#ff6600", period=50, duration=0, strip=None)
+```
+
+以指定基準色隨機改變 RGB 強度，產生類似火光／燭光的不規則閃爍。
+
+```python
+m.led_start_fire_flicker("#ff6600", period=70)
+```
+
+## `led_off()` — 停止並熄燈
+
+```python
+m.led_off(strip=None)
+```
+
+停止目前 strip 的燈效，並清空 LED frame。若只是啟動了持續燈效，通常用這個方法收尾最明確。
+
+## `select_led_strip()` — 多燈條選擇
+
+```python
+m.select_led_strip(strip=None) -> str
+```
+
+設定後續 LED API 的預設 strip。`None` 或空字串會回到 `"board"`。
+
+```python
+m.select_led_strip("external")
+m.led_all("blue")
+```
+
+## 完整範例：按鈕切換呼吸燈與彩虹燈
 
 ```python
 from mangobox import Mango
 
 m = Mango()
-m.led_all("#0088ff")
-```
+mode = 0
 
-Scheduler 型：
+def pressed():
+    global mode
+    mode = (mode + 1) % 3
+    if mode == 0:
+        m.led_off()
+    elif mode == 1:
+        m.breath("#0080ff", period=70)
+    else:
+        m.rainbow(period=30)
 
-```python
-from mangobox import Mango
-
-m = Mango()
-m.rainbow()
+m.on_pressed("button", pressed)
+m.start_button()
 m.run_forever()
 ```
 
-## Related APIs
+## 常見問題
 
-`select_led_strip()`, `led_show_one()`, `led_show_all()`, `led_show_range()`, `led_clear()`, `led_start_rainbow()`, `led_start_breathing()`, `run_forever()`
+**搜尋「呼吸燈」應該用哪個 API？** 直接使用 `m.breath(...)`；完整名稱為 `m.led_start_breathing(...)`。
+
+**`period=1000` 是否表示一秒完成一次呼吸？** 不是。`period` 是每次動畫更新的間隔。
+
+**`duration=0` 是否表示不執行？** 不是。對持續燈效來說代表不設定自動停止時間。
+
+**一定要填 `strip` 嗎？** 一般不用。只有多組 LED strip 時才需要指定。
+
+## 相關 API
+
+`led()`, `led_all()`, `led_range()`, `brightness()`, `breath()`, `rainbow()`, `led_start_meteor()`, `led_start_color_wipe()`, `led_start_random_sparkle()`, `led_start_fire_flicker()`, `led_off()`, `select_led_strip()`
