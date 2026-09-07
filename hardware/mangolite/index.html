@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MangoLite 電路板設計與 Pinout｜MangoBox</title>
+<meta name="description" content="MangoLite 電路板設計、板載 RGB、按鈕、蜂鳴器、IR、DRV8833C 雙馬達驅動、Sensor、GPIO、ADC、I2C、UART 與開發注意事項。">
+<style>
+:root{
+  font-family:Inter,"Noto Sans TC","Microsoft JhengHei",system-ui,sans-serif;
+  color:#172033;background:#f6f8fb;
+  --orange:#ff6b0b;--orange-soft:#fff3e8;--cyan:#13b8d4;--navy:#172033;
+  --muted:#64748b;--line:#dbe3ec;--panel:#ffffff;--soft:#f8fafc;
+  --shadow:0 16px 40px rgba(30,41,59,.07);
+}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:linear-gradient(180deg,#f8fafc 0,#f6f8fb 58%,#f8fafc 100%)}a{color:inherit}
+.top{max-width:1240px;margin:auto;padding:24px 28px;display:flex;align-items:center;justify-content:space-between;gap:24px;position:relative}
+.brand{display:flex;align-items:center;gap:13px;text-decoration:none;color:inherit;min-width:0}.brand img{width:52px;height:52px;object-fit:contain}.brand strong{display:block;font-size:22px;line-height:1.1}.brand small{display:block;margin-top:3px;color:var(--muted)}
+nav{display:flex;gap:18px;flex-wrap:wrap;justify-content:flex-end}nav a{color:#334155;text-decoration:none;font-weight:800;font-size:14px;white-space:nowrap}nav a:hover{color:var(--orange)}
+.menu-toggle{display:none;width:42px;height:42px;flex:0 0 42px;border:1px solid var(--line);border-radius:12px;background:white;position:relative;cursor:pointer}.menu-toggle span,.menu-toggle::before,.menu-toggle::after{content:"";position:absolute;left:11px;width:18px;height:2px;border-radius:2px;background:#334155;transition:.2s}.menu-toggle span{top:20px}.menu-toggle::before{top:14px}.menu-toggle::after{top:26px}.top.menu-open .menu-toggle span{opacity:0}.top.menu-open .menu-toggle::before{top:20px;transform:rotate(45deg)}.top.menu-open .menu-toggle::after{top:20px;transform:rotate(-45deg)}
+.hero{max-width:1240px;margin:22px auto 0;padding:0 28px 46px}.hero-shell{background:linear-gradient(135deg,#fff 0%,#fffaf5 100%);border:1px solid var(--line);border-radius:28px;padding:44px;box-shadow:var(--shadow)}
+.breadcrumb{font-size:13px;color:var(--muted);font-weight:800;margin-bottom:24px}.breadcrumb a{text-decoration:none}.breadcrumb a:hover{color:var(--orange)}
+.eyebrow{font-weight:900;color:#d85d00;letter-spacing:.08em;font-size:13px;text-transform:uppercase}.hero h1{font-size:clamp(40px,5vw,62px);line-height:1.08;margin:10px 0 12px;color:var(--navy);letter-spacing:-.035em}.tagline{font-size:clamp(21px,2.4vw,28px);font-weight:900;color:#3b5575;margin:0 0 16px}.credit{font-size:15px;color:#45566f;font-weight:800;margin:0 0 24px}.hero-copy{max-width:940px;font-size:17px;line-height:1.9;color:var(--muted);margin:0}.tags{display:flex;gap:8px;flex-wrap:wrap;margin-top:24px}.tag{display:inline-flex;align-items:center;padding:7px 11px;border-radius:999px;border:1px solid #ffd3b4;background:#fff7f1;color:#c55406;font-size:12px;font-weight:900}
+.jump-nav{display:flex;gap:10px;flex-wrap:wrap;margin-top:30px}.jump-nav a{padding:10px 14px;border:1px solid var(--line);border-radius:11px;background:#fff;text-decoration:none;font-size:13px;font-weight:900;color:#334155}.jump-nav a:hover{border-color:#ffc79f;color:#c55406}
+.section{max-width:1240px;margin:auto;padding:0 28px 64px;scroll-margin-top:22px}.section-shell{background:rgba(255,255,255,.68);border:1px solid rgba(219,227,236,.9);border-radius:26px;padding:30px;box-shadow:0 10px 30px rgba(30,41,59,.035)}.section-head{margin-bottom:22px}.section-kicker{font-size:13px;font-weight:900;color:#d85d00;letter-spacing:.08em;text-transform:uppercase;margin-bottom:7px}.section h2{font-size:30px;line-height:1.25;margin:0;color:var(--navy)}.lead{font-size:16px;line-height:1.8;color:var(--muted);max-width:980px;margin:10px 0 0}
+.board-stage{background:#fff;border:1px solid #edf1f5;border-radius:22px;padding:26px;display:grid;place-items:center;box-shadow:var(--shadow)}.board-stage img{display:block;width:min(100%,1040px);height:auto;object-fit:contain}.image-note{margin-top:13px;text-align:center;color:#8290a3;font-size:12px}
+.feature-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}.feature-card,.resource-card{background:#fff;border:1px solid var(--line);border-radius:18px;padding:20px;box-shadow:0 10px 26px rgba(30,41,59,.045)}.feature-card .num{font-size:12px;font-weight:950;color:var(--orange);letter-spacing:.08em}.feature-card h3,.resource-card h3{margin:7px 0 9px;font-size:18px;color:var(--navy)}.feature-card p,.resource-card p,.resource-card li{font-size:14px;line-height:1.7;color:var(--muted)}.feature-card p{margin:0}.resource-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}.resource-card ul{margin:8px 0 0;padding-left:20px}.resource-card code,.note-card code{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:.92em;color:#334155}
+.table-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:18px;background:#fff}.pin-table{width:100%;border-collapse:collapse;min-width:980px}.pin-table th{position:sticky;top:0;background:#f8fafc;color:#334155;text-align:left;font-size:12px;letter-spacing:.02em;padding:13px 14px;border-bottom:1px solid var(--line);white-space:nowrap}.pin-table td{padding:13px 14px;border-bottom:1px solid #edf1f5;font-size:13px;line-height:1.6;color:#526178;vertical-align:top}.pin-table tr:last-child td{border-bottom:0}.pin-table td:first-child{font-weight:950;color:#172033;white-space:nowrap}.pin-table strong{color:#334155}.availability{font-weight:900}.yes{color:#13795b}.conditional{color:#a85a00}.fixed{color:#9f2e2e}.shared{color:#087ea4}.table-note{font-size:13px;line-height:1.75;color:var(--muted);margin:14px 2px 0}
+.note-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}.note-card{background:#fff;border:1px solid var(--line);border-left:4px solid #ffb37d;border-radius:16px;padding:19px 20px}.note-card h3{font-size:17px;margin:0 0 7px;color:var(--navy)}.note-card p{font-size:14px;line-height:1.75;color:var(--muted);margin:0}.note-card.warning{border-left-color:#f59e0b}.note-card.info{border-left-color:#13b8d4}
+.compat{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:18px}.compat-card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:17px}.compat-card.primary-target{border-color:#ffc79f;background:#fffaf5}.compat-card strong{display:block;color:var(--navy);font-size:16px}.compat-card span{display:block;color:var(--muted);font-size:13px;line-height:1.6;margin-top:6px}.target-badge{display:inline-flex;margin-top:9px;padding:5px 8px;border-radius:999px;background:#fff1e6;color:#c55406;font-size:11px;font-weight:900;border:1px solid #ffd3b4}
+.actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:22px}.btn{padding:12px 17px;border-radius:12px;text-decoration:none;font-weight:900;border:1px solid var(--line);background:white;color:#172033;box-shadow:0 4px 12px rgba(30,41,59,.04)}.btn.primary{background:var(--orange);color:#fff;border-color:var(--orange)}
+footer{border-top:1px solid var(--line);padding:28px;color:var(--muted);background:#fff}.footer-inner{max-width:1240px;margin:auto;display:flex;justify-content:space-between;gap:16px;align-items:center}.footer-links{display:flex;gap:18px;flex-wrap:wrap}.footer-links a{text-decoration:none;color:var(--muted);font-size:13px}.footer-links a:hover{color:var(--orange)}
+@media(max-width:980px){.feature-grid{grid-template-columns:1fr 1fr}.resource-grid,.note-grid{grid-template-columns:1fr}.compat{grid-template-columns:1fr}}
+@media(max-width:640px){.top{padding:16px 18px}.brand img{width:44px;height:44px}.brand strong{font-size:20px}.brand small{font-size:12px}.menu-toggle{display:block}.top nav{position:absolute;top:calc(100% + 2px);left:12px;right:12px;display:none;flex-direction:column;gap:0;padding:8px;border:1px solid var(--line);border-radius:16px;background:rgba(255,255,255,.98);box-shadow:0 18px 45px rgba(30,41,59,.16);z-index:50}.top.menu-open nav{display:flex}.top nav a{display:block;padding:11px 13px;border-radius:10px;font-size:14px}.hero{padding:0 18px 38px;margin-top:10px}.hero-shell{padding:25px 20px;border-radius:21px}.hero-copy{font-size:16px}.section{padding:0 18px 48px}.section-shell{padding:19px;border-radius:20px}.section h2{font-size:26px}.feature-grid{grid-template-columns:1fr}.board-stage{padding:14px}.footer-inner{flex-direction:column;align-items:flex-start}}
+</style>
+</head>
+<body>
+<header class="top">
+  <a class="brand" href="../../"><img src="../../assets/brand/mangobox-core-refined-64.png" alt="MangoBox"><span><strong>MangoBox</strong><small>AI 精準教學平台</small></span></a>
+  <nav aria-label="主要導覽">
+    <a href="../../#computing">核心單元</a><a href="../../#boards">電路板</a><a href="../../#kits">套件</a><a href="../../#software">韌體與軟體</a><a href="../../#ai-platform">AI 教學平台</a><a href="../../releases/">下載中心</a><a href="../../docs/student-guide/site/">文件</a>
+  </nav>
+  <button class="menu-toggle" type="button" aria-label="開啟導覽選單" aria-expanded="false"><span></span></button>
+</header>
+<main>
+  <section class="hero" aria-labelledby="page-title">
+    <div class="hero-shell">
+      <div class="breadcrumb"><a href="../../">MangoBox</a> ／ <a href="../../#boards">實體運算電路板</a> ／ MangoLite</div>
+      <div class="eyebrow">MangoLite Hardware</div>
+      <h1 id="page-title">MangoLite</h1>
+      <p class="tagline">整合感測、控制與機器人應用的實體程式設計平台</p>
+      <p class="credit">電路板研發設計｜羅治民 教授</p>
+      <p class="hero-copy">MangoLite 是為程式設計、感測控制與機器人應用設計的 Raspberry Pi Pico 系列擴充電路板。板上整合 6 顆可定址 RGB LED、User Button、蜂鳴器、紅外線接收、TI DRV8833C 雙馬達驅動，以及多組 Sensor、GPIO、ADC、I2C 與 UART 擴充介面，讓使用者不需先搭建大量基礎電路，即可從互動控制延伸到物聯網、智慧車與機器人實作。</p>
+      <div class="tags"><span class="tag">板載 RGB</span><span class="tag">Sensor</span><span class="tag">Motor</span><span class="tag">I2C</span><span class="tag">ADC</span><span class="tag">UART</span><span class="tag">Robotics</span></div>
+      <nav class="jump-nav" aria-label="本頁導覽"><a href="#board">板子外觀</a><a href="#features">設計特色</a><a href="#resources">硬體資源</a><a href="#pinout">Pinout</a><a href="#notes">開發注意事項</a></nav>
+    </div>
+  </section>
+
+  <section class="section" id="board">
+    <div class="section-shell">
+      <div class="section-head"><div class="section-kicker">Board Overview</div><h2>電路板外觀</h2><p class="lead">MangoLite 將常用互動元件、感測與通訊介面、雙馬達驅動及 Pico 系列控制核心整合於同一塊載板，兼顧快速實作與後續擴充。</p></div>
+      <div class="board-stage"><img src="../../assets/home/MangoLite.png" width="640" height="480" loading="eager" decoding="async" alt="MangoLite 電路板實體圖"></div>
+      <div class="image-note">MangoLite 電路板配置示意</div>
+    </div>
+  </section>
+
+  <section class="section" id="features">
+    <div class="section-shell">
+      <div class="section-head"><div class="section-kicker">Design Features</div><h2>設計特色</h2><p class="lead">MangoLite 的設計重點是把常用輸入、輸出、馬達與擴充介面直接整合在板上，同時保留足夠的通用 GPIO 與多裝置擴充空間。</p></div>
+      <div class="feature-grid">
+        <article class="feature-card"><div class="num">01</div><h3>板載互動元件</h3><p>整合 6 顆 WS2812B RGB LED、User Button、Buzzer 與 IR Receiver，可直接進行燈光、按鍵、聲音與紅外線互動。</p></article>
+        <article class="feature-card"><div class="num">02</div><h3>感測與 GPIO 擴充</h3><p>提供兩組雙訊號 Sensor Port、5 組 General GPIO 與 3 組 ADC，方便連接數位、類比與 PWM 類外部裝置。</p></article>
+        <article class="feature-card"><div class="num">03</div><h3>雙馬達與機器人控制</h3><p>板載 TI DRV8833C 雙 H-Bridge Motor Driver，可直接控制兩組 DC Motor，適合雙輪車與移動式機器人應用。</p></article>
+        <article class="feature-card"><div class="num">04</div><h3>多裝置通訊與擴充</h3><p>提供 UART0、UART1 與共享 I2C0 介面；搭配 Pico 2 W 時，還可進一步發展 Wi-Fi、Bluetooth 與物聯網應用。</p></article>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="resources">
+    <div class="section-shell">
+      <div class="section-head"><div class="section-kicker">Hardware Resources</div><h2>硬體資源快速總覽</h2><p class="lead">以下描述 MangoLite 電路板本體的固定硬體與實體接頭。Servo、第二組 I2C 等用途若使用 General GPIO 實作，屬於軟體設定或應用選擇，不是 PCB 固定功能。</p></div>
+      <div class="resource-grid">
+        <article class="resource-card"><h3>板載硬體</h3><ul><li>6× WS2812B RGB：GP2</li><li>User Button：GP3</li><li>Buzzer：GP6</li><li>IR Receiver：GP22</li><li>TI DRV8833C 雙馬達驅動：GP10～GP13</li><li>Reset / RUN Button：SW2</li></ul></article>
+        <article class="resource-card"><h3>感測與 GPIO</h3><ul><li>Sensor1：GND / 5V / GP14 / GP15</li><li>Sensor2：GND / 5V / GP16 / GP17</li><li>General GPIO：GP7 / GP8 / GP9 / GP18 / GP19</li><li>ADC0 / ADC1 / ADC2：GP26 / GP27 / GP28</li></ul></article>
+        <article class="resource-card"><h3>通訊與匯流排</h3><ul><li><code>UART0</code>：BT1，GP0 TX / GP1 RX</li><li><code>UART1</code>：Wired UART，GP4 TX / GP5 RX</li><li><code>I2C0</code>：GP20 SDA / GP21 SCL，可共享</li><li>GP18 / GP19 可依軟體需求配置為 optional I2C1</li></ul></article>
+        <article class="resource-card"><h3>電源與馬達</h3><ul><li>External VIN：最高 10V</li><li>M1 / M2：兩組 DC Motor Output</li><li>多組接頭提供 5V 模組供電</li><li>Pico GPIO / ADC 訊號仍為 3.3V logic</li></ul></article>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="pinout">
+    <div class="section-shell">
+      <div class="section-head"><div class="section-kicker">GPIO & Pinout</div><h2>MangoLite Pinout</h2><p class="lead">「一般 GPIO」表示電路板本身沒有將該 Pin 固定綁定到板載功能；實際使用仍需確認目前 Runtime、PWM、UART、I2C 或其他裝置是否已占用。</p></div>
+      <div class="table-wrap" role="region" aria-label="MangoLite Pinout 表" tabindex="0">
+        <table class="pin-table">
+          <thead><tr><th>GPIO</th><th>Pico 實體 Pin</th><th>MangoLite 主要用途</th><th>實體位置 / 類型</th><th>一般 GPIO</th><th>主要限制與注意事項</th></tr></thead>
+          <tbody>
+            <tr><td>GP0</td><td>1</td><td>BT1 UART0 TX</td><td>BT1 4Pin 接頭</td><td><span class="availability conditional">條件式</span></td><td>外接 UART / Bluetooth 模組使用時作 UART0 TX。</td></tr>
+            <tr><td>GP1</td><td>2</td><td>BT1 UART0 RX</td><td>BT1 4Pin 接頭</td><td><span class="availability conditional">條件式</span></td><td>外接 UART / Bluetooth 模組使用時作 UART0 RX。</td></tr>
+            <tr><td>GP2</td><td>4</td><td>6× WS2812B RGB Data</td><td>板載 RGB</td><td><span class="availability fixed">固定用途</span></td><td>PCB 已連接 6 顆 WS2812B LED chain。</td></tr>
+            <tr><td>GP3</td><td>5</td><td>User Button</td><td>板載 SW3</td><td><span class="availability fixed">固定用途</span></td><td>PCB 已連接使用者按鈕。</td></tr>
+            <tr><td>GP4</td><td>6</td><td>Wired UART1 TX</td><td>UART2 實體接頭</td><td><span class="availability conditional">條件式</span></td><td>現行 MangoLite Host UART 使用 UART1 TX；UART2 是 PCB 接頭名稱。</td></tr>
+            <tr><td>GP5</td><td>7</td><td>Wired UART1 RX</td><td>UART2 實體接頭</td><td><span class="availability conditional">條件式</span></td><td>現行 MangoLite Host UART 使用 UART1 RX。</td></tr>
+            <tr><td>GP6</td><td>9</td><td>Buzzer</td><td>板載蜂鳴器</td><td><span class="availability fixed">固定用途</span></td><td>PCB 已連接蜂鳴器驅動電路。</td></tr>
+            <tr><td>GP7</td><td>10</td><td>General GPIO</td><td>IO / 5V / GND 擴充排</td><td><span class="availability yes">可以</span></td><td>可依需求配置 Digital I/O、PWM 或外部模組。</td></tr>
+            <tr><td>GP8</td><td>11</td><td>General GPIO</td><td>IO / 5V / GND 擴充排</td><td><span class="availability yes">可以</span></td><td>可用於 Servo 等 PWM 裝置，但 Servo 不是 PCB 固定用途。</td></tr>
+            <tr><td>GP9</td><td>12</td><td>General GPIO</td><td>IO / 5V / GND 擴充排</td><td><span class="availability yes">可以</span></td><td>可依需求配置 Digital I/O、PWM 或外部模組。</td></tr>
+            <tr><td>GP10</td><td>14</td><td>Motor B IN2</td><td>板載 Motor Driver</td><td><span class="availability fixed">固定用途</span></td><td>PCB 已連接 TI DRV8833C。</td></tr>
+            <tr><td>GP11</td><td>15</td><td>Motor B IN1</td><td>板載 Motor Driver</td><td><span class="availability fixed">固定用途</span></td><td>PCB 已連接 TI DRV8833C。</td></tr>
+            <tr><td>GP12</td><td>16</td><td>Motor A IN2</td><td>板載 Motor Driver</td><td><span class="availability fixed">固定用途</span></td><td>PCB 已連接 TI DRV8833C。</td></tr>
+            <tr><td>GP13</td><td>17</td><td>Motor A IN1</td><td>板載 Motor Driver</td><td><span class="availability fixed">固定用途</span></td><td>PCB 已連接 TI DRV8833C。</td></tr>
+            <tr><td>GP14</td><td>19</td><td>Sensor1 A</td><td>Sensor1 4Pin 接頭</td><td><span class="availability conditional">條件式</span></td><td>Sensor1 提供 GND / 5V / GP14 / GP15；實際裝置由應用決定。</td></tr>
+            <tr><td>GP15</td><td>20</td><td>Sensor1 B</td><td>Sensor1 4Pin 接頭</td><td><span class="availability conditional">條件式</span></td><td>與 GP14 組成通用雙訊號 Sensor Port。</td></tr>
+            <tr><td>GP16</td><td>21</td><td>Sensor2 A</td><td>Sensor2 4Pin 接頭</td><td><span class="availability conditional">條件式</span></td><td>Sensor2 提供 GND / 5V / GP16 / GP17；實際裝置由應用決定。</td></tr>
+            <tr><td>GP17</td><td>22</td><td>Sensor2 B</td><td>Sensor2 4Pin 接頭</td><td><span class="availability conditional">條件式</span></td><td>與 GP16 組成通用雙訊號 Sensor Port。</td></tr>
+            <tr><td>GP18</td><td>24</td><td>General GPIO / optional I2C1 SDA</td><td>IO / 5V / GND 擴充排</td><td><span class="availability yes">可以</span></td><td>PCB 本質為 General GPIO；I2C1 SDA 是軟體可選 alternate role。</td></tr>
+            <tr><td>GP19</td><td>25</td><td>General GPIO / optional I2C1 SCL</td><td>IO / 5V / GND 擴充排</td><td><span class="availability yes">可以</span></td><td>PCB 本質為 General GPIO；I2C1 SCL 是軟體可選 alternate role。</td></tr>
+            <tr><td>GP20</td><td>26</td><td>I2C0 SDA</td><td>I2C 多組接頭</td><td><span class="availability shared">共享匯流排</span></td><td>板上有 2.2kΩ / 3.3V pull-up；可共享但需避免 address 與總上拉負載衝突。</td></tr>
+            <tr><td>GP21</td><td>27</td><td>I2C0 SCL</td><td>I2C 多組接頭</td><td><span class="availability shared">共享匯流排</span></td><td>與 GP20 組成 I2C0 shared bus。</td></tr>
+            <tr><td>GP22</td><td>29</td><td>IR Receiver</td><td>板載 IR</td><td><span class="availability fixed">固定用途</span></td><td>PCB 已連接紅外線接收器。</td></tr>
+            <tr><td>GP26</td><td>31</td><td>ADC0 / GPIO</td><td>ADC 擴充</td><td><span class="availability yes">可以</span></td><td>可作 Analog Input 或一般 GPIO；訊號邏輯仍為 3.3V。</td></tr>
+            <tr><td>GP27</td><td>32</td><td>ADC1 / GPIO</td><td>ADC 擴充</td><td><span class="availability yes">可以</span></td><td>可作 Analog Input 或一般 GPIO；訊號邏輯仍為 3.3V。</td></tr>
+            <tr><td>GP28</td><td>34</td><td>ADC2 / GPIO</td><td>ADC 擴充</td><td><span class="availability yes">可以</span></td><td>可作 Analog Input 或一般 GPIO；訊號邏輯仍為 3.3V。</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="table-note">GP23、GP24、GP25 與 GP29 屬 Pico 模組內部資源，不是 MangoLite 的外部 breakout。尤其 GP25 不應被當成跨 Pico / Pico W / Pico 2 W 都一致的 MangoLite 板載 LED 定義。</p>
+    </div>
+  </section>
+
+  <section class="section" id="notes">
+    <div class="section-shell">
+      <div class="section-head"><div class="section-kicker">Developer Notes</div><h2>開發者注意事項</h2><p class="lead">MangoLite 的板載功能很多，但仍保留 General GPIO 與共享 Bus。低層 MicroPython、Runtime 或外部模組開發時，應把「PCB 固定功能」與「軟體可選用途」分開理解。</p></div>
+      <div class="note-grid">
+        <article class="note-card warning"><h3>5V 是模組電源，不是 GPIO 訊號電壓</h3><p>部分 MangoLite 接頭提供 5V 供電，但 Pico GPIO / ADC 訊號仍是 <strong>3.3V logic</strong>。不要將 5V signal 直接輸入 Pico GPIO。</p></article>
+        <article class="note-card"><h3>GP7 / GP8 / GP9 / GP18 / GP19 是 General GPIO</h3><p>Servo、PWM、第二組 I2C 等可依需求配置，但這些都是軟體角色。尤其 GP8 不是固定 Servo Port，GP18/GP19 也不是固定 I2C1。</p></article>
+        <article class="note-card info"><h3>I2C0 是共享匯流排</h3><p>GP20 / GP21 可供多個 I2C 裝置共用。板上已有 2.2kΩ pull-up 到 3.3V，外接模組時應注意 I2C address 與額外 pull-up 負載。</p></article>
+        <article class="note-card warning"><h3>Motor GPIO 是固定板載資源</h3><p>GP10～GP13 已接到 TI DRV8833C，應視為固定 Motor Driver input，不應重新分配為一般 GPIO。</p></article>
+        <article class="note-card"><h3>BT1 與 Wired UART 使用不同 UART peripheral</h3><p>BT1 使用 UART0（GP0/GP1）；Wired UART 使用 UART1（GP4/GP5）。兩者不是 MangoX2 那種共用同一 UART0 的關係，但仍應由 Runtime 管理各自的 peripheral ownership。</p></article>
+        <article class="note-card warning"><h3>External VIN 最高 10V</h3><p>J7 提供外部 VIN / GND。公開板級規格以 <strong>最高 10V</strong> 為準；使用外部供電時仍需確認馬達、模組及整體電流需求。</p></article>
+      </div>
+      <div class="compat">
+        <div class="compat-card primary-target"><strong>Raspberry Pi Pico 2 W</strong><span>MangoLite 與 MangoBox 後續新功能的主要建議配置，適合 Wi-Fi、Bluetooth、IoT 與進階互動應用。</span><span class="target-badge">Primary / Reference Target</span></div>
+        <div class="compat-card"><strong>Raspberry Pi Pico W</strong><span>40Pin 相容並具 Wi-Fi / Bluetooth 能力，作為過渡期與既有設備的相容配置。</span></div>
+        <div class="compat-card"><strong>Raspberry Pi Pico</strong><span>40Pin 相容，可進行基礎有線實體程式設計；無原生 Wi-Fi / Bluetooth，定位為相容／既有配置。</span></div>
+      </div>
+      <div class="actions"><a class="btn primary" href="../../#boards">回到電路板介紹</a><a class="btn" href="../../docs/student-guide/site/">查看 MangoBox 文件</a></div>
+    </div>
+  </section>
+</main>
+<footer><div class="footer-inner"><span>© 2026 歐陽芳泉 · 國立臺北商業大學 · MangoBox 平台。版權所有。</span><div class="footer-links"><a href="../../">MangoBox 首頁</a><a href="../../docs/student-guide/site/">線上文件</a><a href="../../releases/">下載中心</a></div></div></footer>
+<script>(()=>{const h=document.querySelector('.top'),t=document.querySelector('.menu-toggle'),n=document.querySelector('.top nav');if(!h||!t||!n)return;const c=()=>{h.classList.remove('menu-open');t.setAttribute('aria-expanded','false');t.setAttribute('aria-label','開啟導覽選單')};t.addEventListener('click',e=>{e.stopPropagation();const o=!h.classList.contains('menu-open');h.classList.toggle('menu-open',o);t.setAttribute('aria-expanded',String(o));t.setAttribute('aria-label',o?'關閉導覽選單':'開啟導覽選單')});n.addEventListener('click',c);document.addEventListener('click',e=>{if(!h.contains(e.target))c()});window.addEventListener('resize',()=>{if(innerWidth>640)c()},{passive:true})})();</script>
+</body>
+</html>
