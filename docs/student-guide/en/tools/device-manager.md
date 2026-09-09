@@ -1,6 +1,6 @@
 # Device Manager Basics
 
-Device Manager is MangoBox's **day-to-day device configuration, calibration, and live-monitoring tool**. The current public stable release is **v0.5.0**, aligned with the five Runtime targets published on 2026-09-06:
+Device Manager is MangoBox's **day-to-day device configuration, calibration, and live-monitoring tool**. The current public stable release is **v0.5.1**, continuing support for the five stable Runtime targets:
 
 ```text
 MangoX2 + Pico       → Runtime v0.2.6
@@ -62,7 +62,7 @@ Active connection path
 Whether config was read successfully
 ```
 
-Device Manager v0.5.0 passed identity / system-info / config sanity checks against all five stable Runtime targets. The UI should match the actual board and Runtime currently connected.
+Device Manager v0.5.1 continues the five-target support line from v0.5 Stable. This maintenance release passed focused capability/navigation regression plus representative hardware smoke on MangoLite + Pico W and MangoX2.
 
 ---
 
@@ -105,6 +105,8 @@ The same Student API semantics may map to different board hardware. For example:
 - **MangoLite IR** is a fixed onboard GP22 function.
 - **MangoX2 IR** is an optional external module whose pin is configurable.
 - **MangoX2 OLED / RGB / Button** are standard pre-installed modules, not PCB-mounted components.
+- **MangoX2 / MangoLite OLED** hardware pages follow the module Enable state in v0.5.1: disabling hides the page; re-enabling restores it.
+- **MangoLite Ultrasonic** appears correctly after being enabled in Pin Configuration through the canonical capability resolver in v0.5.1.
 
 Select the correct target first, then verify Enable state, pin assignment, and physical wiring.
 
@@ -152,11 +154,11 @@ module_enabled
 configured Pin
 ```
 
-The online documentation now follows the five stable Runtime targets and filters Student API content by the selected stable compatibility profile.
+The online documentation follows the five stable Runtime targets and filters Student API content by the selected stable compatibility profile.
 
 ## Related documentation
 
 - [Hardware Lab Basics](hardware-lab.md)
-- [Device Manager v0.5.0 full installation and user guide](../../../../desktop/device-manager/guide/)
+- [Device Manager v0.5.1 full installation and user guide](../../../../desktop/device-manager/guide/)
 - [MangoBox Download Center](../../../../releases/)
 - Module Guide / Troubleshooting / API Reference pages
