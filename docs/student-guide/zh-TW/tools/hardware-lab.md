@@ -1,16 +1,16 @@
 # Hardware Lab 基本操作
 
-Hardware Lab 是 MangoBox 的**韌體與裝置生命週期工具**。目前公開正式版為 **v0.3.0**，支援 2026-09-06 已發布的五個正式 Runtime target：
+Hardware Lab 是 MangoBox 的**韌體與裝置生命週期工具**。目前公開正式版為 **v0.3.0**，對應目前五個正式 Runtime target：
 
 ```text
 MangoX2 + Pico       → Runtime v0.2.6
 MangoX2 + Pico W     → Runtime v0.2.6
 MangoX2 + Pico 2 W   → Runtime v0.2.6
-MangoLite + Pico W   → Runtime v0.6.0
-MangoLite + Pico 2 W → Runtime v0.6.0
+MangoLite + Pico W   → Runtime v0.6.1
+MangoLite + Pico 2 W → Runtime v0.6.1
 ```
 
-Hardware Lab 主要處理 Firmware Update、Clean Flash、Factory Reset 輔助、Recovery / Deep Rescue、execution mode、管理 transport 與診斷報告。一般 GPIO / Pin 設定、校準與感測器監看請使用 Device Manager v0.5.0。
+Hardware Lab 主要處理 Firmware Update、Clean Flash、Factory Reset 輔助、Recovery / Deep Rescue、execution mode、管理 transport 與診斷報告。一般 GPIO / Pin 設定、校準與感測器監看請使用 Device Manager v0.5.1。
 
 正式版下載與 SHA-256 請以 [MangoBox 下載中心](../../../../releases/) 為準。
 
@@ -129,7 +129,7 @@ MangoX2 與 MangoLite 的 UART Pin 不同，請依 target 選擇。
 
 # 8. Sensor / GPIO 問題怎麼查？
 
-如果只是 PIR / Light / Sound / IR / Joystick 沒反應，先不要做 Clean Flash。建議：
+如果只是 PIR / Light / Sound / IR / Joystick / Ultrasonic 沒反應，先不要做 Clean Flash。建議：
 
 ```text
 Student API supports()
@@ -150,7 +150,7 @@ Hardware Lab v0.3.0 的定位仍是 firmware / lifecycle，不是通用 GPIO / A
 | 工具 | 主要用途 |
 |---|---|
 | MangoThonny v0.4.0 | Python / MicroPython 教學、Host Student API、程式開發與匯出 |
-| Device Manager v0.5.0 | 模組 Enable、Pin、設定、校準、Read Once / Monitor |
+| Device Manager v0.5.1 | 模組 Enable、Pin、設定、校準、Read Once / Monitor |
 | Hardware Lab v0.3.0 | Firmware、Clean Flash、Recovery、execution mode、生命週期診斷 |
 
 ## 相關文件
