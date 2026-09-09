@@ -6,8 +6,8 @@ Device Manager is MangoBox's **day-to-day device configuration, calibration, and
 MangoX2 + Pico       → Runtime v0.2.6
 MangoX2 + Pico W     → Runtime v0.2.6
 MangoX2 + Pico 2 W   → Runtime v0.2.6
-MangoLite + Pico W   → Runtime v0.6.0
-MangoLite + Pico 2 W → Runtime v0.6.0
+MangoLite + Pico W   → Runtime v0.6.1
+MangoLite + Pico 2 W → Runtime v0.6.1
 ```
 
 Use the Windows Installer for normal installations or the Portable ZIP for no-install deployment. Stable downloads and SHA-256 values are listed in the [MangoBox Download Center](../../../../releases/).
@@ -62,7 +62,7 @@ Active connection path
 Whether config was read successfully
 ```
 
-Device Manager v0.5.1 continues the five-target support line from v0.5 Stable. This maintenance release passed focused capability/navigation regression plus representative hardware smoke on MangoLite + Pico W and MangoX2.
+Device Manager v0.5.1 continues the five-target support line from v0.5 Stable; MangoLite is now recommended with Runtime v0.6.1. This maintenance line passed focused capability/navigation regression plus representative hardware smoke on MangoLite + Pico W, Pico 2 W, and MangoX2.
 
 ---
 
@@ -106,7 +106,7 @@ The same Student API semantics may map to different board hardware. For example:
 - **MangoX2 IR** is an optional external module whose pin is configurable.
 - **MangoX2 OLED / RGB / Button** are standard pre-installed modules, not PCB-mounted components.
 - **MangoX2 / MangoLite OLED** hardware pages follow the module Enable state in v0.5.1: disabling hides the page; re-enabling restores it.
-- **MangoLite Ultrasonic** appears correctly after being enabled in Pin Configuration through the canonical capability resolver in v0.5.1.
+- **MangoLite Ultrasonic** is fully aligned in Runtime v0.6.1 across runtime / Student API / handler paths; Device Manager v0.5.1 shows the device page after the module is enabled in Pin Configuration.
 
 Select the correct target first, then verify Enable state, pin assignment, and physical wiring.
 
@@ -154,7 +154,7 @@ module_enabled
 configured Pin
 ```
 
-The online documentation follows the five stable Runtime targets and filters Student API content by the selected stable compatibility profile.
+The online documentation follows the five stable Runtime targets, with MangoLite profiles updated to Runtime v0.6.1, and filters Student API content by the selected stable compatibility profile.
 
 ## Related documentation
 
