@@ -6,8 +6,8 @@ Device Manager 是 MangoBox 的**日常裝置設定、校準與即時監看工�
 MangoX2 + Pico       → Runtime v0.2.6
 MangoX2 + Pico W     → Runtime v0.2.6
 MangoX2 + Pico 2 W   → Runtime v0.2.6
-MangoLite + Pico W   → Runtime v0.6.0
-MangoLite + Pico 2 W → Runtime v0.6.0
+MangoLite + Pico W   → Runtime v0.6.1
+MangoLite + Pico 2 W → Runtime v0.6.1
 ```
 
 一般 Windows 使用者建議使用 Installer；需要免安裝部署時可使用 Portable ZIP。正式版下載與 SHA-256 請以 [MangoBox 下載中心](../../../../releases/) 為準。
@@ -62,7 +62,7 @@ Runtime / Firmware version
 config 是否成功讀取
 ```
 
-Device Manager v0.5.1 延續 v0.5 Stable 的五個正式 Runtime target 支援線；本版完成 focused capability / navigation regression，並以 MangoLite + Pico W 與 MangoX2 進行代表性實機 smoke。
+Device Manager v0.5.1 延續 v0.5 Stable 的五個正式 Runtime target 支援線；MangoLite 建議搭配 Runtime v0.6.1。本版完成 focused capability / navigation regression，並以 MangoLite + Pico W、Pico 2 W 與 MangoX2 進行代表性實機 smoke。
 
 ---
 
@@ -106,7 +106,7 @@ GP28 (AD2)
 - **MangoX2 IR**：外接選配模組，Pin 由設定決定。
 - **MangoX2 OLED / RGB / Button**：屬標準預安裝模組，不應描述為 PCB 板載元件。
 - **MangoX2 / MangoLite OLED**：v0.5.1 依目前 Enable 狀態顯示硬體頁；Disable 後隱藏，重新 Enable 後恢復。
-- **MangoLite Ultrasonic**：在 Pin Configuration 啟用後，v0.5.1 會依 canonical capability resolver 正確顯示裝置頁。
+- **MangoLite Ultrasonic**：Runtime v0.6.1 補齊 runtime / Student API / handler parity；在 Pin Configuration 啟用後，Device Manager v0.5.1 會正確顯示裝置頁。
 
 因此應先選正確 target，再看 Enable、Pin 與實際接線。
 
@@ -154,7 +154,7 @@ module_enabled
 configured Pin
 ```
 
-線上文件現在已對齊五個正式 target，並以正式 Runtime profile 過濾可用 Student API。
+線上文件現在已對齊五個正式 target，MangoLite profile 已更新到 Runtime v0.6.1，並以正式 Runtime profile 過濾可用 Student API。
 
 ## 相關文件
 
