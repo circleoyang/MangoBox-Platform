@@ -1,16 +1,16 @@
 # Hardware Lab Basics
 
-Hardware Lab is MangoBox's **firmware and device-lifecycle tool**. The current public stable release is **v0.3.0**, aligned with the five Runtime targets published on 2026-09-06:
+Hardware Lab is MangoBox's **firmware and device-lifecycle tool**. The current public stable release is **v0.3.0**, aligned with the current five Runtime targets:
 
 ```text
 MangoX2 + Pico       → Runtime v0.2.6
 MangoX2 + Pico W     → Runtime v0.2.6
 MangoX2 + Pico 2 W   → Runtime v0.2.6
-MangoLite + Pico W   → Runtime v0.6.0
-MangoLite + Pico 2 W → Runtime v0.6.0
+MangoLite + Pico W   → Runtime v0.6.1
+MangoLite + Pico 2 W → Runtime v0.6.1
 ```
 
-Hardware Lab handles Firmware Update, Clean Flash, Factory Reset assistance, Recovery / Deep Rescue, execution modes, management transports, and diagnostic reports. Normal GPIO / Pin configuration, calibration, and sensor monitoring belong to Device Manager v0.5.0.
+Hardware Lab handles Firmware Update, Clean Flash, Factory Reset assistance, Recovery / Deep Rescue, execution modes, management transports, and diagnostic reports. Normal GPIO / Pin configuration, calibration, and sensor monitoring belong to Device Manager v0.5.1.
 
 Stable downloads and SHA-256 values are listed in the [MangoBox Download Center](../../../../releases/).
 
@@ -129,7 +129,7 @@ When a lifecycle problem occurs, save the JSON diagnostic report before making l
 
 # 8. Sensor / GPIO troubleshooting
 
-For a PIR / Light / Sound / IR / Joystick problem, do not start with Clean Flash. Use this order instead:
+For a PIR / Light / Sound / IR / Joystick / Ultrasonic problem, do not start with Clean Flash. Use this order instead:
 
 ```text
 Student API supports()
@@ -150,7 +150,7 @@ Hardware Lab v0.3.0 remains a firmware / lifecycle tool, not a general GPIO / AD
 | Tool | Primary role |
 |---|---|
 | MangoThonny v0.4.0 | Python / MicroPython teaching, Host Student API, project development and export |
-| Device Manager v0.5.0 | Module Enable state, pins, configuration, calibration, Read Once / Monitor |
+| Device Manager v0.5.1 | Module Enable state, pins, configuration, calibration, Read Once / Monitor |
 | Hardware Lab v0.3.0 | Firmware, Clean Flash, Recovery, execution mode, lifecycle diagnostics |
 
 ## Related documentation
