@@ -6,15 +6,24 @@ Current engineering source remains in the private MangoBox repository during mig
 
 ## Current public release
 
-- Device Manager: `v0.5.0`
-- Tag: `device-manager-v0.5.0`
-- Windows Installer: `MangoBox_Device_Manager_v0.5.0_Setup.exe`
-- Windows Portable: `MangoBox_Device_Manager_v0.5.0_Portable.zip`
+- Device Manager: `v0.5.1`
+- Tag: `device-manager-v0.5.1`
+- Windows Installer: `MangoBox_Device_Manager_v0.5.1_Setup.exe`
+- Windows Portable: `MangoBox_Device_Manager_v0.5.1_Portable.zip`
 - Release status: Stable
-- Portable SHA-256: `5619ceabcf2f5393df54898c5b2443a4927c70bae541bfd331d8bacd14cb0182`
-- Installer SHA-256: `d011d45b2542c591632eadbc98c7f4d6aaddfbad8c38718b45ba431be84d4d80`
+- Portable SHA-256: `df40a9602546a655e69b3416b56738fa3a69807ccda4b58e731bb4f62b32ab9e`
+- Installer SHA-256: `70b45ea75fc0f5e8d4f206fc54bddc79ee450b4fbb2e22b420be5d1bd1fd9484`
 
 The Installer is the recommended download for normal Windows users. The Portable ZIP is provided for no-install and classroom deployment scenarios.
+
+## v0.5.1 maintenance scope
+
+- Fixes MangoLite Ultrasonic navigation visibility after the module is enabled in Pin Configuration.
+- Aligns MangoLite + Pico W / Pico 2 W Ultrasonic capability parity.
+- Consolidates capability/navigation ownership around the canonical resolver path.
+- Aligns MangoX2 / MangoLite OLED as preinstalled/configurable modules whose hardware pages follow enable/disable state.
+- Adds stable Windows AppUserModelID `MangoBox.DeviceManager` behavior for taskbar icon persistence.
+- Exact Installer/Portable artifacts and representative hardware smoke were validated before publication.
 
 ## Supported Stable target line
 
