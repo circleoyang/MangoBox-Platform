@@ -1,6 +1,6 @@
 # Device Manager 基本操作
 
-Device Manager 是 MangoBox 的**日常裝置設定、校準與即時監看工具**。目前公開正式版為 **v0.5.0**，支援 2026-09-06 已發布的五個正式 Runtime target：
+Device Manager 是 MangoBox 的**日常裝置設定、校準與即時監看工具**。目前公開正式版為 **v0.5.1**，延續五個正式 Runtime target：
 
 ```text
 MangoX2 + Pico       → Runtime v0.2.6
@@ -62,7 +62,7 @@ Runtime / Firmware version
 config 是否成功讀取
 ```
 
-Device Manager v0.5.0 已完成五個正式 Runtime target 的 identity / system-info / config sanity 驗證；畫面顯示應與目前實機及 Runtime 相符。
+Device Manager v0.5.1 延續 v0.5 Stable 的五個正式 Runtime target 支援線；本版完成 focused capability / navigation regression，並以 MangoLite + Pico W 與 MangoX2 進行代表性實機 smoke。
 
 ---
 
@@ -105,6 +105,8 @@ GP28 (AD2)
 - **MangoLite IR**：板載固定 GP22。
 - **MangoX2 IR**：外接選配模組，Pin 由設定決定。
 - **MangoX2 OLED / RGB / Button**：屬標準預安裝模組，不應描述為 PCB 板載元件。
+- **MangoX2 / MangoLite OLED**：v0.5.1 依目前 Enable 狀態顯示硬體頁；Disable 後隱藏，重新 Enable 後恢復。
+- **MangoLite Ultrasonic**：在 Pin Configuration 啟用後，v0.5.1 會依 canonical capability resolver 正確顯示裝置頁。
 
 因此應先選正確 target，再看 Enable、Pin 與實際接線。
 
@@ -157,6 +159,6 @@ configured Pin
 ## 相關文件
 
 - [Hardware Lab 基本操作](hardware-lab.md)
-- [Device Manager v0.5.0 完整安裝與使用說明](../../../../desktop/device-manager/guide/)
+- [Device Manager v0.5.1 完整安裝與使用說明](../../../../desktop/device-manager/guide/)
 - [MangoBox 下載中心](../../../../releases/)
 - 各模組的「使用指南／問題排除／API Reference」
