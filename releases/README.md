@@ -2,10 +2,27 @@
 
 User-downloadable binaries are published through **GitHub Releases** rather than stored as versioned binaries in the source tree.
 
+## Current Stable line
+
+- MangoThonny: `v0.4.3`
+- Device Manager: `v0.5.2`
+- Hardware Lab: `v0.3.1`
+- MangoX2 Runtime: `v0.2.8` for Pico / Pico W / Pico 2 W
+- MangoLite Runtime: `v0.6.3` for Pico W / Pico 2 W
+
 ## Component tags
 
-- `mangox2-vX.Y.Z`
-- `mangolite-vX.Y.Z`
+Runtime firmware is published per exact target:
+
+- `mangox2-pico-vX.Y.Z`
+- `mangox2-picow-vX.Y.Z`
+- `mangox2-pico2w-vX.Y.Z`
+- `mangolite-picow-vX.Y.Z`
+- `mangolite-pico2w-vX.Y.Z`
+
+Desktop tools use component tags:
+
+- `mangothonny-vX.Y.Z`
 - `device-manager-vX.Y.Z`
 - `hardware-lab-vX.Y.Z`
 - `gateway-vX.Y.Z`
