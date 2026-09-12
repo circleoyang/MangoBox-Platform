@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="zh-Hant"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="MangoBox Motor Direction Calibration 使用說明"><title>Motor Direction Calibration｜MangoBox Docs</title><link rel="stylesheet" href="styles.css"><style>.guide{max-width:920px;margin:auto;background:#fff;border:1px solid var(--line);border-radius:20px;box-shadow:var(--shadow);padding:30px}.guide h1{font-size:clamp(32px,5vw,48px);margin:.2em 0}.guide h2{margin-top:34px}.guide p,.guide li{line-height:1.75}.guide pre{overflow:auto;padding:16px 18px;border-radius:12px;background:#111827;color:#f8fafc;line-height:1.55}.guide code{font-family:Consolas,monospace}.callout{padding:14px 16px;border-left:4px solid var(--accent);background:#fff7ed;border-radius:9px}.back{display:inline-block;margin-bottom:18px;text-decoration:none;font-weight:800}table{width:100%;border-collapse:collapse;margin:18px 0}th,td{border:1px solid var(--line);padding:10px;vertical-align:top;text-align:left}th{background:var(--soft)}</style></head><body>
+<header class="topbar"><a class="brand" href="../../../"><img class="brand-logo" src="../../../assets/brand/mangobox-core-refined-64.png" alt="MangoBox"><span><strong>MangoBox Docs</strong><small>Motor Direction Calibration</small></span></a><div class="top-actions"><a class="ghost-button" href="index.html">API 文件</a></div></header>
+<main><article class="guide"><a class="back" href="index.html">← 回到 MangoBox Docs</a><p class="eyebrow">MANGOX2 · MANGOLITE · FIVE TARGETS</p><h1>Motor Direction Calibration</h1><p>Motor Direction Calibration 用來處理「車體實際組裝方向」與程式邏輯不一致的情況。例如左右馬達插座互換、某一側馬達接線方向相反，學生仍然應該能用相同的 <code>forward()</code> / <code>backward()</code> 程式控制車體。</p>
+<div class="callout"><strong>設計原則：</strong>這是 Motor / Drive 層的車體校正，不是 BLE 專屬設定。BLE、UART、Gateway、循線與 High-Level MicroPython 都共用同一套車體方向語意。</div>
+<h2>支援版本</h2><table><thead><tr><th>Target</th><th>最低建議 Stable Runtime</th></tr></thead><tbody><tr><td>MangoX2 + Pico</td><td>v0.2.8</td></tr><tr><td>MangoX2 + Pico W</td><td>v0.2.8</td></tr><tr><td>MangoX2 + Pico 2 W</td><td>v0.2.8</td></tr><tr><td>MangoLite + Pico W</td><td>v0.6.3</td></tr><tr><td>MangoLite + Pico 2 W</td><td>v0.6.3</td></tr></tbody></table>
+<h2>四個核心設定</h2><pre><code>drive.left_motor
+drive.right_motor
+drive.left_inverted
+drive.right_inverted</code></pre><ul><li><code>left_motor</code> / <code>right_motor</code>：決定邏輯左右輪分別對應實體 M1 或 M2。</li><li><code>left_inverted</code> / <code>right_inverted</code>：決定該側車輪是否反轉。</li></ul><p>預設基線維持 MangoBox 既有車體語意：左輪使用 M2、右輪使用 M1；左輪不反轉、右輪反轉。</p>
+<h2>什麼情況要改哪一個？</h2><table><thead><tr><th>實機現象</th><th>建議調整</th></tr></thead><tbody><tr><td>左右輪插座互換</td><td>交換 <code>left_motor</code> / <code>right_motor</code></td></tr><tr><td>只有左輪方向相反</td><td>切換 <code>left_inverted</code></td></tr><tr><td>只有右輪方向相反</td><td>切換 <code>right_inverted</code></td></tr><tr><td>Forward 整台往後、Backward 整台往前</td><td>檢查兩輪 inversion，避免用學生程式硬改 forward / backward</td></tr></tbody></table>
+<h2>在 Device Manager 中校正</h2><ol><li>連線到裝置。</li><li>進入 Motor / Drive 相關設定頁。</li><li>先用 M1 / M2 raw test 確認每個實體 channel 是否能正常轉動。</li><li>確認哪一顆實體 Motor 是車體左輪、哪一顆是右輪。</li><li>設定 Left Motor / Right Motor。</li><li>若單側方向相反，切換該側 Inverted。</li><li>儲存設定。</li><li>用 Forward / Backward 測試車體語意。</li></ol><p>新版 Runtime 在設定儲存後會讓下一個 Drive command 直接使用新的 Drive profile，不需要重新開機。</p>
+<h2>Raw Motor 與 Drive 的差別</h2><p><code>M1</code> / <code>M2</code> raw motor 操作故意保留「實體通道」語意，方便接線與硬體診斷；它不會自動套用車體 inversion。相對地，<code>forward()</code>、<code>backward()</code>、tank、arc、spin 等 Drive 命令會套用邏輯左右輪映射與 inversion。</p>
+<h2>給學生的程式應該維持不變</h2><pre><code>from mangobox import Mango
+
+m = Mango()
+m.forward(60)
+# 車體應該真的向前，不需要學生知道 M1 / M2 如何安裝。</code></pre><p>校正完成後，學生可以專注在「車體要做什麼」，而不是處理每一台車的配線差異。</p></article></main>
+<footer><span>MangoBox Online Documentation</span><span>© 2026 歐陽芳泉 · 國立臺北商業大學 · MangoBox 平台。</span></footer></body></html>
