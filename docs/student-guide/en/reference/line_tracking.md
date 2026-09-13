@@ -1,6 +1,6 @@
 # Line Tracking API Reference
 
-> **Availability**: the current canonical contract exposes `line_tracking` only for **MangoX2 + High-Level MicroPython**. MangoX2 Host Python does not advertise it because the default GP12 / GP13 Line Tracking pair conflicts with current Host UART ownership. MangoLite does not currently advertise this capability.
+> **Availability**: the current canonical contract exposes `line_tracking` only for **MangoX2 + High-Level MicroPython**. MangoThonny Host Python does not yet provide the corresponding Line Tracking Student API; a later release can restore Host Student API parity. MangoLite does not currently advertise this capability.
 
 Canonical import:
 
@@ -181,7 +181,8 @@ This demonstrates API usage, not a universal controller. Real behavior depends o
 ## Hardware / configuration notes
 
 - Current MangoX2 defaults Line Tracking to GP12 / GP13.
-- Current Host UART usage conflicts with that default pair, so Host Python profiles do not advertise `line_tracking`.
+- MangoThonny Host Python does not currently implement this Line Tracking Student API set, so current Host profiles do not advertise `line_tracking`.
+- The GP12 / GP13 conflict with Host UART is a default-configuration limitation, not an architectural limitation. A future Host implementation can avoid it by assigning Line Tracking to different GPIO pins.
 - Active level and left/right pin mapping belong in Runtime / Device Manager configuration; learner programs should use semantic APIs rather than rebuilding raw GPIO drivers.
 - Check capability before use when needed:
 
