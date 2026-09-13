@@ -12,6 +12,8 @@ PROFILES_PATH = SITE / "data" / "profiles.json"
 MODULES_PATH = SITE / "data" / "modules.json"
 LANGS = ("zh-TW", "en")
 PUBLIC_SOURCE_STATUSES = {"public-current", "public-stable"}
+MANGOLITE_TARGETS = {"mangolite-picow", "mangolite-pico2w"}
+MANGOX2_TARGETS = {"mangox2-pico", "mangox2-picow", "mangox2-pico2w"}
 
 
 def load(path: Path):
@@ -57,10 +59,14 @@ def main() -> int:
         module_ids.add(module_id)
         capabilities.add(capability)
 
+    if "ble-control" not in module_ids or "ble_control" not in capabilities:
+        errors.append("BLE Control module/capability must be published in modules.json")
+
     profile_ids = set()
     for profile in profiles:
         profile_id = profile.get("id")
         mode = profile.get("mode")
+        target = str(profile.get("target", ""))
         profile_caps = set(profile.get("capabilities", []))
         if not profile_id or mode not in ("high_level_micropython", "host_python"):
             errors.append(f"invalid profile identity/mode: {profile!r}")
@@ -92,16 +98,28 @@ def main() -> int:
 
         # Current transport ownership rule: MangoX2 Host UART must not expose
         # line_tracking while the default line sensor owns GP12/GP13.
-        if mode == "host_python" and str(profile.get("target", "")).startswith("mangox2"):
-            if "line_tracking" in profile_caps:
-                errors.append(f"Host profile must not expose line_tracking: {profile_id}")
+        if mode == "host_python" and target in MANGOX2_TARGETS and "line_tracking" in profile_caps:
+            errors.append(f"Host profile must not expose line_tracking: {profile_id}")
 
-        # MangoLite distance/obstacle/line-tracking are still legacy and are
-        # intentionally not promoted into the current shared Student API docs.
-        if str(profile.get("target", "")) == "mangolite-pico2w":
-            stale = profile_caps & {"distance", "obstacle", "line_tracking"}
+        # Current canonical MangoLite v0.6.3 contract exposes distance but does
+        # not promote line_tracking/obstacle into the shared online profile.
+        if target in MANGOLITE_TARGETS:
+            stale = profile_caps & {"obstacle", "line_tracking"}
             if stale:
-                errors.append(f"MangoLite current profile exposes legacy shared capability: {profile_id} -> {sorted(stale)}")
+                errors.append(
+                    f"MangoLite current profile exposes unavailable shared capability: "
+                    f"{profile_id} -> {sorted(stale)}"
+                )
+
+        # BLE Control v1 is intentionally limited to MangoLite wireless targets
+        # using High Level MicroPython.
+        should_have_ble = target in MANGOLITE_TARGETS and mode == "high_level_micropython"
+        if should_have_ble and "ble_control" not in profile_caps:
+            errors.append(f"MangoLite v0.6.3 HLMP profile missing ble_control: {profile_id}")
+        if not should_have_ble and "ble_control" in profile_caps:
+            errors.append(f"ble_control exposed outside MangoLite HLMP v1 scope: {profile_id}")
+        if target in MANGOLITE_TARGETS and profile.get("runtime") != "0.6.3":
+            errors.append(f"MangoLite online profile must use Runtime 0.6.3: {profile_id}")
 
     recommended = profiles_data.get("recommended", {})
     for target, modes in recommended.items():
@@ -120,7 +138,8 @@ def main() -> int:
     print(
         "Student documentation validation PASS:",
         f"{len(profiles)} profiles, {len(modules)} modules,",
-        "zh-TW/en guide+reference coverage complete for every visible module.",
+        "zh-TW/en guide+reference coverage complete for every visible module;",
+        "MangoLite v0.6.3 BLE scope is consistent.",
     )
     return 0
 

@@ -1,8 +1,8 @@
 {
   "schema_version": 3,
-  "metadata_source": "MangoBox stable Runtime and Host Student API compatibility",
+  "metadata_source": "MangoBox canonical Student API compatibility",
   "source_status": "public-stable",
-  "source_date": "2026-09-09",
+  "source_date": "2026-09-13",
   "recommended": {
     "mangox2-pico": {
       "high_level_micropython": "mangox2-pico__hlmp__runtime-0.2.6",
@@ -17,12 +17,12 @@
       "host_python": "mangox2-pico2w__host-0.4.6__runtime-0.2.6"
     },
     "mangolite-picow": {
-      "high_level_micropython": "mangolite-picow__hlmp__runtime-0.6.1",
-      "host_python": "mangolite-picow__host-0.4.6__runtime-0.6.1"
+      "high_level_micropython": "mangolite-picow__hlmp__runtime-0.6.3",
+      "host_python": "mangolite-picow__host-0.4.6__runtime-0.6.3"
     },
     "mangolite-pico2w": {
-      "high_level_micropython": "mangolite-pico2w__hlmp__runtime-0.6.1",
-      "host_python": "mangolite-pico2w__host-0.4.6__runtime-0.6.1"
+      "high_level_micropython": "mangolite-pico2w__hlmp__runtime-0.6.3",
+      "host_python": "mangolite-pico2w__host-0.4.6__runtime-0.6.3"
     }
   },
   "profiles": [
@@ -84,49 +84,49 @@
       "capabilities": ["led", "buzzer", "servo", "oled", "button", "ir", "distance", "drive", "motor", "obstacle", "motion", "light", "sound_level", "joystick"]
     },
     {
-      "id": "mangolite-picow__hlmp__runtime-0.6.1",
+      "id": "mangolite-picow__hlmp__runtime-0.6.3",
       "target": "mangolite-picow",
       "mode": "high_level_micropython",
-      "runtime": "0.6.1",
+      "runtime": "0.6.3",
       "release_status": "stable",
-      "label": {"zh-TW": "正式版 · Runtime 0.6.1", "en": "Stable · Runtime 0.6.1"},
-      "capabilities": ["led", "buzzer", "servo", "oled", "button", "ir", "distance", "drive", "motor", "motion", "light", "sound_level", "joystick"]
+      "label": {"zh-TW": "正式版 · Runtime 0.6.3", "en": "Stable · Runtime 0.6.3"},
+      "capabilities": ["led", "buzzer", "servo", "oled", "button", "ir", "distance", "drive", "motor", "motion", "light", "sound_level", "joystick", "ble_control"]
     },
     {
-      "id": "mangolite-picow__host-0.4.6__runtime-0.6.1",
+      "id": "mangolite-picow__host-0.4.6__runtime-0.6.3",
       "target": "mangolite-picow",
       "mode": "host_python",
       "host_package": "0.4.6",
-      "runtime": "0.6.1",
+      "runtime": "0.6.3",
       "release_status": "stable",
-      "label": {"zh-TW": "正式版 · Host 0.4.6 + Runtime 0.6.1", "en": "Stable · Host 0.4.6 + Runtime 0.6.1"},
+      "label": {"zh-TW": "正式版 · Host 0.4.6 + Runtime 0.6.3", "en": "Stable · Host 0.4.6 + Runtime 0.6.3"},
       "capabilities": ["led", "buzzer", "servo", "oled", "button", "ir", "distance", "drive", "motor", "motion", "light", "sound_level", "joystick"]
     },
     {
-      "id": "mangolite-pico2w__hlmp__runtime-0.6.1",
+      "id": "mangolite-pico2w__hlmp__runtime-0.6.3",
       "target": "mangolite-pico2w",
       "mode": "high_level_micropython",
-      "runtime": "0.6.1",
+      "runtime": "0.6.3",
       "release_status": "stable",
-      "label": {"zh-TW": "正式版 · Runtime 0.6.1", "en": "Stable · Runtime 0.6.1"},
-      "capabilities": ["led", "buzzer", "servo", "oled", "button", "ir", "distance", "drive", "motor", "motion", "light", "sound_level", "joystick"]
+      "label": {"zh-TW": "正式版 · Runtime 0.6.3", "en": "Stable · Runtime 0.6.3"},
+      "capabilities": ["led", "buzzer", "servo", "oled", "button", "ir", "distance", "drive", "motor", "motion", "light", "sound_level", "joystick", "ble_control"]
     },
     {
-      "id": "mangolite-pico2w__host-0.4.6__runtime-0.6.1",
+      "id": "mangolite-pico2w__host-0.4.6__runtime-0.6.3",
       "target": "mangolite-pico2w",
       "mode": "host_python",
       "host_package": "0.4.6",
-      "runtime": "0.6.1",
+      "runtime": "0.6.3",
       "release_status": "stable",
-      "label": {"zh-TW": "正式版 · Host 0.4.6 + Runtime 0.6.1", "en": "Stable · Host 0.4.6 + Runtime 0.6.1"},
+      "label": {"zh-TW": "正式版 · Host 0.4.6 + Runtime 0.6.3", "en": "Stable · Host 0.4.6 + Runtime 0.6.3"},
       "capabilities": ["led", "buzzer", "servo", "oled", "button", "ir", "distance", "drive", "motor", "motion", "light", "sound_level", "joystick"]
     }
   ],
   "notes": [
-    "Profiles are aligned to the five stable Runtime targets current on 2026-09-09: MangoX2 Pico/Pico W/Pico 2 W v0.2.6 and MangoLite Pico W/Pico 2 W v0.6.1.",
-    "Host Python profiles use the current Host Student API package 0.4.6 distributed through the MangoThonny v0.4.0 teaching environment.",
+    "Profiles are aligned to the canonical MangoBox Student API state current on 2026-09-13: MangoX2 Pico/Pico W/Pico 2 W v0.2.6 and MangoLite Pico W/Pico 2 W v0.6.3.",
+    "BLE Control v1 is available only for MangoLite Pico W/Pico 2 W High Level MicroPython profiles. Host Python and MangoX2 profiles do not advertise ble_control.",
+    "Host Python profiles use Student API package 0.4.6.",
     "A profile capability means the learner API path exists for the selected target and mode. Physical module presence, current Enable state, wiring health, and hardware validation are separate states.",
-    "MangoX2 line_tracking is intentionally absent from Host profiles because the default GP12/GP13 line-tracking profile conflicts with active Host UART ownership.",
-    "MangoLite legacy line_tracking/obstacle paths are intentionally not promoted until their shared contracts are migrated."
+    "MangoX2 line_tracking is intentionally absent from Host profiles because the default GP12/GP13 line-tracking profile conflicts with active Host UART ownership."
   ]
 }

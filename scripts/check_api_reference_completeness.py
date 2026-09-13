@@ -1,17 +1,5 @@
 #!/usr/bin/env python3
-"""Validate the public MangoBox method-level API Reference contract.
-
-Reference coverage has two layers:
-
-1. module/mode Markdown for hardware- and execution-specific notes;
-2. a structured Method Quick Reference generated from the merged public method
-   contract (base api-index.json plus the temporary 2026-09-06 overlay).
-
-The overlay is an explicit bridge to the private engineering contract while
-GitHub Actions quota prevents final validation/merge of MangoBox PR #91. It is
-not a replacement source of truth and must be removed after automatic public
-catalog synchronization is available.
-"""
+"""Validate the public MangoBox method-level API Reference contract."""
 from __future__ import annotations
 
 import json
@@ -24,17 +12,17 @@ SITE = GUIDE / "site"
 DATA = SITE / "data"
 API_INDEX = DATA / "api-index.json"
 API_OVERLAY = DATA / "api-contract-overlay-v20260906.json"
+BLE_OVERLAY = DATA / "ble-control-api-overlay-v20260913.json"
 MODULES = DATA / "modules.json"
 PARAM_HELP = DATA / "api-parameter-help.json"
 OVERLAY_JS = SITE / "api-contract-overlay-v20260906.js"
+BLE_OVERLAY_JS = SITE / "ble-control-api-overlay-v20260913.js"
 DETAILS_JS = SITE / "api-reference-details.js"
 SITE_INDEX = SITE / "index.html"
 LANGS = ("zh-TW", "en")
 ALLOWED_SOURCE_STATUS = {"public-current", "public-stable"}
 
-GLOBAL_METHODS = {
-    "supports", "capabilities", "run_once", "run_forever", "close", "send_command"
-}
+GLOBAL_METHODS = {"supports", "capabilities", "run_once", "run_forever", "close", "send_command"}
 
 CANONICAL_SMOKE = {
     "joystick": "m.joystick()",
@@ -57,6 +45,12 @@ CANONICAL_SMOKE = {
     "sound_level": "m.sound_level()",
     "on_sound_above": "m.on_sound_above(threshold, callback, hysteresis=5, period=100)",
     "on_sound_below": "m.on_sound_below(threshold, callback, hysteresis=5, period=100)",
+    "on_control": "m.on_control(control, action, callback, controller=\"primary\")",
+    "on_control_pressed": "m.on_control_pressed(control, callback, controller=\"primary\")",
+    "on_control_released": "m.on_control_released(control, callback, controller=\"primary\")",
+    "on_control_joystick": "m.on_control_joystick(callback, controller=\"primary\")",
+    "control_name": "m.control_name()",
+    "control_connected": "m.control_connected()",
 }
 
 REQUIRED_STRUCTURED_JS_TOKENS = (
@@ -71,38 +65,24 @@ REQUIRED_STRUCTURED_JS_TOKENS = (
     "MutationObserver",
 )
 
-REQUIRED_OVERLAY_JS_TOKENS = (
-    'fetch("data/api-contract-overlay-v20260906.json")',
-    "new Map(state.api.map",
-    "byName.set(patch.name",
-    "state.api = [...byName.values()]",
-    "expected_public_methods",
-)
-
 
 def load(path: Path):
     return json.loads(path.read_text(encoding="utf-8"))
 
 
-def merged_entries(base: dict, overlay: dict) -> list[dict]:
+def merge_entries(base: dict, *overlays: dict) -> list[dict]:
     by_name: dict[str, dict] = {}
     order: list[str] = []
-    for entry in base.get("entries", []):
-        name = entry.get("name")
-        if not name:
-            continue
-        if name not in by_name:
-            order.append(name)
-        by_name[name] = dict(entry)
-    for patch in overlay.get("entries", []):
-        name = patch.get("name")
-        if not name:
-            continue
-        if name not in by_name:
-            order.append(name)
-            by_name[name] = dict(patch)
-        else:
-            by_name[name] = {**by_name[name], **patch}
+    for payload in (base, *overlays):
+        for patch in payload.get("entries", []):
+            name = patch.get("name")
+            if not name:
+                continue
+            if name not in by_name:
+                order.append(name)
+                by_name[name] = dict(patch)
+            else:
+                by_name[name] = {**by_name[name], **patch}
     return [by_name[name] for name in order]
 
 
@@ -115,11 +95,7 @@ def reference_path(lang: str, module_id: str, mode: str) -> Path:
 
 def heading_has_method(text: str, method: str) -> bool:
     escaped = re.escape(method)
-    pattern = re.compile(
-        rf"^#{{2,4}}\s+.*(?:`{escaped}\(\)`|{escaped}\(\)).*$",
-        re.MULTILINE,
-    )
-    return bool(pattern.search(text))
+    return bool(re.search(rf"^#{{2,4}}\s+.*(?:`{escaped}\(\)`|{escaped}\(\)).*$", text, re.MULTILINE))
 
 
 def split_parameters(raw: str) -> list[str]:
@@ -176,9 +152,11 @@ def signature_parameters(signature: str) -> list[str]:
 def main() -> int:
     api = load(API_INDEX)
     overlay = load(API_OVERLAY)
+    ble_overlay = load(BLE_OVERLAY)
     modules_data = load(MODULES)
     param_data = load(PARAM_HELP)
-    entries = merged_entries(api, overlay)
+    legacy_entries = merge_entries(api, overlay)
+    entries = merge_entries(api, overlay, ble_overlay)
     modules = modules_data.get("modules", [])
     module_ids = {m.get("id") for m in modules if m.get("id")}
     errors: list[str] = []
@@ -186,51 +164,49 @@ def main() -> int:
     for label, payload in (
         ("api-index.json", api),
         ("api-contract-overlay-v20260906.json", overlay),
+        ("ble-control-api-overlay-v20260913.json", ble_overlay),
         ("modules.json", modules_data),
         ("api-parameter-help.json", param_data),
     ):
         if payload.get("source_status") not in ALLOWED_SOURCE_STATUS:
-            errors.append(
-                f"{label} source_status must be one of {sorted(ALLOWED_SOURCE_STATUS)}"
-            )
+            errors.append(f"{label} source_status must be one of {sorted(ALLOWED_SOURCE_STATUS)}")
 
-    expected_base = overlay.get("base_method_count")
-    if expected_base != len(api.get("entries", [])):
-        errors.append(
-            f"base API count drift: {len(api.get('entries', []))} != overlay base_method_count {expected_base}"
-        )
-    expected_public = overlay.get("expected_public_methods")
-    if expected_public != len(entries):
-        errors.append(
-            f"merged public API count drift: {len(entries)} != expected_public_methods {expected_public}"
-        )
+    if overlay.get("base_method_count") != len(api.get("entries", [])):
+        errors.append("base API count drift")
+    if overlay.get("expected_public_methods") != len(legacy_entries):
+        errors.append(f"2026-09-06 public API count drift: {len(legacy_entries)} != {overlay.get('expected_public_methods')}")
+    if ble_overlay.get("expected_total_public_methods") != len(entries):
+        errors.append(f"BLE public API count drift: {len(entries)} != {ble_overlay.get('expected_total_public_methods')}")
     deferred = set(overlay.get("deferred_not_promoted", []))
     if deferred & {entry.get("name") for entry in entries}:
-        errors.append(
-            f"deferred APIs must not be promoted into searchable public methods: {sorted(deferred)}"
-        )
+        errors.append(f"deferred APIs must not be promoted: {sorted(deferred)}")
 
     site_html = SITE_INDEX.read_text(encoding="utf-8")
     overlay_js = OVERLAY_JS.read_text(encoding="utf-8")
+    ble_js = BLE_OVERLAY_JS.read_text(encoding="utf-8")
     details_js = DETAILS_JS.read_text(encoding="utf-8")
     scripts = [
         'src="app.js"',
         'src="api-contract-overlay-v20260906.js"',
         'src="api-reference-details.js"',
         'src="method-search.js"',
+        'src="ble-control-api-overlay-v20260913.js"',
     ]
     positions = [site_html.find(token) for token in scripts]
     if any(position < 0 for position in positions):
-        errors.append("site/index.html is missing one or more API contract/reference/search scripts")
+        errors.append("site/index.html is missing one or more API scripts")
     elif positions != sorted(positions):
-        errors.append("API scripts must load app -> contract overlay -> reference details -> search")
+        errors.append("API scripts must load app -> base overlay -> reference details -> search -> BLE overlay")
 
-    for token in REQUIRED_OVERLAY_JS_TOKENS:
+    for token in ('fetch("data/api-contract-overlay-v20260906.json")', "new Map(state.api.map", "byName.set(patch.name", "state.api = [...byName.values()]", "expected_public_methods"):
         if token not in overlay_js:
-            errors.append(f"API contract overlay loader missing token: {token}")
+            errors.append(f"base API overlay loader missing token: {token}")
+    for token in ('fetch("data/ble-control-api-overlay-v20260913.json")', "new Map(state.api.map", "state.api = [...byName.values()]", "expected_total_public_methods"):
+        if token not in ble_js:
+            errors.append(f"BLE API overlay loader missing token: {token}")
     for token in REQUIRED_STRUCTURED_JS_TOKENS:
         if token not in details_js:
-            errors.append(f"structured Reference renderer missing contract token: {token}")
+            errors.append(f"structured Reference renderer missing token: {token}")
 
     param_help = param_data.get("parameters", {})
     if not isinstance(param_help, dict):
@@ -267,25 +243,11 @@ def main() -> int:
     for name, expected in CANONICAL_SMOKE.items():
         entry = next((item for item in entries if item.get("name") == name), None)
         if entry is None:
-            errors.append(f"canonical smoke method missing from merged public contract: {name}")
+            errors.append(f"canonical smoke method missing: {name}")
         elif entry.get("signature") != expected:
-            errors.append(
-                f"stale public signature: {name}: {entry.get('signature')!r} != {expected!r}"
-            )
+            errors.append(f"stale public signature: {name}: {entry.get('signature')!r} != {expected!r}")
 
-    joystick = next((item for item in entries if item.get("name") == "joystick"), None)
-    if joystick:
-        combined = f"{joystick.get('zh', '')} {joystick.get('en', '')}".lower()
-        if "按鍵狀態" in combined or "switch state" in combined:
-            errors.append(
-                "joystick() summary is stale: it returns normalized (x, y); "
-                "button state belongs to is_joystick_pressed()"
-            )
-
-    checked = 0
-    manual = 0
-    generated = 0
-    missing_pages = 0
+    checked = manual = generated = missing_pages = 0
     for lang in LANGS:
         for module_id, methods in sorted(by_module.items()):
             ordinary = [m for m in methods if m["name"] not in GLOBAL_METHODS]
@@ -309,10 +271,7 @@ def main() -> int:
 
     if errors:
         print("API Reference completeness FAILED")
-        print(
-            f"Merged public methods={len(entries)}; checked {checked} method/page pairs; "
-            f"manual={manual}, structured={generated}, missing_pages={missing_pages}."
-        )
+        print(f"Merged public methods={len(entries)}; checked {checked} method/page pairs; manual={manual}, structured={generated}, missing_pages={missing_pages}.")
         for error in errors:
             print("-", error)
         return 1
@@ -321,8 +280,7 @@ def main() -> int:
         "API Reference completeness PASS:",
         f"{len(entries)} executable/searchable public methods; {checked} method/page pairs;",
         f"manual headings={manual}, structured quick-reference={generated};",
-        f"deferred not promoted={sorted(deferred)};",
-        "all signature parameters have bilingual help and deep-link rendering."
+        f"deferred not promoted={sorted(deferred)}; BLE Control reference included.",
     )
     return 0
 

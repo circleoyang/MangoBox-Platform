@@ -1,29 +1,29 @@
 <!doctype html>
-<html lang="zh-Hant"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="MangoLite BLE Control v1 與 Dabble Gamepad 快速入門"><title>BLE Control v1｜MangoBox Docs</title><link rel="stylesheet" href="styles.css"><style>.guide{max-width:920px;margin:auto;background:#fff;border:1px solid var(--line);border-radius:20px;box-shadow:var(--shadow);padding:30px}.guide h1{font-size:clamp(32px,5vw,48px);margin:.2em 0}.guide h2{margin-top:34px}.guide p,.guide li{line-height:1.75}.guide pre{overflow:auto;padding:16px 18px;border-radius:12px;background:#111827;color:#f8fafc;line-height:1.55}.guide code{font-family:Consolas,monospace}.callout{padding:14px 16px;border-left:4px solid var(--accent);background:#fff7ed;border-radius:9px}.back{display:inline-block;margin-bottom:18px;text-decoration:none;font-weight:800}</style></head><body>
-<header class="topbar"><a class="brand" href="../../../"><img class="brand-logo" src="../../../assets/brand/mangobox-core-refined-64.png" alt="MangoBox"><span><strong>MangoBox Docs</strong><small>BLE Control v1</small></span></a><div class="top-actions"><a class="ghost-button" href="index.html">API 文件</a></div></header>
-<main><article class="guide"><a class="back" href="index.html">← 回到 MangoBox Docs</a><p class="eyebrow">MANGOLITE · BLE CONTROL V1</p><h1>BLE Control v1 快速入門</h1><p>MangoLite Runtime v0.6.3 在 Pico W 與 Pico 2 W 上提供 BLE Control v1，可直接使用 Dabble 的 Gamepad 模組控制 MangoBox。BLE Control 與既有 UART Runtime 共存，學生仍以 MangoBox Student API 綁定按鍵與搖桿事件。</p>
-<div class="callout"><strong>支援 target：</strong>MangoLite + Pico W、MangoLite + Pico 2 W。一般開機不主動 BLE advertising；需要配對時，長按板載 GP3 約 10 秒開啟配對視窗。</div>
-<h2>1. 使用 Dabble 配對</h2><ol><li>啟動 MangoLite v0.6.3。</li><li>長按板載按鈕 GP3 約 10 秒。</li><li>聽到提示音後，在手機 Dabble App 連線到裝置名稱，例如 <code>ML-B032</code>。</li><li>進入 <strong>Gamepad</strong> 模組。</li></ol><p>配對視窗期間按一下板載按鈕可取消配對。斷線時 Runtime 會清理控制狀態，避免 RGB、Motor 等輸出因失去控制端而保持在按住狀態。</p>
-<h2>2. Digital Gamepad</h2><p>方向鍵、Triangle、Circle、Cross、Square、Start、Select 等按鍵會產生 press / release 事件。未綁定的按鍵只保留控制事件，不會自動操作硬體。</p><pre><code>from mangobox import Mango
-
-m = Mango()
-
-def up_pressed():
-    print("UP pressed")
-
-m.on_control_pressed("up", up_pressed)
-m.run_forever()</code></pre>
-<h2>3. Analog Joystick</h2><p>Dabble Analog Joystick 提供 <code>angle</code> 與 <code>radius</code>。angle 可視為 0–359° 的方向角，radius 代表搖桿離中心的程度，可用來控制車速、轉向或燈光色相。</p><pre><code>from mangobox import Mango
-
-m = Mango()
-
-def joystick(angle, radius):
-    print("angle=", angle, "radius=", radius)
-
-m.on_control_joystick(joystick)
-m.run_forever()</code></pre>
-<h2>4. 色相環燈光</h2><p>可把 joystick angle 對應 HSV 色相，radius 對應亮度，形成類似色相環的互動控制。官方範例原始碼位於 Runtime examples 中的 <code>ble_joystick_hue_ring.py</code>。</p>
-<h2>5. 車控範例</h2><p>v0.6.3 提供兩種車控範例：</p><ul><li><strong>Digital Car：</strong>方向鍵控制前進、後退、pivot 左右；Triangle / Cross 調整速度，Circle 蜂鳴器，Square 切換板載 RGB。</li><li><strong>Analog Car：</strong>使用 joystick angle / radius 做連續速度與轉向控制。</li></ul><p>車子的左右輪方向不要在 BLE 層補正。請先使用 Device Manager 的 Motor Direction Calibration 校正車體，讓 <code>forward()</code> 永遠代表車體真正向前。</p>
-<h2>6. 多裝置 Student API</h2><p>BLE Control 不改變 MangoBox 原有的 named-device 設計。若有多組 LED strip、IR 或其他模組，仍使用既有 Student API 的裝置名稱或 selector 指定目標；控制器事件只負責觸發 callback。</p>
-<h2>版本需求</h2><ul><li>MangoLite Runtime：v0.6.3 或更新。</li><li>控制板：Raspberry Pi Pico W 或 Pico 2 W。</li><li>App：Dabble，使用 Gamepad 模組。</li></ul></article></main>
-<footer><span>MangoBox Online Documentation</span><span>© 2026 歐陽芳泉 · 國立臺北商業大學 · MangoBox 平台。</span></footer></body></html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="MangoLite BLE Control v1 canonical Student API Guide">
+  <title>BLE Control v1｜MangoBox Docs</title>
+  <link rel="stylesheet" href="styles.css">
+  <meta http-equiv="refresh" content="0; url=index.html?lang=zh-TW&target=mangolite-picow&mode=high_level_micropython&module=ble-control&view=guide">
+  <script>
+    (() => {
+      const params = new URLSearchParams(location.search);
+      const lang = params.get("lang") === "en" ? "en" : "zh-TW";
+      const target = params.get("target") === "mangolite-pico2w" ? "mangolite-pico2w" : "mangolite-picow";
+      location.replace(`index.html?lang=${encodeURIComponent(lang)}&target=${encodeURIComponent(target)}&mode=high_level_micropython&module=ble-control&view=guide`);
+    })();
+  </script>
+</head>
+<body>
+  <main class="home-panel">
+    <section class="home-hero">
+      <p class="eyebrow">MANGOLITE · BLE CONTROL V1</p>
+      <h1>BLE Control 文件已整合至 Student API</h1>
+      <p>正在前往 MangoLite v0.6.3 canonical Guide。若沒有自動跳轉，請使用下方連結。</p>
+      <p><a class="primary-button" href="index.html?lang=zh-TW&target=mangolite-picow&mode=high_level_micropython&module=ble-control&view=guide">開啟 BLE Control Guide</a></p>
+    </section>
+  </main>
+</body>
+</html>

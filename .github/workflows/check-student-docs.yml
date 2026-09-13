@@ -38,3 +38,4 @@ jobs:
           node --check docs/student-guide/site/api-contract-overlay-v20260906.js
           node --check docs/student-guide/site/api-reference-details.js
           node --check docs/student-guide/site/method-search.js
+          node --check docs/student-guide/site/ble-control-api-overlay-v20260913.js
