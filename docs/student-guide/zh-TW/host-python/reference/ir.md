@@ -1,28 +1,6 @@
 # IR Remote API Reference — Host Python
 
-Host Python 的 IR learner path 必須由目前 Host package + Runtime compatibility resolver 確認；不能只因 Runtime config 有 IR Pin 就假設完整 API 可用。
-
-## `on_ir_pressed()` / `on_ir_released()`
-
-```python
-m.on_ir_pressed(key, callback)
-m.on_ir_released(key, callback)
-```
-
-| 參數 | 說明 |
-|---|---|
-| `key` | NEC teaching remote 的按鍵名稱，例如 `"ok"`, `"up"`, `"1"`, `"*"`。 |
-| `callback` | 按下／放開事件時執行的 callable。 |
-
-```python
-def ok():
-    print("OK")
-
-m.on_ir_pressed("ok", ok)
-m.run_forever()
-```
-
-Host process 必須持續接收 Runtime 事件，因此 callback 程式需要保持事件服務流程。
+> **Availability**：目前 MangoThonny Host 0.4.6 已提供完整 IR Student API。MangoLite 使用固定板載 IR；MangoX2 使用選配外接 IR，live Runtime config 未啟用時會拒絕使用。
 
 ## `is_ir_pressed()`
 
@@ -30,7 +8,44 @@ Host process 必須持續接收 Runtime 事件，因此 callback 程式需要保
 m.is_ir_pressed(key) -> bool
 ```
 
-讀取 Runtime 維護的 held state。
+同步向 Runtime 讀取目前 IR state，當指定 key 正處於 pressed / held 狀態時回傳 `True`。
+
+未知 key 會丟出 `ValueError`。
+
+## `on_ir_pressed()`
+
+```python
+m.on_ir_pressed(key, callback)
+```
+
+指定 NEC key 進入 pressed 狀態時執行 callback。
+
+## `on_ir_released()`
+
+```python
+m.on_ir_released(key, callback)
+```
+
+指定 key 進入 released 狀態時執行 callback。
+
+callback 不是 callable 時會丟出 `TypeError`。
+
+## Host lifecycle
+
+Host IR callback 由背景 reader / dispatch 路徑接收 Runtime event。註冊 callback 後，Host 會要求 Runtime 啟動 IR monitor；Host 不需要為 IR callback 額外執行 MicroPython 的 `m.run_forever()`。
+
+Python process 本身仍必須保持存活，例如：
+
+```python
+from mangobox import Mango
+import time
+
+m = Mango()
+m.on_ir_pressed("ok", lambda: print("OK"))
+
+while True:
+    time.sleep(1)
+```
 
 ## 標準 key
 
@@ -38,10 +53,18 @@ m.is_ir_pressed(key) -> bool
 1 2 3 4 5 6 7 8 9 * 0 # up left ok right down
 ```
 
-## Capability
+名稱會正規化為小寫。
 
-```python
-print(m.supports("ir"))
-```
+## Target gate
 
-MangoLite 的固定板載 IR 與 MangoX2 選配外接 IR 是不同硬體情境，線上文件以 target / resolver 顯示為準。
+### MangoLite
+
+固定板載 IR 不以 `enabled_modules.ir_sensor` 作為可用性 gate。
+
+### MangoX2
+
+若 live Runtime snapshot 顯示 `ir_sensor=false`，Host API 會丟出 `RuntimeError`。active GPIO 由 `ir_sensor_pin` 管理。
+
+## 相關 API
+
+`is_ir_pressed()`, `on_ir_pressed()`, `on_ir_released()`, `supports("ir")`

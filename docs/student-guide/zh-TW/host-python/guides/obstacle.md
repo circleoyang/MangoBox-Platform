@@ -1,6 +1,6 @@
 # Obstacle 障礙物感測 — Host Python 使用指南
 
-MangoX2 Host API 支援 named obstacle sensors，同步讀取與 blocked/clear callbacks。
+MangoX2 Host API 支援 named obstacle sensors、同步讀取與狀態改變 callback。
 
 ## 30 秒快速測試
 
@@ -21,16 +21,26 @@ print(m.is_blocked('left'))
 print(m.block_state('right'))
 ```
 
+未指定名稱時使用預設 `obstacle1`。
+
 ## 事件
 
 ```python
+from mangobox import Mango
+import time
+
+m = Mango()
 m.on_blocked(lambda: print('LEFT BLOCKED'), sensor='left')
 m.on_clear(lambda: print('LEFT CLEAR'), sensor='left')
-m.run_forever()
+
+while True:
+    time.sleep(1)
 ```
 
-Host 在註冊 monitor 時會先建立 current-state baseline，避免把初始值誤當成一次 transition。
+Host callback 由背景 reader / dispatch 接收 Runtime 事件，不需要 MicroPython 的 `m.run_forever()`。註冊 monitor 時會先建立 current-state baseline，因此初始狀態不會被誤當成一次 transition。
 
-MangoLite legacy obstacle 設定目前不自動提升為 Host current capability。
+同步讀取若沒有取得有效值，目前可能呈現 `False` / `clear` fallback，所以 `clear` 不應單獨用來判斷感測器是否正常連線。
+
+MangoLite Host profile 目前不宣告 `obstacle` capability。
 
 完整函式資料請看 [Host Python Obstacle API Reference](../reference/obstacle.md)。

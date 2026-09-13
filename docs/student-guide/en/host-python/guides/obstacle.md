@@ -1,6 +1,6 @@
 # Obstacle Sensor — Host Python Guide
 
-MangoX2 Host API supports named obstacle sensors, synchronous reads, and blocked/clear callbacks.
+The current `obstacle` capability is available on MangoX2 Host Python profiles. Host Student API supports named sensors, synchronous reads, and state-transition callbacks. MangoLite Host profiles do not currently advertise this capability.
 
 ## 30-second test
 
@@ -9,6 +9,8 @@ from mangobox import Mango
 import time
 
 m = Mango()
+print("Obstacle supported =", m.supports("obstacle"))
+
 while True:
     print(m.is_blocked(), m.block_state())
     time.sleep(0.2)
@@ -17,21 +19,29 @@ while True:
 ## Named sensor
 
 ```python
-print(m.is_blocked('left'))
-print(m.block_state('right'))
+print(m.is_blocked("left"))
+print(m.block_state("right"))
 ```
+
+When no name is supplied, the default sensor is `obstacle1`.
 
 ## Events
 
 ```python
-m.on_blocked(lambda: print('LEFT BLOCKED'), sensor='left')
-m.on_clear(lambda: print('LEFT CLEAR'), sensor='left')
-m.run_forever()
+from mangobox import Mango
+import time
+
+m = Mango()
+m.on_blocked(lambda: print("LEFT BLOCKED"), sensor="left")
+m.on_clear(lambda: print("LEFT CLEAR"), sensor="left")
+
+while True:
+    time.sleep(1)
 ```
 
-Host establishes a current-state baseline before transition callbacks, so initial registration is not misreported as a state change.
+Host callbacks are delivered by the background reader/dispatch path and do not require the MicroPython `m.run_forever()` loop. Registration first establishes a current-state baseline, so the initial state is not misreported as a new transition.
 
-MangoLite legacy obstacle configuration is not automatically promoted to a current Host capability.
+If a synchronous read does not obtain a valid value, the current API may fall back to `False` / `clear`; therefore `clear` is not a transport-health signal.
 
 ## More
 

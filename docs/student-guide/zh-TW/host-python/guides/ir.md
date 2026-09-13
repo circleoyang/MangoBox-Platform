@@ -1,6 +1,6 @@
 # IR 紅外線遙控器 — Host Python 使用指南
 
-Host Python 透過目前 Runtime 的 structured JSON reply/event 路徑讀取 NEC 紅外線遙控器。MangoLite 是固定板載 GP22 IR；MangoX2 則是由 `enabled_modules.ir_sensor` 與 `ir_sensor_pin` 控制的選配外接模組。
+Host Python 透過目前 Runtime 的 structured JSON reply/event 路徑使用 NEC 紅外線遙控器。MangoLite 使用固定板載 GP22 IR；MangoX2 則使用由 `enabled_modules.ir_sensor` 與 `ir_sensor_pin` 管理的選配外接模組。
 
 ## 30 秒快速測試
 
@@ -9,41 +9,49 @@ from mangobox import Mango
 import time
 
 m = Mango()
-print('IR supported =', m.supports('ir'))
+print("IR supported =", m.supports("ir"))
+
 while True:
-    print('OK =', m.is_ir_pressed('ok'))
+    print("OK =", m.is_ir_pressed("ok"))
     time.sleep(0.1)
 ```
 
-可用 key：`1..9`、`0`、`*`、`#`、`up`、`down`、`left`、`right`、`ok`。
+支援 key：`1..9`、`0`、`*`、`#`、`up`、`down`、`left`、`right`、`ok`。
 
 ## 按下／放開事件
 
 ```python
 from mangobox import Mango
+import time
 
 m = Mango()
 
-def pressed():
-    print('OK pressed')
+m.on_ir_pressed("ok", lambda: print("OK pressed"))
+m.on_ir_released("ok", lambda: print("OK released"))
 
-def released():
-    print('OK released')
-
-m.on_ir_pressed('ok', pressed)
-m.on_ir_released('ok', released)
-m.run_forever()
+while True:
+    time.sleep(1)
 ```
 
-註冊 callback 時 Host 會要求 Runtime 啟動 IR monitor；事件由裝置端 NEC decoder 產生，Host 不重新解碼 pulse timing。
+Host Python 的 callback 由背景 reader / dispatch 路徑接收 Runtime semantic event。**不需要為了 IR callback 額外呼叫 MicroPython 的 `m.run_forever()`**；只要 Host process 本身仍在執行即可。
+
+裝置端 Runtime 負責 NEC pulse 解碼、repeat 與 released 判定；Host 不重新解碼 raw pulse timing。
 
 ## MangoLite / MangoX2 差異
 
-- MangoLite：固定板載 GP22 IR，不因舊的 `ir_sensor` 選配開關為 False 就消失。
-- MangoX2：必須在目前 Runtime config 啟用 `ir_sensor`，否則 Host API 會拒絕使用。
+- **MangoLite**：固定板載 GP22 IR，不因舊的 `enabled_modules.ir_sensor` 選配開關為 False 就消失。
+- **MangoX2**：live Runtime config 必須啟用 `ir_sensor`，並由 `ir_sensor_pin` 決定外接 Signal GPIO。
 
-## 如果按鍵沒反應
+## 常見問題
 
-先看 `m.supports('ir')`，再到 Device Manager 確認 target、module enable 與 MangoX2 `ir_sensor_pin`。MangoLite 則確認固定 GP22 接收器與遙控器是否為 NEC protocol。
+### `supports("ir")` 是 True，但按鍵沒反應
 
-完整函式資料請看 [Host Python IR API Reference](../reference/ir.md)。
+`supports()` 代表 Host Student API path 可用，不代表接線一定正常。MangoX2 應再確認 module enable、Pin、VCC/GND/Signal 與 receiver 方向。
+
+### callback 沒有觸發
+
+先確認 Host 程式沒有立刻結束，再確認 Runtime IR event 是否有進入。callback 不需要 `m.run_forever()`，但 Python process 必須保持存活。
+
+## 進階閱讀
+
+- [Host Python IR API Reference](../reference/ir.md)

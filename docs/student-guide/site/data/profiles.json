@@ -127,6 +127,6 @@
     "BLE Control v1 is available only for MangoLite Pico W/Pico 2 W High Level MicroPython profiles. Host Python and MangoX2 profiles do not advertise ble_control.",
     "Host Python profiles use Student API package 0.4.6.",
     "A profile capability means the learner API path exists for the selected target and mode. Physical module presence, current Enable state, wiring health, and hardware validation are separate states.",
-    "MangoX2 line_tracking is intentionally absent from Host profiles because the default GP12/GP13 line-tracking profile conflicts with active Host UART ownership."
+    "MangoX2 line_tracking is absent from Host profiles because the Host Line Tracking Student API has not yet been published. The default GP12/GP13 mapping also overlaps the current Host UART mapping, but GPIO remapping can avoid that conflict; it is not a permanent hardware limitation."
   ]
 }

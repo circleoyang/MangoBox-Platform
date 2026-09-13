@@ -1,51 +1,62 @@
 # IR Remote API Reference
 
-Engineering reference. Visible content should be filtered by target, programming mode and version.
+> **Availability**: the current canonical profiles expose the `ir` capability on MangoX2 and MangoLite in both High-Level MicroPython and Host Python. MangoLite uses an onboard receiver; MangoX2 uses an optional external receiver gated by Runtime configuration.
+
+Canonical import:
+
+```python
+from mangobox import Mango
+m = Mango()
+```
 
 ## `on_ir_pressed()`
 
 ```python
-on_ir_pressed(key: str, callback) -> None
+m.on_ir_pressed(key, callback)
 ```
 
-Run a callback when a named NEC IR key transitions into the pressed state.
+Run `callback` when a named NEC teaching-remote key enters the pressed state.
 
 ### Parameters
 
 | Parameter | Type | Description |
 |---|---|---|
-| `key` | `str` | Key name such as `"ok"`, `"up"`, `"1"` or `"*"`. |
-| `callback` | callable | Function invoked for the pressed transition. |
+| `key` | str | Standard key name such as `"ok"`, `"up"`, `"1"`, or `"*"`. |
+| `callback` | callable | No-argument callback. |
 
 ### Raises
 
-- `ValueError` when `key` is not in the supported IR key map.
-- `TypeError` when `callback` is not callable.
-- `RuntimeError` on MangoX2 High Level MicroPython when the optional IR module is disabled.
-
-MangoLite onboard IR does not use the legacy `enabled_modules.ir_sensor` switch as the Student API gate.
+- unknown key: `ValueError`
+- non-callable callback: `TypeError`
+- MangoX2 IR disabled in live Runtime config: `RuntimeError`
 
 ## `on_ir_released()`
 
 ```python
-on_ir_released(key: str, callback) -> None
+m.on_ir_released(key, callback)
 ```
 
-Run a callback when the key is considered released.
+Run `callback` when the key leaves the held/pressed state.
 
-NEC repeat frames maintain the held state and should not flood repeated pressed callbacks. Release is inferred after repeat activity stops for the configured timeout.
+NEC repeat frames maintain held state; they should not flood repeated pressed callbacks. Release is inferred when repeat activity stops according to the receiver timeout.
 
 ## `is_ir_pressed()`
 
 ```python
-is_ir_pressed(key: str) -> bool
+m.is_ir_pressed(key) -> bool
 ```
 
-Return whether the named key is currently held.
+Return whether the named IR key is currently held.
 
-## Supported key names
+### Host Python
 
-Current standard 17-key NEC teaching remote mapping:
+Host 0.4.6 sends `{"target":"ir","action":"read"}`, waits for the Runtime state reply, and returns whether the requested key matches the current held state.
+
+### High-Level MicroPython
+
+Reads decoder-maintained held state. A custom polling loop must continue servicing the Scheduler so the decoder can update.
+
+## Supported standard key names
 
 ```text
 1 2 3
@@ -55,56 +66,49 @@ Current standard 17-key NEC teaching remote mapping:
 up left ok right down
 ```
 
-## Availability
+## Execution lifecycle
 
-| Target | High Level MicroPython | Host Python |
-|---|---:|---:|
-| MangoX2 + Pico | supported; optional receiver | do not currently advertise a complete Host IR learner path |
-| MangoX2 + Pico 2 W | supported; optional receiver | do not currently advertise a complete Host IR learner path |
-| MangoLite + Pico 2 W | supported; onboard receiver | Host capability still requires an actual learner-facing Host method |
+| API | High-Level MicroPython | Host Python |
+|---|---|---|
+| `on_ir_pressed()` / `on_ir_released()` | create/start receiver; Scheduler must keep running | register Host callbacks; reader/dispatch receives Runtime events |
+| `is_ir_pressed()` | read decoder held state | synchronous Runtime state read |
 
-A Runtime configuration key alone must never make Host IR appear in the documentation.
+MicroPython callback programs normally end with:
 
-## Hardware/configuration notes
+```python
+m.run_forever()
+```
+
+Host Python does not need a separate MicroPython scheduler loop for IR callbacks.
+
+## Hardware / configuration notes
 
 ### MangoLite
 
 - onboard IR receiver
-- fixed GP22
-- the Student API directly owns the receiver path
+- current baseline GP22
+- onboard availability is not gated by legacy `enabled_modules.ir_sensor`
 
 ### MangoX2
 
-- optional external IR receiver
-- `enabled_modules.ir_sensor` must be `True`
-- active GPIO/Pin is read from `ir_sensor_pin`
-- the semantic IR path does not use the historical `ir_receiver_pin` as its MangoX2 Pin source
+- optional external receiver
+- `enabled_modules.ir_sensor` must be enabled
+- active GPIO comes from `ir_sensor_pin`
 
-## Execution lifecycle
+## Troubleshooting
 
-| API | High Level MicroPython behavior | `m.run_forever()` |
-|---|---|---:|
-| `on_ir_pressed()` / `on_ir_released()` | create/start the IR receiver and schedule receiver `update()` | required |
-| `is_ir_pressed()` | reads held state maintained by the decoder; the decoder still needs Scheduler updates | a one-shot read is not a complete IR test |
+### `supports("ir")` is True but nothing happens
 
-IR callbacks therefore do not need a separate Button-style `start_button()` call, but the event loop must continue servicing Scheduler tasks.
+`supports()` confirms the API path, not electrical health. On MangoX2 check enable state, GPIO, VCC/GND/Signal, receiver orientation, and remote compatibility.
 
-If polling `is_ir_pressed()` manually, call `m.run_once()` regularly inside the custom loop, or prefer callbacks plus `m.run_forever()`. Do not treat a single `print(m.is_ir_pressed("ok"))` as a reliable receiver test.
+### Held key repeatedly fires pressed callbacks
 
-## Example
+Canonical semantics should treat NEC repeat frames as held-state maintenance rather than new presses. Verify that learner code is using the Student API instead of raw repeat frames.
 
-```python
-from mangobox import Mango
+### Host and MicroPython examples differ
 
-m = Mango()
-
-def pressed():
-    print("OK")
-
-m.on_ir_pressed("ok", pressed)
-m.run_forever()
-```
+The learner-facing method names are the same, but lifecycle differs: Host uses reader/dispatch; MicroPython uses Scheduler/decoder updates.
 
 ## Related APIs
 
-`on_ir_released()`, `is_ir_pressed()`, `supports("ir")`, `capabilities()`, `run_once()`, `run_forever()`
+`on_ir_pressed()`, `on_ir_released()`, `is_ir_pressed()`, `supports("ir")`, `capabilities()`, `run_once()`, `run_forever()`
