@@ -1,6 +1,13 @@
 # IR Remote API Reference
 
-IR Student API 以 NEC teaching remote 的「按鍵名稱」為主，不要求學生處理 raw pulse 或 NEC frame。
+> **Availability**：目前 `ir` capability 已在 MangoX2 / MangoLite 的 High-Level MicroPython 與 Host Python profiles 中提供。MangoLite 使用板載 IR receiver；MangoX2 使用選配外接 receiver，需由 Runtime config 啟用。
+
+Canonical import：
+
+```python
+from mangobox import Mango
+m = Mango()
+```
 
 ## `on_ir_pressed()`
 
@@ -8,22 +15,18 @@ IR Student API 以 NEC teaching remote 的「按鍵名稱」為主，不要求�
 m.on_ir_pressed(key, callback)
 ```
 
-指定按鍵由未按下狀態轉為 pressed 時執行 callback。
+指定 NEC teaching remote 按鍵進入 pressed 狀態時執行 callback。
 
 | 參數 | 型別 | 說明 |
 |---|---|---|
-| `key` | `str` | 按鍵名稱，例如 `"ok"`、`"up"`、`"1"`、`"*"`。 |
-| `callback` | callable | 按下事件發生時執行的無參數函式。 |
+| `key` | str | `"ok"`、`"up"`、`"1"`、`"*"` 等標準按鍵名稱。 |
+| `callback` | callable | 無參數 callback。 |
 
-```python
-def ok_pressed():
-    print("OK")
+### Raises
 
-m.on_ir_pressed("ok", ok_pressed)
-m.run_forever()
-```
-
-可能的錯誤：未知 `key` 會產生 `ValueError`；callback 不可呼叫會產生 `TypeError`；需要 Enable 的外接 IR 尚未啟用時可產生 `RuntimeError`。
+- 未知 `key`：`ValueError`
+- callback 不可呼叫：`TypeError`
+- MangoX2 IR 在 live Runtime config 中未啟用：`RuntimeError`
 
 ## `on_ir_released()`
 
@@ -33,14 +36,7 @@ m.on_ir_released(key, callback)
 
 指定按鍵由 held / pressed 轉為 released 時執行 callback。
 
-```python
-def ok_released():
-    print("released")
-
-m.on_ir_released("ok", ok_released)
-```
-
-NEC repeat frame 用來維持「按住」狀態，不應在長按期間不斷重複觸發 pressed callback；release 由 receiver 在 repeat 停止後依 timeout 判斷。
+NEC repeat frame 用來維持 held 狀態，不應在長按期間不斷重複觸發 pressed callback；release 由 Runtime / receiver timeout 判斷。
 
 ## `is_ir_pressed()`
 
@@ -48,18 +44,17 @@ NEC repeat frame 用來維持「按住」狀態，不應在長按期間不斷重
 m.is_ir_pressed(key) -> bool
 ```
 
-回傳指定 IR key 目前是否處於 held 狀態。
+回傳指定 IR key 是否目前處於 held 狀態。
 
-```python
-if m.is_ir_pressed("up"):
-    print("UP is held")
-```
+### Host Python
 
-IR decoder 必須持續被 Scheduler 更新；若要自己 polling，需在 loop 中規律呼叫 `m.run_once()`。一般教學建議 callback + `m.run_forever()`。
+Host 0.4.6 會送出 `{"target":"ir","action":"read"}`，等待 Runtime 回覆目前 key / pressed / code / protocol，再回傳布林結果。
+
+### High-Level MicroPython
+
+讀取 decoder 維護的 held state；若自行寫 polling loop，需持續服務 Scheduler，否則 decoder 狀態不會正常更新。
 
 ## 支援的標準按鍵名稱
-
-標準 17-key NEC teaching remote：
 
 ```text
 1 2 3
@@ -71,43 +66,47 @@ up left ok right down
 
 ## Execution lifecycle
 
-| API | 行為 | `m.run_forever()` |
-|---|---|---:|
-| `on_ir_pressed()` / `on_ir_released()` | 建立／啟動 receiver 並註冊事件 | 需要 |
-| `is_ir_pressed()` | 讀 decoder 維護的 held state | decoder 仍需持續更新 |
+| API | High-Level MicroPython | Host Python |
+|---|---|---|
+| `on_ir_pressed()` / `on_ir_released()` | 建立／啟動 receiver；需持續服務 Scheduler | 註冊 Host callback，事件由 reader/dispatch 接收 |
+| `is_ir_pressed()` | 讀 decoder held state | 同步向 Runtime 讀取目前 IR state |
 
-IR callback 與 Button 不同：IR API 會建立／啟動 receiver，不需要另外呼叫 `start_button()` 類型的方法，但仍必須持續服務 Scheduler。
-
-## Target / config notes
-
-### MangoLite
-
-- 固定板載 IR receiver
-- current hardware baseline 為 GP22
-- 不以 legacy `enabled_modules.ir_sensor` 當作固定板載 IR 是否存在的 gate
-
-### MangoX2
-
-- IR 為選配外接模組
-- 是否啟用與 GPIO 由目前 Runtime config / Device Manager 決定
-
-## 完整範例：遙控器控制車體
+MicroPython callback 程式通常以：
 
 ```python
-from mangobox import Mango
-
-m = Mango()
-
-m.on_ir_pressed("up", lambda: m.forward(35))
-m.on_ir_released("up", lambda: m.stop())
-m.on_ir_pressed("left", lambda: m.spin_left(30))
-m.on_ir_released("left", lambda: m.stop())
-m.on_ir_pressed("right", lambda: m.spin_right(30))
-m.on_ir_released("right", lambda: m.stop())
-
 m.run_forever()
 ```
 
+作結。Host Python 不需要為 IR callback 額外建立 MicroPython scheduler loop。
+
+## Hardware / config notes
+
+### MangoLite
+
+- 板載 IR receiver
+- current baseline：GP22
+- 不以 `enabled_modules.ir_sensor` 作為板載 receiver 是否存在的 gate
+
+### MangoX2
+
+- 選配外接 IR receiver
+- `enabled_modules.ir_sensor` 必須啟用
+- active GPIO 由 `ir_sensor_pin` 決定
+
+## Troubleshooting
+
+### `supports("ir")` 是 True 但沒反應
+
+`supports()` 只代表 API path 存在。MangoX2 仍要檢查 enable state、GPIO、VCC/GND/Signal 與 receiver 方向。
+
+### 長按一直重複觸發 pressed
+
+標準語意不應如此。先確認使用 canonical Student API，而不是自行把 raw repeat frame 當成新 pressed 事件。
+
+### Host / MicroPython 行為看起來不同
+
+兩者 learner-facing method 相同，但生命週期不同：Host 依 reader/dispatch；MicroPython 依 Scheduler/decoder 更新。
+
 ## 相關 API
 
-`on_ir_pressed()`, `on_ir_released()`, `is_ir_pressed()`, `supports("ir")`, `run_once()`, `run_forever()`
+`on_ir_pressed()`, `on_ir_released()`, `is_ir_pressed()`, `supports("ir")`, `capabilities()`, `run_once()`, `run_forever()`
