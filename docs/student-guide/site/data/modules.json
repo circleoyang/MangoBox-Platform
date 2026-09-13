@@ -37,8 +37,10 @@
       "signal": "digital_pulse",
       "summary": {"zh-TW": "接收 NEC 紅外線遙控器按鍵與按下／放開事件。", "en": "Receive NEC infrared remote keys and press/release events."},
       "target_notes": {
-        "mangolite-pico2w": {"zh-TW": "MangoLite 為板載固定 GP22 IR，不由 ir_sensor 選配開關決定是否存在。", "en": "MangoLite has fixed onboard IR on GP22; the optional ir_sensor switch is not its availability gate."},
+        "mangolite-picow": {"zh-TW": "MangoLite 使用板載固定 IR；Student API 不因 Pico W / Pico 2 W 改變。", "en": "MangoLite uses fixed onboard IR; the Student API is the same on Pico W and Pico 2 W."},
+        "mangolite-pico2w": {"zh-TW": "MangoLite 使用板載固定 IR；Student API 不因 Pico W / Pico 2 W 改變。", "en": "MangoLite uses fixed onboard IR; the Student API is the same on Pico W and Pico 2 W."},
         "mangox2-pico": {"zh-TW": "MangoX2 為選配外接 IR，Pin 由 ir_sensor_pin 決定。", "en": "MangoX2 IR is an optional external receiver configured by ir_sensor_pin."},
+        "mangox2-picow": {"zh-TW": "MangoX2 為選配外接 IR，Pin 由 ir_sensor_pin 決定。", "en": "MangoX2 IR is an optional external receiver configured by ir_sensor_pin."},
         "mangox2-pico2w": {"zh-TW": "MangoX2 為選配外接 IR，Pin 由 ir_sensor_pin 決定。", "en": "MangoX2 IR is an optional external receiver configured by ir_sensor_pin."}
       },
       "diagnostic": {
@@ -105,7 +107,7 @@
       "gate": "enabled_modules.ultrasonic_sensor",
       "pins": ["ultrasonic_trigger_pin", "ultrasonic_echo_pin"],
       "signal": "pulse_distance",
-      "summary": {"zh-TW": "讀取距離，並可在靠近或遠離門檻時觸發事件；目前 current shared contract 主要適用 MangoX2。", "en": "Read distance and react to near/far thresholds; the current shared contract primarily applies to MangoX2."},
+      "summary": {"zh-TW": "讀取距離，並可在靠近或遠離門檻時觸發事件。", "en": "Read distance and react to near/far thresholds."},
       "diagnostic": {
         "high_level_micropython": "from mangobox import Mango\n\nm = Mango()\nprint('Distance supported =', m.supports('distance'))\nprint('Distance cm =', m.distance())",
         "host_python": "from mangobox import Mango\n\nm = Mango()\nprint('Distance supported =', m.supports('distance'))\nprint('Distance cm =', m.distance())"
@@ -121,11 +123,12 @@
       "summary": {"zh-TW": "讀取左右循跡感測器並判斷 none／left／right／both。", "en": "Read dual line sensors and resolve none/left/right/both states."},
       "target_notes": {
         "mangox2-pico": {"zh-TW": "預設 GP12/GP13 與 Host UART 衝突，因此目前只在 High-Level MicroPython profile 顯示。", "en": "Default GP12/GP13 conflict with active Host UART, so this is shown only in High-Level MicroPython profiles."},
+        "mangox2-picow": {"zh-TW": "預設 GP12/GP13 與 Host UART 衝突，因此目前只在 High-Level MicroPython profile 顯示。", "en": "Default GP12/GP13 conflict with active Host UART, so this is shown only in High-Level MicroPython profiles."},
         "mangox2-pico2w": {"zh-TW": "預設 GP12/GP13 與 Host UART 衝突，因此目前只在 High-Level MicroPython profile 顯示。", "en": "Default GP12/GP13 conflict with active Host UART, so this is shown only in High-Level MicroPython profiles."}
       },
       "diagnostic": {
         "high_level_micropython": "from mangobox import Mango\n\nm = Mango()\nprint('Line Tracking supported =', m.supports('line_tracking'))\nprint('Line state =', m.line_state())",
-        "host_python": "# Current Host UART profiles intentionally do not advertise line_tracking.\n# Use High-Level MicroPython or Device Manager MicroUSB diagnostics for the default GP12/GP13 profile."
+        "host_python": "# Current Host UART profiles intentionally do not advertise line_tracking.\n# Use High-Level MicroPython for the default GP12/GP13 profile."
       }
     },
     {
@@ -135,7 +138,7 @@
       "gate": "enabled_modules.obstacle_sensor",
       "pins": ["obstacle_sensor_pin"],
       "signal": "digital_input_active_low",
-      "summary": {"zh-TW": "判斷 CLEAR／BLOCKED，並處理 blocked／clear 事件；current shared contract 主要適用 MangoX2。", "en": "Detect CLEAR/BLOCKED states and blocked/clear events; the current shared contract primarily applies to MangoX2."},
+      "summary": {"zh-TW": "判斷 CLEAR／BLOCKED，並處理 blocked／clear 事件。", "en": "Detect CLEAR/BLOCKED states and blocked/clear events."},
       "diagnostic": {
         "high_level_micropython": "from mangobox import Mango\n\nm = Mango()\nprint('Obstacle supported =', m.supports('obstacle'))\nprint('Blocked =', m.is_blocked())",
         "host_python": "from mangobox import Mango\n\nm = Mango()\nprint('Obstacle supported =', m.supports('obstacle'))\nprint('Blocked =', m.is_blocked())"
@@ -191,6 +194,22 @@
       "diagnostic": {
         "high_level_micropython": "from mangobox import Mango\n\nm = Mango()\nprint('Joystick supported =', m.supports('joystick'))\nprint('XY =', m.joystick())\nprint('Pressed =', m.is_joystick_pressed())",
         "host_python": "from mangobox import Mango\n\nm = Mango()\nprint('Joystick supported =', m.supports('joystick'))\nprint('XY =', m.joystick())\nprint('Pressed =', m.is_joystick_pressed())"
+      }
+    },
+    {
+      "id": "ble-control",
+      "capability": "ble_control",
+      "labels": {"zh-TW": "BLE Control 手機控制", "en": "BLE Control"},
+      "pins": [],
+      "signal": "ble_input",
+      "summary": {"zh-TW": "使用 Dabble Gamepad Digital 按鍵與 Analog Joystick 控制 MangoLite。", "en": "Use Dabble Gamepad Digital buttons and the Analog Joystick to control MangoLite."},
+      "target_notes": {
+        "mangolite-picow": {"zh-TW": "MangoLite Runtime v0.6.3 支援；長按板載 Button GP3 10 秒開啟約 60 秒配對視窗。", "en": "Supported by MangoLite Runtime v0.6.3; hold onboard Button GP3 for 10 seconds to open the approximately 60-second pairing window."},
+        "mangolite-pico2w": {"zh-TW": "MangoLite Runtime v0.6.3 支援；長按板載 Button GP3 10 秒開啟約 60 秒配對視窗。", "en": "Supported by MangoLite Runtime v0.6.3; hold onboard Button GP3 for 10 seconds to open the approximately 60-second pairing window."}
+      },
+      "diagnostic": {
+        "high_level_micropython": "from mangobox import Mango\n\nm = Mango()\nprint('BLE name =', m.control_name())\nprint('Connected =', m.control_connected())",
+        "host_python": "# BLE Control v1 is not supported in Host Python."
       }
     }
   ]
