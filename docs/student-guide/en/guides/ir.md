@@ -1,8 +1,6 @@
-# IR Remote Guide — High Level MicroPython
+# IR Remote Guide
 
-An IR Remote can control a MangoBox project with navigation keys, OK, number keys, `*` and `#`.
-
-> This page applies only to High Level MicroPython. Current Host Python profiles do not expose a complete IR learner API, so the Host resolver hides this module.
+An IR remote can control a MangoBox project with navigation keys, OK, number keys, `*`, and `#`. The current canonical profiles expose the `ir` capability on MangoX2 and MangoLite in both High-Level MicroPython and Host Python; the hardware path differs by board.
 
 ## Check support
 
@@ -13,9 +11,9 @@ m = Mango()
 print(m.supports("ir"))
 ```
 
-`True` means the selected target and Runtime version expose the IR Student API. It does not prove that an external receiver is wired correctly.
+`True` means the selected target/mode profile exposes the IR Student API. It does not prove that an external receiver is wired correctly.
 
-## Use OK to control the LEDs
+## Use OK to control LEDs
 
 ```python
 from mangobox import Mango
@@ -32,92 +30,60 @@ def ok_released():
 
 m.on_ir_pressed("ok", ok_pressed)
 m.on_ir_released("ok", ok_released)
+
 m.run_forever()
 ```
 
-`on_ir_pressed()` / `on_ir_released()` start the IR receive/update path, so there is no separate `start_button()`-style call. Decoding and release detection still depend on Scheduler updates, so `m.run_forever()` is required.
+High-Level MicroPython must keep the Scheduler active, so callback examples normally end with `m.run_forever()`. Host Python receives Runtime IR events through the Host reader/dispatch path; do not apply the MicroPython event-loop requirement to Host programs.
 
-Do not use a one-shot `print(m.is_ir_pressed("ok"))` as a complete IR test. The decoder also needs event-loop updates.
-
-## MangoLite and MangoX2 hardware differences
-
-### MangoLite + Pico 2 W
-
-The IR receiver is fixed onboard hardware on GP22. Learners normally do not enable a separate IR module or choose its Pin.
-
-### MangoX2 + Pico / Pico 2 W
-
-The IR receiver is optional external hardware. You must enable `ir_sensor`, set `ir_sensor_pin`, and connect Signal/OUT to that same GPIO/Pin.
-
-The High Level MicroPython semantic IR path uses `ir_sensor_pin` on MangoX2 rather than the historical `ir_receiver_pin` source.
-
-## If IR does not respond
-
-### Step 1: check capability
+## `is_ir_pressed()`
 
 ```python
-from mangobox import Mango
-
-m = Mango()
-print("IR supported =", m.supports("ir"))
+if m.is_ir_pressed("up"):
+    print("UP is held")
 ```
 
-### Step 2: check MangoX2 configuration
+Host Python performs a synchronous Runtime state read. High-Level MicroPython reads held state maintained by the decoder, so a custom polling loop must continue servicing the Scheduler.
 
-```python
-from mangobox import Mango
+## MangoLite vs MangoX2
 
-m = Mango()
-print("IR enabled =", m.config.get("enabled_modules", {}).get("ir_sensor"))
-print("IR Pin =", m.config.get("ir_sensor_pin"))
+### MangoLite
+
+- fixed onboard IR receiver
+- current baseline uses GP22
+- learner code does not create a raw GPIO receiver
+
+### MangoX2
+
+- optional external IR receiver
+- `ir_sensor` must be enabled in Runtime configuration
+- active GPIO comes from `ir_sensor_pin`
+- Host Python and High-Level MicroPython share the same learner-facing key semantics
+
+## Supported standard keys
+
+```text
+1 2 3
+4 5 6
+7 8 9
+* 0 #
+up left ok right down
 ```
 
-If it reports `IR Pin = 4`, verify that physical Signal/OUT is connected to GP4.
+Unknown keys raise `ValueError`; non-callable callbacks raise `TypeError`. On MangoX2, an IR API call may raise `RuntimeError` when the live Runtime config has IR disabled.
 
-### Step 3: Device Manager
+## Troubleshooting order
 
-For MangoX2, verify IR enablement, displayed Pin, and physical wiring. For MangoLite, the UI should identify the fixed onboard GP22 receiver.
-
-### Step 4: minimal raw edge test
-
-Do not run `on_ir_pressed()` at the same time as this diagnostic because both would try to own the same Pin IRQ.
-
-```python
-from machine import Pin
-from mangobox import Mango
-import time
-
-m = Mango()
-pin_no = m.config.get("ir_sensor_pin")
-if pin_no is None:
-    pin_no = 22
-
-edges = 0
-
-def changed(pin):
-    global edges
-    edges += 1
-
-p = Pin(pin_no, Pin.IN)
-p.irq(handler=changed,
-      trigger=Pin.IRQ_RISING | Pin.IRQ_FALLING)
-
-print("IR raw Pin = GP", pin_no)
-last = 0
-while True:
-    time.sleep(1)
-    now = edges
-    print("edges / second =", now - last)
-    last = now
-```
-
-- edge count increases when a key is pressed → the receiver is delivering pulses; investigate protocol/decoder/Student API next.
-- edge count remains zero → inspect VCC, GND, Signal, receiver orientation, Pin, and the remote.
-
-> Hardware Lab is for firmware, execution mode, Recovery, Clean Flash, and device-lifecycle diagnostics rather than general IR pulse analysis.
+1. Confirm `m.supports("ir")`.
+2. On MangoX2, verify `ir_sensor` is enabled and `ir_sensor_pin` matches wiring.
+3. On MangoLite, make sure no raw GPIO/IRQ diagnostic is competing for the onboard receiver.
+4. Test a minimal callback before combining IR with Motor/OLED/BLE behavior.
+5. Use a raw edge diagnostic only after the semantic API path has been isolated; do not run raw IRQ ownership and the Student API receiver at the same time.
 
 ## Challenge
 
-Use Up, Down, and OK to switch project states or LED colors.
+Use `up`, `down`, and `ok` to select LED colors or project states.
 
-See [IR Remote API Reference](../reference/ir.md).
+## More
+
+- [IR Remote API Reference](../reference/ir.md)
