@@ -2,7 +2,7 @@
 
 Line Tracking 使用左右兩個數位感測器判斷線條位置。MangoBox Student API 會把左右 raw 狀態整理成 `none`、`left`、`right`、`both` 四種語意狀態，學生程式不需要自己處理 active-high / active-low 反轉。
 
-> **適用範圍**：目前 canonical contract 只在 **MangoX2 + High-Level MicroPython** 提供 `line_tracking` capability。MangoX2 預設 Line Tracking 使用 GP12 / GP13，會與 Host UART ownership 衝突，因此 Host Python profile 不提供此能力；MangoLite 目前也不宣告支援。
+> **適用範圍**：目前 canonical contract 只在 **MangoX2 + High-Level MicroPython** 提供 `line_tracking` capability。MangoThonny Host Python 目前尚未提供對應的 Line Tracking Student API；後續版本可規劃補齊 Host Student API parity。MangoLite 目前也不宣告支援。
 
 ## 30 秒快速測試
 
@@ -129,7 +129,9 @@ while True:
 
 ### 為什麼 Host Python 看不到 Line Tracking？
 
-目前 MangoX2 預設循跡使用 GP12 / GP13，與 Host UART ownership 衝突，因此 canonical profile 不對 Host Python 宣告 `line_tracking`。
+目前 MangoThonny Host Python 尚未實作這組 Line Tracking Student API，因此 current canonical Host profile 不宣告 `line_tracking`。這是目前軟體支援範圍，而不是硬體本身無法支援；後續版本可規劃補回 Host Student API parity。
+
+MangoX2 目前預設循跡腳位為 GP12 / GP13，這組預設配置另與 Host UART 腳位使用情境衝突。未來若加入 Host Python 支援，可透過重新配置循跡 GPIO 避開此限制。
 
 ### 為什麼 callback 沒有反應？
 
