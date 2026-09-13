@@ -2,7 +2,7 @@
 
 Line Tracking uses two digital sensors to determine where a line is relative to the board. The MangoBox Student API normalizes the raw left/right signals into four semantic states: `none`, `left`, `right`, and `both`, so learner code does not need to reverse active-high / active-low GPIO logic manually.
 
-> **Availability**: the current canonical contract exposes `line_tracking` only for **MangoX2 + High-Level MicroPython**. MangoX2 defaults Line Tracking to GP12 / GP13, which conflicts with current Host UART ownership, so Host Python profiles do not advertise this capability. MangoLite does not currently advertise it either.
+> **Availability**: the current canonical contract exposes `line_tracking` only for **MangoX2 + High-Level MicroPython**. MangoThonny Host Python does not yet provide the corresponding Line Tracking Student API; a later release can restore Host Student API parity. MangoLite does not currently advertise it either.
 
 ## 30-second test
 
@@ -129,7 +129,9 @@ Do not start by reversing raw GPIO `0/1` values in learner code. Active level be
 
 ### Why is Line Tracking not shown in Host Python?
 
-The current MangoX2 default uses GP12 / GP13, which conflicts with Host UART ownership, so the canonical Host Python profile does not advertise `line_tracking`.
+MangoThonny Host Python does not currently implement this Line Tracking Student API set, so the current canonical Host profile does not advertise `line_tracking`. This is a current software-support boundary, not a fundamental hardware limitation; a later release can restore Host Student API parity.
+
+MangoX2 currently defaults Line Tracking to GP12 / GP13. That default pair separately conflicts with current Host UART pin usage, but a future Host implementation can avoid the conflict by assigning Line Tracking to different GPIO pins.
 
 ### Why do callbacks not fire?
 
