@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "source_status": "public-stable",
-  "source_date": "2026-09-06",
+  "source_date": "2026-09-13",
   "notes": "Shared parameter descriptions used by the rendered method-level API Reference. Method-specific Markdown may add stricter range or hardware notes.",
   "parameters": {
     "index": {"zh-TW": "要控制的 LED 索引；通常從 0 開始。", "en": "LED index to control; normally starts at 0."},
@@ -45,6 +45,9 @@
     "samples": {"zh-TW": "取樣次數；用於需要多次讀值或校準平均的 method。", "en": "Number of samples used for repeated reading or calibration averaging."},
     "capability": {"zh-TW": "要檢查的 MangoBox capability 名稱或支援的常用別名。", "en": "MangoBox capability name or supported alias to check."},
     "sleep_ms": {"zh-TW": "event loop 每輪之間的休息時間，單位 ms。", "en": "Sleep interval between event-loop iterations in milliseconds."},
-    "command": {"zh-TW": "進階 Runtime 命令物件；一般學生程式不需要直接使用。", "en": "Advanced Runtime command object; ordinary learner code normally does not use this directly."}
+    "command": {"zh-TW": "進階 Runtime 命令物件；一般學生程式不需要直接使用。", "en": "Advanced Runtime command object; ordinary learner code normally does not use this directly."},
+    "control": {"zh-TW": "BLE controller 的控制名稱，例如 up、circle 或 joystick。", "en": "BLE controller control name such as up, circle, or joystick."},
+    "action": {"zh-TW": "BLE Control 事件動作；v0.6.3 支援 press、release、value。", "en": "BLE Control event action; v0.6.3 supports press, release, and value."},
+    "controller": {"zh-TW": "BLE controller selector；v1 預設且目前使用 primary。", "en": "BLE controller selector; v1 defaults to and currently uses primary."}
   }
 }
