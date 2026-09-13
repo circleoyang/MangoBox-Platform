@@ -1,6 +1,6 @@
 # Line Tracking API Reference
 
-> **Availability**：目前 canonical contract 僅在 **MangoX2 + High-Level MicroPython** 提供 `line_tracking` capability。MangoX2 Host Python 因預設 GP12 / GP13 與 Host UART ownership 衝突而不宣告支援；MangoLite 目前也不宣告此 capability。
+> **Availability**：目前 canonical contract 僅在 **MangoX2 + High-Level MicroPython** 提供 `line_tracking` capability。MangoThonny Host Python 目前尚未提供對應的 Line Tracking Student API；後續版本可規劃補齊 Host Student API parity。MangoLite 目前也不宣告此 capability。
 
 Canonical import：
 
@@ -181,7 +181,8 @@ while True:
 ## Hardware / configuration notes
 
 - MangoX2 current default Line Tracking Pin 為 GP12 / GP13。
-- 目前 Host UART 使用情境與這組預設 Pin 衝突，因此 Host Python profile 不宣告 `line_tracking`。
+- MangoThonny Host Python 目前尚未實作這組 Line Tracking Student API，因此 current Host profile 不宣告 `line_tracking`。
+- GP12 / GP13 與 Host UART 的衝突屬於目前預設配置限制，不是硬體架構限制；未來若補上 Host Student API，可重新配置循跡 GPIO 避開。
 - active level、左右腳位與硬體設定應由 Runtime / Device Manager 管理；學生程式應使用語意 API，不要自行重建 raw GPIO driver。
 - 使用前可先檢查：
 
