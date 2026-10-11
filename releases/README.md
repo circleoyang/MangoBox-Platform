@@ -4,11 +4,11 @@ User-downloadable binaries are published through **GitHub Releases** rather than
 
 ## Current Stable line
 
-- MangoThonny: `v0.4.3`
-- Device Manager: `v0.5.2`
+- MangoThonny: `v0.4.3.1`
+- Device Manager: `v0.5.3`
 - Hardware Lab: `v0.3.1`
-- MangoX2 Runtime: `v0.2.8` for Pico / Pico W / Pico 2 W
-- MangoLite Runtime: `v0.6.3` for Pico W / Pico 2 W
+- MangoX2 Runtime: `v0.2.9` for Pico / Pico W / Pico 2 W
+- MangoLite Runtime: `v0.6.4` for Pico W / Pico 2 W
 
 ## Component tags
 

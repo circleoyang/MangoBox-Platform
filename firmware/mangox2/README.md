@@ -1,10 +1,18 @@
 # MangoX2 Runtime
 
-正式版 / Stable: v0.2.8
+正式版 / Stable: v0.2.9
 
-- [MangoX2 + Pico](https://github.com/circleoyang/MangoBox-Platform/releases/tag/mangox2-pico-v0.2.8)
-- [MangoX2 + Pico W](https://github.com/circleoyang/MangoBox-Platform/releases/tag/mangox2-picow-v0.2.8)
-- [MangoX2 + Pico 2 W](https://github.com/circleoyang/MangoBox-Platform/releases/tag/mangox2-pico2w-v0.2.8)
+- [MangoX2 + Pico](https://github.com/circleoyang/MangoBox-Platform/releases/tag/mangox2-pico-v0.2.9)
+- [MangoX2 + Pico W](https://github.com/circleoyang/MangoBox-Platform/releases/tag/mangox2-picow-v0.2.9)
+- [MangoX2 + Pico 2 W](https://github.com/circleoyang/MangoBox-Platform/releases/tag/mangox2-pico2w-v0.2.9)
+
+## v0.2.9 新增 / New in v0.2.9
+
+支援 Pot Student API（讀值、raw、電壓、Change／Above／Below 事件）及 Light、Sound、Ultrasonic Distance、Joystick 的 Change Callback。五個正式版 UF2 均重新建置；X2 + Pico 的 Pot/Light 與 Logger 已通過 RC4 代表性實機驗證。
+
+The new release adds Pot and sensor-change callback APIs. All target images were rebuilt; representative hardware acceptance covers MangoX2 + Pico, not every target permutation.
+
+## 前一版歷史 / Previous version
 
 v0.2.8 新增跨板一致的 Motor Direction Calibration contract，支援 `drive.left_motor`、`drive.right_motor`、`drive.left_inverted`、`drive.right_inverted`。不同車體若左右馬達插反或單側車輪方向相反，可由 Device Manager 校正，而不需要修改學生程式。
 
