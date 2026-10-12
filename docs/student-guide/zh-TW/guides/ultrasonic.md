@@ -87,3 +87,23 @@ m.on_near(15, near, sensor="front")
 ## 進階閱讀
 
 - [Ultrasonic API Reference](../reference/ultrasonic.md)
+
+## 感測值變化事件 (Change Callback): `on_distance_change()`
+
+```python
+m.on_distance_change(callback, threshold=2.0, period=150, sensor=None)
+m.stop_distance_change(sensor=None)
+```
+
+變化量與上次實際通知值比較。門檻預設 2.0（距離 cm），不是每次取樣都通知；首次有效讀值通知一次。超音波先取得三次有效測量值，使用中位數；sensor 可指定命名感測器。 `period` 為毫秒（ms）的監看週期，實際執行可能受取樣與通訊延遲影響。
+
+```python
+from mangobox import Mango
+m = Mango()
+def changed(distance_cm):
+    print(distance_cm)
+m.on_distance_change(changed, threshold=2.0)
+m.run_forever()
+```
+
+注意：此 API 需整合 Sensor Change v1 的 Runtime／Host 套件，舊版不一定支援；不能由韌體版本推定 MangoThonny 的 Host Python 已更新。
