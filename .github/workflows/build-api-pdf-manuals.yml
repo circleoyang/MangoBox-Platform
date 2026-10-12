@@ -1,6 +1,11 @@
 name: Build MangoBox API PDF Manuals
 on:
   workflow_dispatch:
+  pull_request:
+    paths:
+      - 'docs/student-guide/**'
+      - 'scripts/build_api_pdf_manuals.py'
+      - '.github/workflows/build-api-pdf-manuals.yml'
   push:
     branches: [main]
     paths:
@@ -17,19 +22,24 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-      - run: python -m pip install 'reportlab>=4,<5'
+      - run: python -m pip install 'reportlab>=4,<5' 'pypdf>=5,<7'
       - name: Build current MangoLite + Pico 2 W reference and guide
         run: python scripts/build_api_pdf_manuals.py --language zh-TW --kind both
       - name: Check PDF content and structure
         run: |
           python - <<'PY'
           from pathlib import Path
-          from reportlab.pdfbase.pdfdoc import PDFDocument
+          from pypdf import PdfReader
           files=list(Path('dist/api-manuals').glob('*.pdf'))
           assert len(files)==2, files
           for f in files:
               assert f.stat().st_size>4000, (f,f.stat().st_size)
               assert f.read_bytes().startswith(b'%PDF-')
+              reader=PdfReader(str(f))
+              assert len(reader.pages)>=2, (f,'no pages')
+              text=' '.join(page.extract_text() or '' for page in reader.pages)
+              assert 'MangoBox' in text, (f,'missing title')
+              assert 'Pot' in text or 'pot' in text, (f,'missing new Pot module')
           print('PDF build smoke PASS:',len(files))
           PY
       - uses: actions/upload-artifact@v4
