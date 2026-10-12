@@ -258,3 +258,8 @@ m.run_forever()
 ## 相關 API
 
 `led()`, `led_all()`, `led_range()`, `brightness()`, `breath()`, `rainbow()`, `led_start_meteor()`, `led_start_color_wipe()`, `led_start_random_sparkle()`, `led_start_fire_flicker()`, `led_off()`, `select_led_strip()`
+
+
+## 自訂燈效範例與設定查詢
+
+若要設計不使用內建燈效的動畫，請參考 [Scheduler 的 Quantum Ripple 已驗證範例](../guides/scheduler.md)。範例透過既有 `m.config.get("led_strips", {}).get("strip1")` 讀取 DM 儲存的 `leds`，而非假設每條 LED Strip 都只有固定燈珠數。這是 High-Level MicroPython Runtime Config 的存取方式，不是新 LED API，Host Python 不應直接照搬。

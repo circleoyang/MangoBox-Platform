@@ -57,3 +57,8 @@ m.run_forever()
 - 沒有呼叫 `m.run_forever()`（或反覆呼叫 `m.run_once()`）時，註冊的任務不會持續運作。
 
 請參考[Scheduler 完整教學](../scheduler.md)與[RGB LED 使用指南](../guides/led.md)。
+
+
+## 已驗證：動態讀取 DM LED Strip 設定
+
+[Quantum Ripple 完整範例](../guides/scheduler.md) 使用 `m.config.get("led_strips", {}).get(STRIP)` 查詢 DM 設定、檢查 `enabled` 並讀取 `int(spec["leds"])`，以此決定迴圈更新多少顆 LED。此方法不需新增 `led_count()` / `led_info()` 等查詢 API；請勿硬編碼燈珠數或編造查詢方法。
