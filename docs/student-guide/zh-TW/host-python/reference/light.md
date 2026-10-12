@@ -62,3 +62,35 @@ print(m.supports("light"))
 ## 相關 API
 
 `light()`, `on_light_above()`, `on_light_below()`, `run_forever()`
+
+## `on_light_change()` — 感測值變化事件（Change Callback）
+
+```python
+m.on_light_change(callback, threshold=2, period=100)
+m.stop_light_change()
+```
+
+依設定週期讀取現有 `m.light()`，當有效讀值與**上次已通知 callback 的值**相差達門檻時通知；不是每次讀值都觸發。首次有效觀測會通知一次。
+
+| 參數 | 說明 |
+|---|---|
+| `callback` | 接收 `value` 的函式；需接受一個參數 |
+| `threshold` | 預設 `2`，單位為 0～100 相對亮度百分點；比較對象是上次通知值 |
+| `period` | 預設 100 毫秒，指定監看週期，實際取樣時間仍受裝置及通訊延遲影響 |
+
+光線讀值為相對值，不是 lux。
+
+```python
+from mangobox import Mango
+m = Mango()
+
+def changed(value):
+    print('light:', value)
+
+m.on_light_change(changed, threshold=2)
+m.run_forever()
+```
+
+停止監看使用 `m.stop_light_change()`；若要停止所有監看，結束時可使用 `m.close()`。Change watcher 不會替代既有門檻事件。背景自動取樣產生的內部讀取 log 會受到抑制，實際達門檻時會留下 `sensor_event / change` 紀錄。
+
+> **版本注意：** Change API 需具備已整合 Sensor Change v1 的 Runtime／Host 套件。舊版不一定有這些方法；Host Python 應確認 MangoThonny 實際搭載的套件版本，不能只依韌體版本判斷。
