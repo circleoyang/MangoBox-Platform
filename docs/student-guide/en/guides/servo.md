@@ -115,3 +115,8 @@ First test 30, 90, and 150 degrees with `m.servo()`. After all three positions w
 - [Servo API Reference](../reference/servo.md)
 - [Device Manager](../tools/device-manager.md)
 - [Hardware Lab](../tools/hardware-lab.md)
+
+
+## Reading Device Manager configuration
+
+See the [Runtime Config guide](runtime-config.md) for existing read-only `m.config.get()` access in High-Level MicroPython. Confirm the actual key, enabled state and target version; named module dictionaries differ from scalar settings. Do not invent configuration methods or assume this interface exists in Host Python.
