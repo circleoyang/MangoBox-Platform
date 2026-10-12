@@ -64,3 +64,19 @@ print(m.supports("joystick"))
 ## 相關 API
 
 `joystick()`, `is_joystick_pressed()`, `on_joystick_pressed()`, `on_joystick_released()`, `calibrate_joystick()`
+
+
+## 搖桿變化事件: `on_joystick_change()`
+
+`m.on_joystick_change(callback, threshold=8, period=100)` 監控 -100～100 的 X/Y 軸座標；其中任何一軸與上次已通知值相差至少 8 時觸發 callback(x, y)，首次有效讀值亦觸發。
+
+```python
+from mangobox import Mango
+m = Mango()
+def changed(x, y):
+    print(x, y)
+m.on_joystick_change(changed, threshold=8, period=100)
+m.run_forever()
+```
+
+`m.stop_joystick_change()` 停止監看；需整合 Sensor Change v1 的 Runtime／Host 套件。

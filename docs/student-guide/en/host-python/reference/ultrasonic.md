@@ -74,3 +74,19 @@ Trigger/Echo pins and names are Runtime / Device Manager configuration; learner 
 ## Related APIs
 
 `distance()`, `is_near()`, `on_near()`, `on_far()`, `supports("distance")`
+
+
+## Change event: `on_distance_change()`
+
+`m.on_distance_change(callback, threshold=2.0, period=150, sensor=None)` compares each reading to the last delivered callback value; the first valid observation is also delivered. Ultrasonic uses the median of three valid readings; sensor=None uses the default sensor and named sensors are supported.
+
+```python
+from mangobox import Mango
+m = Mango()
+def changed(distance_cm):
+    print(distance_cm)
+m.on_distance_change(changed, threshold=2.0)
+m.run_forever()
+```
+
+`m.stop_distance_change(sensor=None)` stops the watcher. Requires a Runtime / Host package incorporating Sensor Change v1.

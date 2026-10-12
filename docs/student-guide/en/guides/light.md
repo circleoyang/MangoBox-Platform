@@ -75,3 +75,18 @@ If raw values change but `m.light()` is unreasonable, check calibration. If raw 
 - [Light Sensor API Reference](../reference/light.md)
 - [Device Manager](../tools/device-manager.md)
 - [Hardware Lab](../tools/hardware-lab.md)
+
+## New: Change callback
+
+```python
+from mangobox import Mango
+m = Mango()
+def changed(value):
+    print('light:', value)
+m.on_light_change(changed, threshold=2, period=100)
+m.run_forever()
+```
+
+A callback fires on the first valid observation, then only after at least `threshold` 0–100 relative light points of change from the last delivered reading. `period` is the requested interval in milliseconds; real timing depends on the device. Use `m.stop_light_change()` to stop the watcher. See [API Reference](../reference/light.md).
+
+> **Version note:** Change APIs require a Runtime / Host package that integrates Sensor Change v1. Older versions may not include them. Check the Host package actually bundled with MangoThonny.

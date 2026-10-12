@@ -64,3 +64,23 @@ print(m.supports("sound_level"))
 ## 相關 API
 
 `sound_level()`, `on_sound_above()`, `on_sound_below()`, `run_forever()`
+
+## 感測值變化事件 (Change Callback): `on_sound_change()`
+
+```python
+m.on_sound_change(callback, threshold=5, period=100)
+m.stop_sound_change()
+```
+
+變化量與上次實際通知值比較。門檻預設 5（相對音量值（非 dB）），不是每次取樣都通知；首次有效讀值通知一次。 `period` 為毫秒（ms）的監看週期，實際執行可能受取樣與通訊延遲影響。
+
+```python
+from mangobox import Mango
+m = Mango()
+def changed(value):
+    print(value)
+m.on_sound_change(changed, threshold=5)
+m.run_forever()
+```
+
+注意：此 API 需整合 Sensor Change v1 的 Runtime／Host 套件，舊版不一定支援；不能由韌體版本推定 MangoThonny 的 Host Python 已更新。

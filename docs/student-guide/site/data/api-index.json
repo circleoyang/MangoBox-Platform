@@ -1155,6 +1155,110 @@
         "監看",
         "stop"
       ]
+    },
+    {
+      "module": "light",
+      "name": "on_light_change",
+      "signature": "m.on_light_change(callback, threshold=2, period=100)",
+      "zh": "光線值變化時呼叫 callback(value)",
+      "en": "Trigger when relative light changes",
+      "aliases": [
+        "光線",
+        "亮度",
+        "變化",
+        "回呼",
+        "事件"
+      ]
+    },
+    {
+      "module": "light",
+      "name": "stop_light_change",
+      "signature": "m.stop_light_change()",
+      "zh": "停止光線變化監看",
+      "en": "Stop light change watcher",
+      "aliases": [
+        "光線",
+        "監看",
+        "停止"
+      ]
+    },
+    {
+      "module": "sound",
+      "name": "on_sound_change",
+      "signature": "m.on_sound_change(callback, threshold=5, period=100)",
+      "zh": "音量值變化時呼叫 callback(value)",
+      "en": "Trigger when relative sound level changes",
+      "aliases": [
+        "聲音",
+        "音量",
+        "變化",
+        "回呼",
+        "事件"
+      ]
+    },
+    {
+      "module": "sound",
+      "name": "stop_sound_change",
+      "signature": "m.stop_sound_change()",
+      "zh": "停止音量變化監看",
+      "en": "Stop sound change watcher",
+      "aliases": [
+        "音量",
+        "監看",
+        "停止"
+      ]
+    },
+    {
+      "module": "ultrasonic",
+      "name": "on_distance_change",
+      "signature": "m.on_distance_change(callback, threshold=2.0, period=150, sensor=None)",
+      "zh": "距離變化時呼叫 callback(distance_cm)",
+      "en": "Trigger when distance changes",
+      "aliases": [
+        "超音波",
+        "距離",
+        "公分",
+        "變化",
+        "回呼"
+      ]
+    },
+    {
+      "module": "ultrasonic",
+      "name": "stop_distance_change",
+      "signature": "m.stop_distance_change(sensor=None)",
+      "zh": "停止指定超音波變化監看",
+      "en": "Stop distance change watcher",
+      "aliases": [
+        "超音波",
+        "距離",
+        "停止"
+      ]
+    },
+    {
+      "module": "joystick",
+      "name": "on_joystick_change",
+      "signature": "m.on_joystick_change(callback, threshold=8, period=100)",
+      "zh": "搖桿座標變化時呼叫 callback(x, y)",
+      "en": "Trigger when either joystick axis changes",
+      "aliases": [
+        "搖桿",
+        "joystick",
+        "變化",
+        "座標",
+        "回呼"
+      ]
+    },
+    {
+      "module": "joystick",
+      "name": "stop_joystick_change",
+      "signature": "m.stop_joystick_change()",
+      "zh": "停止搖桿變化監看",
+      "en": "Stop joystick change watcher",
+      "aliases": [
+        "搖桿",
+        "停止",
+        "監看"
+      ]
     }
   ]
 }
