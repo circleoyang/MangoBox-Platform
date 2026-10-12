@@ -2,7 +2,7 @@
 """Build version-aware Traditional Chinese MangoBox Student API PDF manuals.
 
 This reads canonical website Markdown and profile metadata. No parallel API text is maintained.
-Requires reportlab; uses built-in Traditional Chinese CID font.
+Requires reportlab; embeds a freely distributable Traditional Chinese TTF installed on the builder.
 """
 from __future__ import annotations
 
@@ -18,18 +18,22 @@ from reportlab.lib.enums import TA_LEFT
 from reportlab.lib.pagesizes import A4
 from reportlab.lib.styles import ParagraphStyle
 from reportlab.pdfbase import pdfmetrics
-from reportlab.pdfbase.cidfonts import UnicodeCIDFont
+from reportlab.pdfbase.ttfonts import TTFont
 from reportlab.pdfgen import canvas
 from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, KeepTogether, PageBreak, XPreformatted
 
 BASE = Path(__file__).resolve().parents[1] / "docs" / "student-guide"
 DATA = BASE / "site" / "data"
-FONT = "MSung-Light"
+FONT = "MangoCJK"
 
 
 def font_setup():
-    # ReportLab built-in CID font supports CJK without shipping third-party fonts.
-    pdfmetrics.registerFont(UnicodeCIDFont(FONT))
+    # Embed a real Traditional Chinese TTF: CID font references can render as blank on some PDF readers.
+    import os
+    path = os.environ.get("MANGOBOX_PDF_FONT", "/usr/share/fonts/truetype/arphic-bkai00mp/bkai00mp.ttf")
+    if not Path(path).is_file():
+        raise RuntimeError("Missing Traditional Chinese font: " + path)
+    pdfmetrics.registerFont(TTFont(FONT, path))
 
 
 def clean_inline(text):
