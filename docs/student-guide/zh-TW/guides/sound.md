@@ -118,3 +118,8 @@ m.run_forever()
 詳見 [API Reference](../reference/sound.md)。
 
 > **版本注意：** Change API 需具備已整合 Sensor Change v1 的 Runtime／Host 套件。舊版不一定有這些方法；Host Python 應確認 MangoThonny 實際搭載的套件版本，不能只依韌體版本判斷。
+
+
+## 裝置設定讀取（Runtime Config）
+
+如果您希望程式適用於 DM 中不同的腳位、名稱或數量設定，可參考 [讀取 Device Manager 設定的教學](runtime-config.md)。High-Level MicroPython 已提供 `m.config.get()`；具名模組（例如 LED Strip）與獨立設定鍵（例如部分感測器 GPIO）的資料結構不同，請核對正式 Config 鍵並檢查模組是否啟用。**不要假設 Host Python 有相同 Config 介面，也不要編造新查詢方法。**
