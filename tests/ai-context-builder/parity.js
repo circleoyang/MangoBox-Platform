@@ -14,6 +14,8 @@ let runs=0;
 for(const profile of profiles.profiles){
   for(const lang of ["zh-TW","en"]){
     const available=nodeCore.selectedModules(profile,modules,null);
+    const schedulerAvailable=available.some(x=>x.id==="scheduler");
+    assert.strictEqual(schedulerAvailable,profile.mode==="high_level_micropython",profile.id);
     for(const ids of [null,available.slice(0,3).map(x=>x.id)]){
       for(const includeGuides of [true,false]){
         const sources={};
@@ -24,6 +26,12 @@ for(const profile of profiles.profiles){
         const fromBatch=nodeCore.render(opts);
         assert.strictEqual(fromBrowser,fromBatch,profile.id);
         if(!fromBatch.includes("## Environment"))throw Error("Missing metadata");
+        if(ids===null && profile.mode==="high_level_micropython"){
+          assert(fromBatch.includes("## Module: scheduler"),"Full HLMP file must teach Scheduler");
+          assert(fromBatch.includes("m.scheduler.add_task"),"Scheduler example missing");
+          assert(fromBatch.includes("m.scheduler.remove_task"),"Scheduler cancellation missing");
+        }
+        if(profile.mode==="host_python") assert(!fromBatch.includes("## Module: scheduler"),"Do not expose runtime Scheduler in Host Python");
         runs++;
       }
     }
