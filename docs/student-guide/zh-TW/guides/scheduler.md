@@ -37,54 +37,85 @@ m.run_forever()
 
 每隔約 1000 ms 輸出一次計數值。**`period` 是更新間隔，不是任務的總執行時間，也不是精確的硬體中斷計時器。**
 
-## 2. 自訂 LED 燈效：雙向交錯光波
+## 2. 已實機驗證範例：Quantum Ripple 雙星量子漣漪
 
-下列範例只用 `m.led()`、`m.brightness()` 與 `m.led_off()` 等基本 LED API；**不使用 `rainbow()`、`breath()`、`led_start_meteor()` 或任何內建燈效**。燈珠數、名稱須與 Device Manager 設定相符。
+本範例已由使用者使用 MangoBox High-Level MicroPython 實機測試成功。它**沒有使用內建特效函式**，而是由學生自行計算各顆 LED 的顏色，並註冊到 MangoBox Scheduler。
+
+**重要：不再把 `LED_COUNT` 寫死。** 只要在 Device Manager 中設定並啟用名為 `strip1` 的燈條，程式便能透過 `m.config.get("led_strips", {})` 讀取該燈條的 `leds`、`pin` 與 `enabled`。如名稱不同，僅修改 `STRIP`；若 DM 修改設定，請重新啟動程式以重新載入 Runtime Config。
 
 ```python
 from mangobox import Mango
 
 m = Mango()
-STRIP = "strip1"       # 依 Device Manager 設定修改
-LED_COUNT = 8          # 依實際燈珠數修改
-PERIOD_MS = 100
+
+# 使用 Device Manager 中定義的燈條名稱
+STRIP = "strip1"
+PERIOD = 100
+
+# 直接由 Runtime Config 讀取 DM 儲存的燈珠數量
+strips = m.config.get("led_strips", {})
+spec = strips.get(STRIP)
+if not isinstance(spec, dict):
+    raise ValueError("找不到燈條：" + STRIP)
+if not spec.get("enabled", False):
+    raise ValueError("燈條尚未啟用：" + STRIP)
+
+LED_COUNT = int(spec["leds"])
+if LED_COUNT <= 0:
+    raise ValueError("LED 數量必須大於 0")
+
+print("燈條：", STRIP)
+print("燈珠數量：", LED_COUNT)
+print("GPIO：", spec.get("pin"))
+
 phase = 0
 
-def clamp(v):
-    return max(0, min(255, int(v)))
+def ring_distance(a, b):
+    d = abs(a - b)
+    return min(d, LED_COUNT - d)
 
-def color(r, g, b):
+def clamp(value):
+    return max(0, min(255, int(value)))
+
+def rgb(r, g, b):
     return "#{:02x}{:02x}{:02x}".format(
         clamp(r), clamp(g), clamp(b)
     )
 
-def distance(a, b):
-    d = abs(a - b)
-    return min(d, LED_COUNT - d)
-
-def draw_frame():
+def quantum_ripple():
     global phase
-    a = (phase * 0.25) % LED_COUNT
-    b = (LED_COUNT - phase * 0.25) % LED_COUNT
+    pos1 = (phase * 0.25) % LED_COUNT
+    pos2 = (LED_COUNT - phase * 0.25) % LED_COUNT
 
     for i in range(LED_COUNT):
-        cyan = max(0, 1 - distance(i, a) / 2.5)
-        pink = max(0, 1 - distance(i, b) / 2.5)
-        flash = cyan * pink
-        r = 2 + 5 * cyan + 150 * pink + 85 * flash
-        g = 3 + 115 * cyan + 8 * pink + 85 * flash
-        blue = 12 + 155 * cyan + 100 * pink + 85 * flash
-        m.led(i, color(r, g, blue), strip=STRIP)
+        d1 = ring_distance(i, pos1)
+        d2 = ring_distance(i, pos2)
+        wave1 = max(0, 1 - d1 / 2.5)
+        wave2 = max(0, 1 - d2 / 2.5)
+        overlap = wave1 * wave2
 
+        r = 2 + 5 * wave1 + 150 * wave2 + 85 * overlap
+        g = 3 + 115 * wave1 + 8 * wave2 + 85 * overlap
+        b = 12 + 155 * wave1 + 100 * wave2 + 85 * overlap
+        m.led(i, rgb(r, g, b), strip=STRIP)
     phase += 1
 
 m.led_off(strip=STRIP)
 m.brightness(50, strip=STRIP)
-task_id = m.scheduler.add_task(draw_frame, period=PERIOD_MS)
+task_id = m.scheduler.add_task(quantum_ripple, period=PERIOD)
+print("Quantum Ripple started")
 m.run_forever()
 ```
 
-此設計每次 callback 更新 `LED_COUNT` 顆燈。燈條較長時，逐顆呼叫 `m.led()` 的成本增加，應放慢 `PERIOD_MS` 或改採已驗證的批次更新方法；不要自行臆測存在 `set_pixels()`、`show_frame()` 等 MangoBox API。
+### 這個範例教會了什麼？
+
+1. **設定與行為分離**：燈條名稱在程式中選取，燈珠數、腳位及啟用狀態由 DM 設定查詢，不要硬編碼。
+2. **具名模組查詢**：`m.config.get("led_strips", {}).get(STRIP)`，取得後先檢查存在與啟用狀態。
+3. **自訂更新函式**：`quantum_ripple()` 每次只更新一個畫面，不內含阻塞式 `while True` 或 `sleep()`。
+4. **註冊協作式排程**：`m.scheduler.add_task(quantum_ripple, period=PERIOD)`，再使用 `m.run_forever()` 驅動。
+5. **避免假想 API**：不要為了查詢燈珠數自行虛構 `m.led_count()`、`m.led_info()`、`m.get_strip()` 等尚未正式實作的方法。
+
+> `m.config.get()` 是現有 High-Level MicroPython Runtime Config 的查詢能力；這個範例不是 Host Python。其他感測器可能使用不同的配置鍵與資料結構，不應一律假設都有 `led_strips` 形式。此燈效逐顆更新 LED，較長燈條可調大 `PERIOD` 降低排程負擔。
 
 ## 3. 與 Button callback 共存
 
