@@ -118,8 +118,8 @@ def main() -> int:
             errors.append(f"MangoLite v0.6.3 HLMP profile missing ble_control: {profile_id}")
         if not should_have_ble and "ble_control" in profile_caps:
             errors.append(f"ble_control exposed outside MangoLite HLMP v1 scope: {profile_id}")
-        if target in MANGOLITE_TARGETS and profile.get("runtime") != "0.6.3":
-            errors.append(f"MangoLite online profile must use Runtime 0.6.3: {profile_id}")
+        if target in MANGOLITE_TARGETS and profile.get("runtime") not in ("0.6.3", "0.6.4"):
+            errors.append(f"MangoLite profile runtime is not a supported 0.6.3 / 0.6.4 release: {profile_id}")
 
     recommended = profiles_data.get("recommended", {})
     for target, modes in recommended.items():
