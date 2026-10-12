@@ -1,0 +1,16 @@
+# MangoBox Official API Documentation
+
+> This index identifies the official MangoBox Student API reference and the AI Context Builder. It is a discovery file, not evidence that every API works in every target or package.
+
+- [MangoBox API Documentation](https://circleoyang.github.io/MangoBox-Platform/docs/student-guide/site/): Searchable Student API guides and references.
+- [AI Context Builder](https://circleoyang.github.io/MangoBox-Platform/docs/student-guide/site/ai-context-builder.html): Select a specific board, programming mode, released profile and modules; generate official Markdown for use with an LLM.
+- [Supported API profiles](https://circleoyang.github.io/MangoBox-Platform/docs/student-guide/site/data/profiles.json): Target, runtime, host-package and capability metadata.
+- [Module metadata](https://circleoyang.github.io/MangoBox-Platform/docs/student-guide/site/data/modules.json): Module identity, capability and hardware notes.
+- [Method search index](https://circleoyang.github.io/MangoBox-Platform/docs/student-guide/site/data/api-index.json): Method names and signatures for discovery, not a substitute for API Reference.
+- [Traditional Chinese API references](https://github.com/circleoyang/MangoBox-Platform/tree/main/docs/student-guide/zh-TW/reference): Full student method descriptions.
+- [English API references](https://github.com/circleoyang/MangoBox-Platform/tree/main/docs/student-guide/en/reference): Full student method descriptions.
+- [Host Python references](https://github.com/circleoyang/MangoBox-Platform/tree/main/docs/student-guide/zh-TW/host-python/reference): Version-specific Host Python instructions.
+
+## Usage
+
+Use the AI Context Builder to obtain a profile-filtered Markdown bundle. Do not assume Host Python supports everything in new MicroPython firmware. Validate enabled modules, calibration, pins and connected hardware. Names such as pot1 or strip1 depend on device configuration.
