@@ -117,30 +117,58 @@ m.run_forever()
 
 > `m.config.get()` 是現有 High-Level MicroPython Runtime Config 的查詢能力；這個範例不是 Host Python。其他感測器可能使用不同的配置鍵與資料結構，不應一律假設都有 `led_strips` 形式。此燈效逐顆更新 LED，較長燈條可調大 `PERIOD` 降低排程負擔。
 
-## 3. 與 Button callback 共存
+## 3. 與 Button callback 共存：延後處理複雜操作（實機驗證）
 
-```python
-# 接續前一範例，在 m.run_forever() 之前加入：
-active = True
+**MangoBox 壓克力音樂燈盒 v2.2.2 實機案例：** button8 放開時若直接在按鈕輪詢 callback 呼叫切換模式，接著執行 `led_off()`、停止舊效果、註冊新效果及切換音樂，MicroPython 可能因巢狀同步呼叫太深而發生：
 
-def toggle():
-    global active, task_id
-    if active:
-        m.scheduler.remove_task(task_id)
-        task_id = None
-        m.led_off(strip=STRIP)
-        active = False
-    else:
-        task_id = m.scheduler.add_task(
-            draw_frame, period=PERIOD_MS
-        )
-        active = True
-
-m.on_pressed("button", toggle)
-m.start_button()
+```text
+[Scheduler] task error: maximum recursion depth exceeded
 ```
 
-按鈕名稱必須與裝置設定一致。停止排程後會保留 `phase`，再次啟動可從原進度繼續。不要同時註冊多個控制同一燈條的動畫工作，避免互相覆蓋。
+Traceback 顯示呼叫鏈由 `digital_input._step()` → `button_released()` → `apply_mode()` → `MangoEffects._start()` → `stop()` → `led_off()`，**不是無限遞迴的證據，也不能將錯誤歸因於蜂鳴器或動畫公式**。此案例將切換工作移至主迴圈後，已由使用者實機驗證恢復正常。
+
+**設計原則：Button／Sensor callback 只記錄事件（flag、目標模式）；主迴圈在 `m.run_once()` 返回後，才執行複雜的硬體操作、燈效切換及音樂切換。** 簡單且已確認安全的 callback 不必全部延後，但跨多模組的切換流程宜採此架構。
+
+以下為可直接執行的**最小範例**。燈效本身使用既有的 `m.led_all()`，以便專注呈現事件處理；實際專題可將 `apply_mode()` 改為呼叫 `fx.dual_star()`、`fx.quantum_ripple()`、`m.stop_song()` 等。
+
+```python
+from mangobox import Mango
+
+m = Mango()
+STRIP = "strip1"   # 需與 DM 已啟用的燈條名稱一致
+COLORS = ("red", "blue", "green")
+mode = 0
+pending_mode_change = False
+
+def button_released():
+    # Scheduler callback：只記錄需求，不執行 led_off / 動畫切換
+    global pending_mode_change
+    pending_mode_change = True
+
+def apply_mode():
+    m.led_off(strip=STRIP)
+    m.led_all(COLORS[mode], strip=STRIP)
+    print("mode =", mode)
+
+m.on_released("button8", button_released)
+m.start_sensor("button8", period=50)
+apply_mode()
+
+try:
+    while True:
+        m.run_once()
+        if pending_mode_change:
+            # 清除 flag，避免同一個按鈕事件重複執行
+            pending_mode_change = False
+            mode = (mode + 1) % len(COLORS)
+            apply_mode()
+except KeyboardInterrupt:
+    m.led_off(strip=STRIP)
+```
+
+此模式由主迴圈持續呼叫 `m.run_once()`；**不要在同一個主程式中再呼叫 `m.run_forever()`**，否則前述 flag 處理沒有機會執行。若要同時檢查長按 3 秒、音樂循環或其他狀態，也放在同一個主迴圈中處理。需要避免忙碌輪詢時，可在迴圈底部使用很短的 `time.sleep_ms(10)`，但不要阻塞 3 秒等待長按。
+
+當事件短時間密集發生而不允許遺失時，請以有界佇列記錄事件；單一 flag 會合併尚未處理的多次事件。關閉單一自訂燈效應使用其任務 ID：`m.scheduler.remove_task(task_id)`，**不可使用 `m.scheduler.clear()`**，以免同時刪除按鈕、感測器與音樂的任務。
 
 ## 4. 參數與常見錯誤
 

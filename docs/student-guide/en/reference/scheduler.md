@@ -32,3 +32,8 @@ m.run_forever()
 Callbacks must be short and non-blocking; scheduling is cooperative, not a precise timer. LED effects should be hand-written with documented basic LED methods rather than guessed APIs.
 
 See [full Scheduler tutorial](../scheduler.md).
+
+
+## Callback stack safety (validated v2.2.2 hardware case)
+
+Performing a full LED/music effect transition (`apply_mode()` → effect `stop()` → `m.led_off()`) inside a button polling callback resulted in `maximum recursion depth exceeded` on MicroPython. Defer complex operations: the callback sets `pending_mode_change = True`; the application's `while True` loop calls `m.run_once()` and then handles the pending request. **Do not combine that custom main loop with `m.run_forever()`**. Remove only the owned animation task, never `scheduler.clear()`. See the [Scheduler tutorial](../guides/scheduler.md).
