@@ -43,45 +43,16 @@ async function generate(){
  if(!ids.length){status("請選擇至少一個支援模組。");return}
  const lang=byId("lang").value,host=p.mode==="host_python";
  const root=ROOT+lang+"/"+(host?"host-python/":"");
- const intro=[
- "# MangoBox Official Student API — AI Context",
- "",
- "> Generated from published MangoBox documentation. Verify actual firmware, device configuration and Host package before executing.",
- "> Do not invent API methods, parameters, pins, capabilities or sensor units. Use only methods defined below.",
- "> Prefer `from mangobox import Mango` and `m = Mango()`. Never mix Arduino C++ or raw MicroPython methods into MangoBox examples unless specifically requested.",
- "> Treat the selected target, mode and version as authoritative. A newer firmware does not imply Host Python parity.",
- "> Never apply voltage above approximately 3.3V to Pico ADC GPIO.",
- "",
- "## Environment", "",
- "- Target: "+p.target,
- "- Mode: "+p.mode,
- "- Profile: "+p.id,
- "- Runtime: "+p.runtime,
- "- Host Student API package: "+(p.host_package||"not applicable"),
- "- Release status: "+p.release_status,
- "- Document language: "+lang,
- "- Modules: "+ids.join(", "),
- "",
- "## Instructions for an LLM", "",
- "1. Use only signatures supported by the selected profile.",
- "2. Keep named device identifiers such as pot1 and strip1 configurable; do not assume enabled hardware or fixed pinouts.",
- "3. Show a complete runnable example with appropriate imports and an event loop only when needed.",
- "4. When an API is absent or its package version is uncertain, explicitly say so instead of fabricating it.",
- "5. For callbacks, use the exact argument count and threshold units in the reference.",
- ""
- ];
- const sections=[];const missing=[];
+ const entries=MangoAIContext.paths(p,modules,ids,lang,byId("includeGuides").checked);
+ const sourceDocs={};const missing=[];
  status("正在讀取 "+ids.length+" 個模組的官方文件…");byId("generate").disabled=true;
  try{
- for(const id of ids){
-  const paths=[root+"reference/"+id+".md"];
-  if(byId("includeGuides").checked)paths.push(root+"guides/"+id+".md");
-  let parts=[];
-  for(const path of paths){try{const data=await getText(path);parts.push("### "+(path.includes("/reference/")?"API Reference":"Learner Guide")+" — "+id+"\n\n"+data)}catch(e){missing.push(path)}}
-  if(parts.length)sections.push("## Module: "+id+"\n\n"+parts.join("\n\n"));
- }
- if(missing.length){status("部分文件讀取失敗，為避免提供不完整 API，已停止下載：\n"+missing.join("\n"));return}
- output=[...intro,...sections].join("\n\n");
+  for(const e of entries){
+   try{sourceDocs[e.path]=await getText(ROOT+e.path)}
+   catch(err){missing.push(e.path)}
+  }
+  if(missing.length){status("缺少官方文件，已停止輸出：\\n"+missing.join("\\n"));return}
+  output=MangoAIContext.render({profile:p,modules,lang,ids,includeGuides:byId("includeGuides").checked,sourceDocs});
  byId("preview").value=output;
  downloadName="MangoBox_AI_Context_"+p.target+"_"+p.mode+"_"+p.runtime+".md";
  ["download","copy","print"].forEach(id=>byId(id).disabled=false);
