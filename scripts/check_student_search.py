@@ -114,6 +114,17 @@ def matches(entry: dict, module: dict | None, query: str) -> bool:
     return False
 
 
+# Method additions after the frozen September overlays: 7 Pot + 8 sensor callbacks.
+# Keep original September count contracts intact; only subtract these explicitly enumerated APIs.
+RECENT_ADDITIONS = {
+    "pot", "pot_raw", "pot_voltage", "on_pot_change",
+    "on_pot_above", "on_pot_below", "stop_pot",
+    "on_light_change", "stop_light_change", "on_sound_change",
+    "stop_sound_change", "on_distance_change", "stop_distance_change",
+    "on_joystick_change", "stop_joystick_change",
+}
+
+
 def main() -> int:
     errors: list[str] = []
     api_data = load(API_INDEX)
@@ -131,13 +142,17 @@ def main() -> int:
         errors.append("merged public method contract must not be empty")
 
     base_count = len(api_data.get("entries", []))
-    if base_count != overlay_data.get("base_method_count"):
-        errors.append(f"base method count drift: {base_count} != {overlay_data.get('base_method_count')}")
+    recent_found = {e.get("name") for e in api_data.get("entries", [])} & RECENT_ADDITIONS
+    if recent_found != RECENT_ADDITIONS:
+        errors.append(f"Missing recently documented methods: {sorted(RECENT_ADDITIONS - recent_found)}")
+    added = len(RECENT_ADDITIONS)
+    if base_count - added != overlay_data.get("base_method_count"):
+        errors.append(f"base method count drift (excluding recent methods): {base_count - added} != {overlay_data.get('base_method_count')}")
     legacy_entries = merge_entries(api_data, overlay_data)
-    if len(legacy_entries) != overlay_data.get("expected_public_methods"):
-        errors.append(f"2026-09-06 public method count drift: {len(legacy_entries)} != {overlay_data.get('expected_public_methods')}")
-    if len(entries) != ble_data.get("expected_total_public_methods"):
-        errors.append(f"BLE public method count drift: {len(entries)} != {ble_data.get('expected_total_public_methods')}")
+    if len(legacy_entries) - added != overlay_data.get("expected_public_methods"):
+        errors.append(f"2026-09-06 public method count drift (excluding recent methods): {len(legacy_entries) - added} != {overlay_data.get('expected_public_methods')}")
+    if len(entries) - added != ble_data.get("expected_total_public_methods"):
+        errors.append(f"BLE public method count drift (excluding recent methods): {len(entries) - added} != {ble_data.get('expected_total_public_methods')}")
 
     deferred = set(overlay_data.get("deferred_not_promoted", []))
     exposed = {entry.get("name") for entry in entries}
