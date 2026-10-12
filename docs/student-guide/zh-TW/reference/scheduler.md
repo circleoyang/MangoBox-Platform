@@ -62,3 +62,10 @@ m.run_forever()
 ## 已驗證：動態讀取 DM LED Strip 設定
 
 [Quantum Ripple 完整範例](../guides/scheduler.md) 使用 `m.config.get("led_strips", {}).get(STRIP)` 查詢 DM 設定、檢查 `enabled` 並讀取 `int(spec["leds"])`，以此決定迴圈更新多少顆 LED。此方法不需新增 `led_count()` / `led_info()` 等查詢 API；請勿硬編碼燈珠數或編造查詢方法。
+
+
+## Button／Sensor callback 的堆疊安全原則（v2.2.2 實機案例）
+
+已確認一個 MicroPython 呼叫深度問題：在 `digital_input._step()` 排程 callback 中，`button_released()` 若直接執行 `apply_mode()` → 自訂燈效 `stop()` → `m.led_off()` 等長串同步硬體操作，可能出現 `[Scheduler] task error: maximum recursion depth exceeded`。**這不是「Scheduler 無法同時跑音樂與燈效」的證據**。經 v2.2.2 實機驗證，可改由 callback 設定 `pending_mode_change = True`，主迴圈執行 `m.run_once()` 返回後再呼叫 `apply_mode()`。
+
+實作時，主迴圈使用 `while True: m.run_once(); ...`，**不要再呼叫 `m.run_forever()`**；只取消自己的動畫 task，不可 `m.scheduler.clear()`。完整範例請見 [Scheduler 教學：延後處理複雜操作](../guides/scheduler.md)。
