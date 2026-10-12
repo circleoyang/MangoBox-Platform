@@ -16,6 +16,8 @@ for(const profile of profiles.profiles){
     const available=nodeCore.selectedModules(profile,modules,null);
     const schedulerAvailable=available.some(x=>x.id==="scheduler");
     assert.strictEqual(schedulerAvailable,profile.mode==="high_level_micropython",profile.id);
+    const configAvailable=available.some(x=>x.id==="runtime-config");
+    assert.strictEqual(configAvailable,profile.mode==="high_level_micropython",profile.id);
     for(const ids of [null,available.slice(0,3).map(x=>x.id)]){
       for(const includeGuides of [true,false]){
         const sources={};
@@ -32,6 +34,12 @@ for(const profile of profiles.profiles){
           assert(fromBatch.includes("m.scheduler.remove_task"),"Scheduler cancellation missing");
         }
         if(profile.mode==="host_python") assert(!fromBatch.includes("## Module: scheduler"),"Do not expose runtime Scheduler in Host Python");
+        if(ids===null && profile.mode==="high_level_micropython") {
+          assert(fromBatch.includes("## Module: runtime-config"));
+          assert(fromBatch.includes("m.config.get"));
+          assert(fromBatch.includes("led_strips"));
+        }
+        if(profile.mode==="host_python") assert(!fromBatch.includes("## Module: runtime-config"),"No Runtime Config in Host Python");
         runs++;
       }
     }
