@@ -165,3 +165,8 @@ m.start_button()
 試著設計完全不靠內建效果的「光波碰撞」、「每顆 LED 不同週期閃爍」或「多組感測器共同控制燈效」。設計時先思考每次 callback 要更新什麼狀態，再選擇更新間隔。
 
 **相關教學**：[RGB LED 使用指南](guides/led.md) ／ [RGB LED API Reference](reference/led.md)
+
+
+## 已實機驗證：callback 延後處理複雜操作
+
+壓克力音樂燈盒 v2.2.2 發現：在按鈕 Scheduler callback 內直接切換燈效並呼叫 `m.led_off()`，曾觸發 `maximum recursion depth exceeded`。改為 callback 只設定 `pending_mode_change = True`、主迴圈每輪先 `m.run_once()` 再處理 `apply_mode()` 後，已實機測試正常。請見 [完整安全範例](guides/scheduler.md)。此方式使用自行控制的主迴圈，不要再呼叫 `m.run_forever()`。
