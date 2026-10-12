@@ -119,3 +119,8 @@ See [RGB LED API Reference](../reference/led.md).
 ## Custom LED animations with Scheduler
 
 To create an animation without any built-in rainbow, meteor or breathing effect, calculate each LED frame yourself and register your short callback through `m.scheduler.add_task(callback, period=100)`. Read the [Scheduler tutorial](scheduler.md) for a complete example, cancellation and cooperative scheduling guidelines.
+
+
+## Reading Device Manager configuration
+
+See the [Runtime Config guide](runtime-config.md) for existing read-only `m.config.get()` access in High-Level MicroPython. Confirm the actual key, enabled state and target version; named module dictionaries differ from scalar settings. Do not invent configuration methods or assume this interface exists in Host Python.
