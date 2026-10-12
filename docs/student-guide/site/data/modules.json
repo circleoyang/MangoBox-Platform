@@ -388,6 +388,25 @@
         "high_level_micropython": "from mangobox import Mango\nm = Mango()\nprint('Pot supported:', m.supports('pot'))\nprint('Pot 1:', m.pot('pot1'))",
         "host_python": "from mangobox import Mango\nm = Mango()\nprint('Pot supported:', m.supports('pot'))\nprint('Pot 1:', m.pot('pot1'))"
       }
+    },
+    {
+      "id": "scheduler",
+      "capability": "scheduler",
+      "labels": {
+        "zh-TW": "Scheduler 自訂輪詢排程",
+        "en": "Scheduler / Custom Tasks"
+      },
+      "gate": "runtime.scheduler (High-Level MicroPython only)",
+      "pins": [],
+      "signal": "software_task",
+      "summary": {
+        "zh-TW": "註冊自訂週期性工作與燈效，使用共用事件迴圈而不阻塞其他感測器。",
+        "en": "Register custom periodic tasks and LED effects on the shared cooperative event loop."
+      },
+      "diagnostic": {
+        "high_level_micropython": "from mangobox import Mango\nm = Mango()\ndef tick():\n    print('tick')\nm.scheduler.add_task(tick, period=1000)\nm.run_forever()",
+        "host_python": "# Runtime Scheduler is not a supported Host Python API."
+      }
     }
   ]
 }
