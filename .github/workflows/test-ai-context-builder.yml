@@ -1,0 +1,35 @@
+name: Verify AI Context Builder in Browser
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - 'docs/student-guide/**'
+      - 'tests/ai-context-builder/**'
+      - '.github/workflows/test-ai-context-builder.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'docs/student-guide/**'
+      - 'tests/ai-context-builder/**'
+      - '.github/workflows/test-ai-context-builder.yml'
+jobs:
+  browser:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm install --no-save playwright@1.56.1
+      - run: npx playwright install --with-deps chromium
+      - name: Launch website locally
+        run: |
+          python3 -m http.server 8769 --bind 127.0.0.1 &
+          for i in $(seq 1 20); do
+            curl -sf http://127.0.0.1:8769/docs/student-guide/site/ai-context-builder.html >/dev/null && exit 0
+            sleep 1
+          done
+          exit 1
+      - name: Browser API documentation smoke tests
+        run: node tests/ai-context-builder/smoke.js
