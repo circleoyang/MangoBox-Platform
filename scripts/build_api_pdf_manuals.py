@@ -2,7 +2,7 @@
 """Build version-aware Traditional Chinese MangoBox Student API PDF manuals.
 
 This reads canonical website Markdown and profile metadata. No parallel API text is maintained.
-Requires reportlab and a CJK-capable font (Noto Sans CJK, etc.).
+Requires reportlab; uses built-in Traditional Chinese CID font.
 """
 from __future__ import annotations
 
@@ -24,7 +24,7 @@ from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, KeepTogethe
 
 BASE = Path(__file__).resolve().parents[1] / "docs" / "student-guide"
 DATA = BASE / "site" / "data"
-FONT = "STSong-Light"
+FONT = "MSung-Light"
 
 
 def font_setup():
@@ -34,7 +34,7 @@ def font_setup():
 
 def clean_inline(text):
     text = escape(text)
-    text = re.sub(r"\*\*(.+?)\*\*", r"<b>\1</b>", text)
+    text = re.sub(r"\*\*(.+?)\*\*", r'<font color="#0d5f4b">\1</font>', text)
     text = re.sub(r"`([^`]+)`", r'<font color="#146c5b">\1</font>', text)
     text = re.sub(r"\[([^\]]+)\]\([^)]+\)", r"\1", text)
     return text
