@@ -97,3 +97,23 @@ Do not keep changing the high-level Python program when there is no raw physical
 
 - [Sound Sensor API Reference](../reference/sound.md)
 - [Device Manager](../tools/device-manager.md)
+
+## Sensor Change Callback: `on_sound_change()`
+
+```python
+m.on_sound_change(callback, threshold=5, period=100)
+m.stop_sound_change()
+```
+
+Changes are compared to the last delivered callback value. Default threshold: 5 (相對音量值（非 dB）). The first valid observation generates a callback. `period` is a requested interval in milliseconds; sampling and transport can delay execution.
+
+```python
+from mangobox import Mango
+m = Mango()
+def changed(value):
+    print(value)
+m.on_sound_change(changed, threshold=5)
+m.run_forever()
+```
+
+Version note: requires a Runtime/Host package with Sensor Change v1; an updated firmware does not imply the installed MangoThonny Host package supports it.
