@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="zh-Hant"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>MangoBox AI Context Builder</title><meta name="description" content="選擇 MangoBox 裝置與 API，下載提供給大型語言模型的官方 Markdown 文件。">
+<link rel="stylesheet" href="styles.css"><style>
+.builder{max-width:1080px;margin:2rem auto;padding:0 1rem 4rem}.builder h1{font-size:2rem;margin:.6rem 0}.builder p{line-height:1.7}.builder-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1rem}.builder-panel{padding:1.2rem;border:1px solid #ccd6da;border-radius:16px;background:#fff;margin:1.1rem 0}.builder-panel select,.builder-panel button{padding:.7rem;border-radius:9px;max-width:100%;font:inherit}.builder-panel select{width:100%;border:1px solid #94a3b8}.builder-panel label{font-weight:600;display:block;margin-bottom:.5rem}.checks{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:.5rem}.checks label{font-weight:400;margin:0;padding:.5rem;border-radius:8px;border:1px solid #ddd}.actions{display:flex;flex-wrap:wrap;gap:.7rem;margin-top:1rem}.actions button,.actions a{padding:.7rem 1.1rem;border:1px solid #0c765c;border-radius:9px;cursor:pointer;background:#096a50;color:white;text-decoration:none}.actions button:disabled{opacity:.5;cursor:not-allowed}.actions .secondary{background:#fff;color:#096a50}.muted{color:#526273}#status{white-space:pre-wrap}#preview{width:100%;min-height:260px;box-sizing:border-box;font-family:monospace;font-size:12px} .warning{border-left:4px solid #ad7425;padding:.65rem 1rem;background:#fff7e8} @media print{header,.actions,.controls,.checks,.no-print{display:none!important}.builder-panel{border:0}textarea{white-space:pre-wrap}body{background:#fff}} </style></head><body>
+<header class="topbar"><a class="brand" href="./" aria-label="MangoBox Documentation"><img class="brand-logo" src="../../../assets/brand/mangobox-core-refined-64.png" alt="MangoBox"><span><strong>MangoBox Docs</strong><small>AI Context Builder</small></span></a><a href="./">返回 API 文件</a></header>
+<main class="builder"><p class="eyebrow">MANGOBOX · AI-READY DOCS</p><h1>提供給 AI 的 API 文件</h1>
+<p>依裝置、程式模式、版本與模組產生官方 Markdown，供 ChatGPT、Gemini、Claude 等工具參考。文件由目前官網的 API Reference 與 Guide 即時組合，不另外維護第二套方法清單。</p>
+<div class="builder-panel controls"><div class="builder-grid">
+<div><label for="target">裝置</label><select id="target"></select></div>
+<div><label for="mode">程式模式</label><select id="mode"><option value="high_level_micropython">High-Level MicroPython（Pico）</option><option value="host_python">Host Python（MangoThonny）</option></select></div>
+<div><label for="profile">API 支援版本</label><select id="profile"></select></div>
+<div><label for="lang">文件語言</label><select id="lang"><option value="zh-TW">繁體中文</option><option value="en">English</option></select></div></div>
+<p id="profileNotice" class="warning" role="status"></p>
+<label><input type="checkbox" id="all" checked> 包含此版本所有支援模組</label>
+<div id="modules" class="checks" aria-label="選擇 API 模組"></div>
+<label style="margin-top:1rem"><input type="checkbox" id="includeGuides" checked> 同時包含使用指南與範例（檔案較大）</label>
+</div>
+<div class="builder-panel"><h2>AI 專用 Markdown</h2><p class="muted">先產生預覽，再下載 <code>.md</code> 或複製內容；若選取模組不支援目前模式與版本，將自動排除。</p>
+<div class="actions"><button id="generate">產生文件</button><button id="download" disabled>下載 Markdown</button><button id="copy" class="secondary" disabled>複製內容</button><button id="print" class="secondary" disabled>列印／另存 PDF</button></div>
+<p id="status" role="status"></p><textarea id="preview" readonly aria-label="Markdown 文件預覽" spellcheck="false"></textarea></div>
+<p class="muted no-print">本工具不會上傳學生程式碼，也不呼叫外部 AI；僅將公開 API 文件在瀏覽器內組合。PDF 可由瀏覽器的列印功能另存，建議以 Markdown 作為 LLM 的主要輸入。</p>
+</main><script src="ai-context-builder.js" defer></script></body></html>
