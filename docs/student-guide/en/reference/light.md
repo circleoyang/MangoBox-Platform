@@ -72,3 +72,25 @@ m.run_forever()
 ## Related
 
 `light()`, `on_light_above()`, `on_light_below()`, `run_forever()`
+
+## `on_light_change()` — Change callback
+
+```python
+m.on_light_change(callback, threshold=2, period=100)
+m.stop_light_change()
+```
+
+Samples the existing `m.light()` method and dispatches only when a valid reading differs from the **last delivered callback value** by at least `threshold`. The first valid observation is delivered once. The default threshold is 2 0–100 relative light points; the default requested sampling period is 100 ms. Actual sampling timing depends on device and transport latency. The callback receives `value`.  
+
+```python
+from mangobox import Mango
+m = Mango()
+def changed(value):
+    print('light:', value)
+m.on_light_change(changed, threshold=2)
+m.run_forever()
+```
+
+Use `m.stop_light_change()` to stop this watcher or `m.close()` to close all. Change events are logged as `sensor_event / change`, while technical polling logs are suppressed. Existing threshold events remain independent.
+
+> **Version note:** Change APIs require a Runtime / Host package that integrates Sensor Change v1. Older versions may not include them. Check the Host package actually bundled with MangoThonny.
