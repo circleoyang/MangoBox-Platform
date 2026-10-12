@@ -33,3 +33,8 @@ Use the configured strip name. For events, register `m.on_pot_change(callback, t
 Host Python needs a version that includes Pot integration and a physical Runtime; the pure virtual backend is not supported.
 
 [Pot API Reference](../reference/pot.md)
+
+
+## Reading Device Manager configuration
+
+See the [Runtime Config guide](runtime-config.md) for documented `m.config.get()` read-only access in High-Level MicroPython. Module key structures differ by firmware; do not invent configuration keys or assume this works in Host Python.
