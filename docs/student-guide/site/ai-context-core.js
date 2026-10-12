@@ -22,6 +22,8 @@
     "11. In High-Level MicroPython, read DM-defined hardware parameters through documented m.config.get() keys instead of hardcoding LED counts, names or pins.",
     "12. Check existence, enabled flags and valid ranges before accessing named modules. Never invent m.led_count(), m.led_info() or an undocumented configuration key.",
     "13. The Runtime Config access pattern is not automatically applicable to Host Python; never assume both execution modes expose the same configuration object.",
+    "14. In High-Level MicroPython, keep Button/Sensor Scheduler callbacks short: for effect/music/hardware mode transitions, record a pending request in the callback and process it in the foreground after m.run_once() returns.",
+    "15. A foreground while-loop that calls m.run_once() must not also call m.run_forever(); avoid deep synchronous LED/music transitions inside polling callbacks because MicroPython may raise maximum recursion depth exceeded.",
   ];
   function selectedModules(profile, modules, ids) {
     if (!profile || !Array.isArray(profile.capabilities)) throw Error("Missing release profile");
