@@ -51,7 +51,8 @@
         "motion",
         "light",
         "sound_level",
-        "joystick"
+        "joystick",
+        "scheduler"
       ]
     },
     {
@@ -107,7 +108,8 @@
         "motion",
         "light",
         "sound_level",
-        "joystick"
+        "joystick",
+        "scheduler"
       ]
     },
     {
@@ -163,7 +165,8 @@
         "motion",
         "light",
         "sound_level",
-        "joystick"
+        "joystick",
+        "scheduler"
       ]
     },
     {
@@ -218,7 +221,8 @@
         "light",
         "sound_level",
         "joystick",
-        "ble_control"
+        "ble_control",
+        "scheduler"
       ]
     },
     {
@@ -272,7 +276,8 @@
         "light",
         "sound_level",
         "joystick",
-        "ble_control"
+        "ble_control",
+        "scheduler"
       ]
     },
     {
@@ -328,7 +333,8 @@
         "light",
         "sound_level",
         "joystick",
-        "pot"
+        "pot",
+        "scheduler"
       ]
     },
     {
@@ -357,7 +363,8 @@
         "light",
         "sound_level",
         "joystick",
-        "pot"
+        "pot",
+        "scheduler"
       ]
     },
     {
@@ -386,7 +393,8 @@
         "light",
         "sound_level",
         "joystick",
-        "pot"
+        "pot",
+        "scheduler"
       ]
     },
     {
@@ -414,7 +422,8 @@
         "sound_level",
         "joystick",
         "ble_control",
-        "pot"
+        "pot",
+        "scheduler"
       ]
     },
     {
@@ -442,7 +451,8 @@
         "sound_level",
         "joystick",
         "ble_control",
-        "pot"
+        "pot",
+        "scheduler"
       ]
     }
   ],
