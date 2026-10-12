@@ -96,3 +96,8 @@ m.run_forever()
 ```
 
 `m.stop_distance_change(sensor=None)` stops the watcher. Requires a Runtime / Host package incorporating Sensor Change v1.
+
+
+## Reading Device Manager configuration
+
+See the [Runtime Config guide](runtime-config.md) for existing read-only `m.config.get()` access in High-Level MicroPython. Confirm the actual key, enabled state and target version; named module dictionaries differ from scalar settings. Do not invent configuration methods or assume this interface exists in Host Python.
