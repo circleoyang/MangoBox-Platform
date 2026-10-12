@@ -22,7 +22,11 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-      - run: python -m pip install 'reportlab>=4,<5' 'pypdf>=5,<7'
+      - name: Install embeddable Traditional Chinese font and PDF validators
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y fonts-arphic-bkai00mp poppler-utils
+          python -m pip install 'reportlab>=4,<5' 'pypdf>=5,<7'
       - name: Build current MangoLite + Pico 2 W reference and guide
         run: python scripts/build_api_pdf_manuals.py --language zh-TW --kind both
       - name: Check PDF content and structure
@@ -40,8 +44,16 @@ jobs:
               text=' '.join(page.extract_text() or '' for page in reader.pages)
               assert 'MangoBox' in text, (f,'missing title')
               assert 'Pot' in text or 'pot' in text, (f,'missing new Pot module')
+              assert '電位器' in text or '感測' in text, (f,'Traditional Chinese text missing')
           print('PDF build smoke PASS:',len(files))
           PY
+      - name: Check PDF rendering without font errors
+        run: |
+          for file in dist/api-manuals/*.pdf; do
+            pdftoppm -f 2 -l 2 -scale-to 900 -png -singlefile "$file" /tmp/mangobox-pdf-check 2>/tmp/mangobox-render-errors.log
+            test -s /tmp/mangobox-pdf-check.png
+            if grep -Ei 'syntax error|unknown font|cmap file' /tmp/mangobox-render-errors.log; then exit 1; fi
+          done
       - uses: actions/upload-artifact@v4
         with:
           name: MangoBox-API-Manuals
