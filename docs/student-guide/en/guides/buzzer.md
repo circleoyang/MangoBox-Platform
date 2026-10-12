@@ -124,3 +124,8 @@ Then change the sound name and compare the two effects.
 
 - [Buzzer API Reference](../reference/buzzer.md)
 - [Device Manager](../tools/device-manager.md)
+
+
+## Reading Device Manager configuration
+
+See the [Runtime Config guide](runtime-config.md) for documented `m.config.get()` read-only access in High-Level MicroPython. Module key structures differ by firmware; do not invent configuration keys or assume this works in Host Python.

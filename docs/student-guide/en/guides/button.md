@@ -120,3 +120,8 @@ while True:
 Press the Button to turn the LEDs yellow, and release it to turn them off.
 
 See [Button API Reference](../reference/button.md).
+
+
+## Reading Device Manager configuration
+
+See the [Runtime Config guide](runtime-config.md) for existing read-only `m.config.get()` access in High-Level MicroPython. Confirm the actual key, enabled state and target version; named module dictionaries differ from scalar settings. Do not invent configuration methods or assume this interface exists in Host Python.

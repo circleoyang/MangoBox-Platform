@@ -120,3 +120,8 @@ After writing both lines, keep the High Level MicroPython event loop running.
 
 - [OLED API Reference](../reference/oled.md)
 - [Device Manager](../tools/device-manager.md)
+
+
+## Reading Device Manager configuration
+
+See the [Runtime Config guide](runtime-config.md) for existing read-only `m.config.get()` access in High-Level MicroPython. Confirm the actual key, enabled state and target version; named module dictionaries differ from scalar settings. Do not invent configuration methods or assume this interface exists in Host Python.

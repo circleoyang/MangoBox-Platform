@@ -52,7 +52,8 @@
         "light",
         "sound_level",
         "joystick",
-        "scheduler"
+        "scheduler",
+        "runtime_config"
       ]
     },
     {
@@ -109,7 +110,8 @@
         "light",
         "sound_level",
         "joystick",
-        "scheduler"
+        "scheduler",
+        "runtime_config"
       ]
     },
     {
@@ -166,7 +168,8 @@
         "light",
         "sound_level",
         "joystick",
-        "scheduler"
+        "scheduler",
+        "runtime_config"
       ]
     },
     {
@@ -222,7 +225,8 @@
         "sound_level",
         "joystick",
         "ble_control",
-        "scheduler"
+        "scheduler",
+        "runtime_config"
       ]
     },
     {
@@ -277,7 +281,8 @@
         "sound_level",
         "joystick",
         "ble_control",
-        "scheduler"
+        "scheduler",
+        "runtime_config"
       ]
     },
     {
@@ -334,7 +339,8 @@
         "sound_level",
         "joystick",
         "pot",
-        "scheduler"
+        "scheduler",
+        "runtime_config"
       ]
     },
     {
@@ -364,7 +370,8 @@
         "sound_level",
         "joystick",
         "pot",
-        "scheduler"
+        "scheduler",
+        "runtime_config"
       ]
     },
     {
@@ -394,7 +401,8 @@
         "sound_level",
         "joystick",
         "pot",
-        "scheduler"
+        "scheduler",
+        "runtime_config"
       ]
     },
     {
@@ -423,7 +431,8 @@
         "joystick",
         "ble_control",
         "pot",
-        "scheduler"
+        "scheduler",
+        "runtime_config"
       ]
     },
     {
@@ -452,7 +461,8 @@
         "joystick",
         "ble_control",
         "pot",
-        "scheduler"
+        "scheduler",
+        "runtime_config"
       ]
     }
   ],
@@ -462,6 +472,7 @@
     "Host Python profiles use Student API package 0.4.6.",
     "A profile capability means the learner API path exists for the selected target and mode. Physical module presence, current Enable state, wiring health, and hardware validation are separate states.",
     "MangoX2 line_tracking is absent from Host profiles because the Host Line Tracking Student API has not yet been published. The default GP12/GP13 mapping also overlaps the current Host UART mapping, but GPIO remapping can avoid that conflict; it is not a permanent hardware limitation.",
-    "Pot capability is added only to v0.2.9 MangoX2 and v0.6.4 MangoLite High-Level MicroPython profiles. Existing Host Python profiles intentionally remain unchanged pending packaged Host release confirmation."
+    "Pot capability is added only to v0.2.9 MangoX2 and v0.6.4 MangoLite High-Level MicroPython profiles. Existing Host Python profiles intentionally remain unchanged pending packaged Host release confirmation.",
+    "Runtime Config read-only access is documented for High-Level MicroPython via m.config.get(); this does not add any Student API or imply Host Python parity."
   ]
 }

@@ -407,6 +407,25 @@
         "high_level_micropython": "from mangobox import Mango\nm = Mango()\ndef tick():\n    print('tick')\nm.scheduler.add_task(tick, period=1000)\nm.run_forever()",
         "host_python": "# Runtime Scheduler is not a supported Host Python API."
       }
+    },
+    {
+      "id": "runtime-config",
+      "capability": "runtime_config",
+      "labels": {
+        "zh-TW": "Runtime Config／讀取 DM 設定",
+        "en": "Runtime Config / Read DM Settings"
+      },
+      "gate": "High-Level MicroPython Runtime Config",
+      "pins": [],
+      "signal": "software_config",
+      "summary": {
+        "zh-TW": "使用既有 m.config.get() 查詢 DM 定義的硬體名稱、腳位、燈珠數與啟用狀態，不新增 API。",
+        "en": "Read DM-defined names, pins, LED counts and enabled flags with existing m.config.get(), without new APIs."
+      },
+      "diagnostic": {
+        "high_level_micropython": "from mangobox import Mango\nm = Mango()\nprint(m.config.get('led_strips', {}))",
+        "host_python": "# Runtime Config lookup is not documented for Host Python."
+      }
     }
   ]
 }
