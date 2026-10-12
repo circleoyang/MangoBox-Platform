@@ -36,3 +36,8 @@ m.led_off(strip=STRIP)
 You may schedule `once=True` callbacks, but do not call `m.scheduler.clear()` merely to stop your animation: it would also clear other registered Runtime tasks. Avoid long sleeps or blocking loops within callbacks. The scheduler is cooperative, not preemptive. For long LED strips increase the period or use only batch APIs actually documented for the installed Runtime.
 
 See [Scheduler reference](reference/scheduler.md) and [LED guide](guides/led.md).
+
+
+## Hardware-tested callback stack safety
+
+A music-lamp application (v2.2.2) encountered `maximum recursion depth exceeded` when a button polling callback synchronously stopped and restarted LED effects. The validated fix is for the callback to set `pending_mode_change = True`, then service the request in an application loop *after* `m.run_once()`. See the [complete example](guides/scheduler.md). Do not also call `m.run_forever()` in that same program.
