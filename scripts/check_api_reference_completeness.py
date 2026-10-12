@@ -171,12 +171,24 @@ def main() -> int:
         if payload.get("source_status") not in ALLOWED_SOURCE_STATUS:
             errors.append(f"{label} source_status must be one of {sorted(ALLOWED_SOURCE_STATUS)}")
 
-    if overlay.get("base_method_count") != len(api.get("entries", [])):
-        errors.append("base API count drift")
-    if overlay.get("expected_public_methods") != len(legacy_entries):
-        errors.append(f"2026-09-06 public API count drift: {len(legacy_entries)} != {overlay.get('expected_public_methods')}")
-    if ble_overlay.get("expected_total_public_methods") != len(entries):
-        errors.append(f"BLE public API count drift: {len(entries)} != {ble_overlay.get('expected_total_public_methods')}")
+    # New releases extend the base catalog after frozen September overlays.
+    # Validate the exact 7 Pot + 8 change methods; never mutate historic overlay counts.
+    recent = {
+        "pot", "pot_raw", "pot_voltage", "on_pot_change", "on_pot_above",
+        "on_pot_below", "stop_pot", "on_light_change", "stop_light_change",
+        "on_sound_change", "stop_sound_change", "on_distance_change",
+        "stop_distance_change", "on_joystick_change", "stop_joystick_change",
+    }
+    present = {e.get("name") for e in api.get("entries", [])} & recent
+    if present != recent:
+        errors.append(f"missing recent methods: {sorted(recent-present)}")
+    extra = len(recent)
+    if overlay.get("base_method_count") != len(api.get("entries", [])) - extra:
+        errors.append("base API count drift beyond the 15 documented additions")
+    if overlay.get("expected_public_methods") != len(legacy_entries) - extra:
+        errors.append(f"2026-09-06 public API count drift: {len(legacy_entries)-extra} != {overlay.get('expected_public_methods')}")
+    if ble_overlay.get("expected_total_public_methods") != len(entries) - extra:
+        errors.append(f"BLE public API count drift: {len(entries)-extra} != {ble_overlay.get('expected_total_public_methods')}")
     deferred = set(overlay.get("deferred_not_promoted", []))
     if deferred & {entry.get("name") for entry in entries}:
         errors.append(f"deferred APIs must not be promoted: {sorted(deferred)}")
