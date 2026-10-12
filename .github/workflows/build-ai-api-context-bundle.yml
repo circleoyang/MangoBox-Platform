@@ -5,12 +5,16 @@ on:
     paths:
       - 'docs/student-guide/**'
       - 'scripts/build_ai_api_context_bundle.py'
+      - 'scripts/build_ai_api_context_bundle.js'
+      - 'tests/ai-context-builder/parity.js'
       - '.github/workflows/build-ai-api-context-bundle.yml'
   push:
     branches: [main]
     paths:
       - 'docs/student-guide/**'
       - 'scripts/build_ai_api_context_bundle.py'
+      - 'scripts/build_ai_api_context_bundle.js'
+      - 'tests/ai-context-builder/parity.js'
       - '.github/workflows/build-ai-api-context-bundle.yml'
 jobs:
   contexts:
@@ -19,6 +23,11 @@ jobs:
       contents: read
     steps:
       - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Verify browser/batch parity for all registered profiles
+        run: node tests/ai-context-builder/parity.js
       - name: Generate ten board/mode combinations
         run: python scripts/build_ai_api_context_bundle.py --lang zh-TW
       - name: Validate Markdown files
