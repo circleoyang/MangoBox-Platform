@@ -4,13 +4,13 @@ on:
   pull_request:
     paths:
       - 'docs/student-guide/**'
-      - 'scripts/build_api_pdf_manuals.py'
+      - 'scripts/build_api_pdf_manuals_v2.py'
       - '.github/workflows/build-api-pdf-manuals.yml'
   push:
     branches: [main]
     paths:
       - 'docs/student-guide/**'
-      - 'scripts/build_api_pdf_manuals.py'
+      - 'scripts/build_api_pdf_manuals_v2.py'
       - '.github/workflows/build-api-pdf-manuals.yml'
 jobs:
   manuals:
@@ -28,7 +28,7 @@ jobs:
           sudo apt-get install -y fonts-arphic-bkai00mp poppler-utils
           python -m pip install 'reportlab>=4,<5' 'pypdf>=5,<7'
       - name: Build current MangoLite + Pico 2 W reference and guide
-        run: python scripts/build_api_pdf_manuals.py --language zh-TW --kind both
+        run: python scripts/build_api_pdf_manuals_v2.py --language zh-TW --kind both
       - name: Check PDF content and structure
         run: |
           python - <<'PY'
@@ -40,11 +40,13 @@ jobs:
               assert f.stat().st_size>4000, (f,f.stat().st_size)
               assert f.read_bytes().startswith(b'%PDF-')
               reader=PdfReader(str(f))
-              assert len(reader.pages)>=2, (f,'no pages')
+              assert len(reader.pages)>=8, (f,'no pages')
               text=' '.join(page.extract_text() or '' for page in reader.pages)
               assert 'MangoBox' in text, (f,'missing title')
               assert 'Pot' in text or 'pot' in text, (f,'missing new Pot module')
               assert '電位器' in text or '感測' in text, (f,'Traditional Chinese text missing')
+              assert len(reader.outline)>5, (f,'missing PDF bookmarks')
+              assert sum(len(page.get('/Annots',[])) for page in reader.pages)>10, (f,'missing links')
           print('PDF build smoke PASS:',len(files))
           PY
       - name: Check PDF rendering without font errors
