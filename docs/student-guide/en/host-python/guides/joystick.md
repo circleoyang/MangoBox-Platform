@@ -42,3 +42,19 @@ If center is still biased, verify VRX/VRY/SW pins, Swap X/Y, Invert X/Y, and dea
 ## More
 
 - [Host Python Joystick API Reference](../reference/joystick.md)
+
+
+## Joystick change event: `on_joystick_change()`
+
+`m.on_joystick_change(callback, threshold=8, period=100)` watches X/Y coordinates (-100 to 100). A change of at least 8 units on either axis from the last delivered reading triggers callback(x, y). The first valid observation also triggers.
+
+```python
+from mangobox import Mango
+m = Mango()
+def changed(x, y):
+    print(x, y)
+m.on_joystick_change(changed, threshold=8, period=100)
+m.run_forever()
+```
+
+`m.stop_joystick_change()` stops the watcher; requires a Runtime/Host package that integrates Sensor Change v1.
