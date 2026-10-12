@@ -117,3 +117,8 @@ m.run_forever()
 ```
 
 Version note: requires a Runtime/Host package with Sensor Change v1; an updated firmware does not imply the installed MangoThonny Host package supports it.
+
+
+## Reading Device Manager configuration
+
+See the [Runtime Config guide](runtime-config.md) for existing read-only `m.config.get()` access in High-Level MicroPython. Confirm the actual key, enabled state and target version; named module dictionaries differ from scalar settings. Do not invent configuration methods or assume this interface exists in Host Python.
