@@ -119,3 +119,8 @@ LED 數量設定是否正確
 ## 自訂燈效與 Scheduler
 
 如果您想製作**不使用內建呼吸燈、彩虹燈或流星燈函式**的原創燈效，可以自行撰寫每次更新 LED 畫面的函式，再用 `m.scheduler.add_task(callback, period=100)` 註冊到 MangoBox 的協作式排程器。請閱讀 [Scheduler 自訂輪詢與燈效完整教學](scheduler.md)，其中包含可直接執行的雙向光波範例、註冊／移除任務及避免阻塞的注意事項。
+
+
+### 已驗證的自訂燈效：Quantum Ripple（動態讀取 DM 設定）
+
+[查看完整程式與操作說明](scheduler.md#2-已實機驗證範例quantum-ripple-雙星量子漣漪)。程式會透過 `m.config.get("led_strips", {}).get(STRIP)` 取得 DM 儲存的 `leds`、`pin` 與 `enabled`，再交給 `m.scheduler.add_task()` 週期執行；**請勿再把 `LED_COUNT` 寫死**。本範例已於 MangoBox High-Level MicroPython 實機驗證。
