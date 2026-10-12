@@ -124,3 +124,8 @@ m.run_forever()
 
 - [Buzzer API Reference](../reference/buzzer.md)
 - [Device Manager 基本操作](../tools/device-manager.md)
+
+
+## 裝置設定讀取（Runtime Config）
+
+如果程式需要依照 DM 配置的腳位、名稱或參數運作，請參考 [Runtime Config 設定讀取教學](runtime-config.md)。High-Level MicroPython 可使用現有 `m.config.get()`，但不同模組的設定鍵可能不同，必須核對正式 Config 並檢查缺值。此介面不可直接假設 Host Python 也有。
