@@ -17,6 +17,8 @@
     "6. If a capability is missing from this reference, state that it is unavailable or unverified.",
     "7. Include imports and a runnable event loop only when the documented API requires it.",
     "8. Pico ADC GPIO input must remain within the supported voltage range.",
+    "9. For custom polling, LED animations or repeated actions in High-Level MicroPython, consult the Scheduler module before using time.sleep() loops.",
+    "10. Only use m.scheduler.add_task/remove_task in High-Level MicroPython profiles documenting Scheduler; never invent a Host Python equivalent or call scheduler.clear() to stop a single task.",
   ];
   function selectedModules(profile, modules, ids) {
     if (!profile || !Array.isArray(profile.capabilities)) throw Error("Missing release profile");

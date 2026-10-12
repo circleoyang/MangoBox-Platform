@@ -114,3 +114,8 @@ configured LED count
 Show red, green, and blue in sequence, then turn the LEDs off.
 
 See [RGB LED API Reference](../reference/led.md).
+
+
+## Custom LED animations with Scheduler
+
+To create an animation without any built-in rainbow, meteor or breathing effect, calculate each LED frame yourself and register your short callback through `m.scheduler.add_task(callback, period=100)`. Read the [Scheduler tutorial](scheduler.md) for a complete example, cancellation and cooperative scheduling guidelines.
