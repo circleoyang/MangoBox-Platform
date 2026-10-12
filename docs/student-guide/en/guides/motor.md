@@ -57,3 +57,8 @@ Do not scatter sign inversions through student code. Fix wheel mapping, directio
 ## More
 
 - [Motor / Drive API Reference](../reference/motor.md)
+
+
+## Reading Device Manager configuration
+
+See the [Runtime Config guide](runtime-config.md) for existing read-only `m.config.get()` access in High-Level MicroPython. Confirm the actual key, enabled state and target version; named module dictionaries differ from scalar settings. Do not invent configuration methods or assume this interface exists in Host Python.
