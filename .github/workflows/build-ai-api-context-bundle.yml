@@ -1,0 +1,48 @@
+name: Build MangoBox AI API Context Markdown Bundle
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - 'docs/student-guide/**'
+      - 'scripts/build_ai_api_context_bundle.py'
+      - '.github/workflows/build-ai-api-context-bundle.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'docs/student-guide/**'
+      - 'scripts/build_ai_api_context_bundle.py'
+      - '.github/workflows/build-ai-api-context-bundle.yml'
+jobs:
+  contexts:
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - name: Generate ten board/mode combinations
+        run: python scripts/build_ai_api_context_bundle.py --lang zh-TW
+      - name: Validate Markdown files
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import json
+          out=Path('dist/ai-api-context')
+          manifest=json.loads((out/'MANIFEST.json').read_text(encoding='utf-8'))
+          assert len(manifest)==10
+          for item in manifest:
+              content=(out/item['file']).read_text(encoding='utf-8')
+              assert 'from mangobox import Mango' in content
+              assert '## AI development rules' in content
+              assert len(content)>5000, item['file']
+              assert len(item['modules'])>=10, item['file']
+          assert (out.parent/'MangoBox_AI_API_Context_zh-TW.zip').stat().st_size>15000
+          print('AI CONTEXT BUNDLE PASS:',len(manifest))
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: MangoBox-AI-API-Markdown-Bundle
+          path: |
+            dist/ai-api-context/*.md
+            dist/ai-api-context/MANIFEST.json
+            dist/MangoBox_AI_API_Context_zh-TW.zip
+          retention-days: 90
