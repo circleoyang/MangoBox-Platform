@@ -41,7 +41,7 @@ jobs:
           for item in manifest:
               content=(out/item['file']).read_text(encoding='utf-8')
               assert 'from mangobox import Mango' in content
-              assert '## AI development rules' in content
+              assert '## Instructions for an LLM' in content
               assert len(content)>5000, item['file']
               assert len(item['modules'])>=10, item['file']
           assert (out.parent/'MangoBox_AI_API_Context_zh-TW.zip').stat().st_size>15000
