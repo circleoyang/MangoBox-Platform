@@ -124,3 +124,8 @@ LED 數量設定是否正確
 ### 已驗證的自訂燈效：Quantum Ripple（動態讀取 DM 設定）
 
 [查看完整程式與操作說明](scheduler.md#2-已實機驗證範例quantum-ripple-雙星量子漣漪)。程式會透過 `m.config.get("led_strips", {}).get(STRIP)` 取得 DM 儲存的 `leds`、`pin` 與 `enabled`，再交給 `m.scheduler.add_task()` 週期執行；**請勿再把 `LED_COUNT` 寫死**。本範例已於 MangoBox High-Level MicroPython 實機驗證。
+
+
+## 裝置設定讀取（Runtime Config）
+
+如果您希望程式適用於 DM 中不同的腳位、名稱或數量設定，可參考 [讀取 Device Manager 設定的教學](runtime-config.md)。High-Level MicroPython 已提供 `m.config.get()`；具名模組（例如 LED Strip）與獨立設定鍵（例如部分感測器 GPIO）的資料結構不同，請核對正式 Config 鍵並檢查模組是否啟用。**不要假設 Host Python 有相同 Config 介面，也不要編造新查詢方法。**
