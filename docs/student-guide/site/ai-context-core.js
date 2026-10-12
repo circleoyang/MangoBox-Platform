@@ -19,6 +19,9 @@
     "8. Pico ADC GPIO input must remain within the supported voltage range.",
     "9. For custom polling, LED animations or repeated actions in High-Level MicroPython, consult the Scheduler module before using time.sleep() loops.",
     "10. Only use m.scheduler.add_task/remove_task in High-Level MicroPython profiles documenting Scheduler; never invent a Host Python equivalent or call scheduler.clear() to stop a single task.",
+    "11. In High-Level MicroPython, read DM-defined hardware parameters through documented m.config.get() keys instead of hardcoding LED counts, names or pins.",
+    "12. Check existence, enabled flags and valid ranges before accessing named modules. Never invent m.led_count(), m.led_info() or an undocumented configuration key.",
+    "13. The Runtime Config access pattern is not automatically applicable to Host Python; never assume both execution modes expose the same configuration object.",
   ];
   function selectedModules(profile, modules, ids) {
     if (!profile || !Array.isArray(profile.capabilities)) throw Error("Missing release profile");
