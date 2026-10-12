@@ -114,3 +114,8 @@ LED 數量設定是否正確
 讓 LED 依序顯示紅色、綠色、藍色，再熄滅。
 
 完整工程資料請看 [RGB LED API Reference](../reference/led.md)。
+
+
+## 自訂燈效與 Scheduler
+
+如果您想製作**不使用內建呼吸燈、彩虹燈或流星燈函式**的原創燈效，可以自行撰寫每次更新 LED 畫面的函式，再用 `m.scheduler.add_task(callback, period=100)` 註冊到 MangoBox 的協作式排程器。請閱讀 [Scheduler 自訂輪詢與燈效完整教學](scheduler.md)，其中包含可直接執行的雙向光波範例、註冊／移除任務及避免阻塞的注意事項。
