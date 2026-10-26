@@ -117,8 +117,8 @@
           "reference": "candidate/shared/{lang}/reference/scheduler.md"
         },
         "servo": {
-          "guide": "{lang}/guides/servo.md",
-          "reference": "{lang}/reference/servo.md"
+          "guide": "candidate/x2/{lang}/guides/servo.md",
+          "reference": "candidate/x2/{lang}/reference/servo.md"
         },
         "sound": {
           "guide": "{lang}/guides/sound.md",
@@ -379,7 +379,8 @@
           "lifecycle"
         ],
         "servo": [
-          "lifecycle"
+          "lifecycle",
+          "runtime-config"
         ],
         "sound": [
           "led",
@@ -503,8 +504,8 @@
           "reference": "candidate/shared/{lang}/reference/scheduler.md"
         },
         "servo": {
-          "guide": "{lang}/guides/servo.md",
-          "reference": "{lang}/reference/servo.md"
+          "guide": "candidate/x2/{lang}/guides/servo.md",
+          "reference": "candidate/x2/{lang}/reference/servo.md"
         },
         "sound": {
           "guide": "{lang}/guides/sound.md",
@@ -779,7 +780,8 @@
           "lifecycle"
         ],
         "servo": [
-          "lifecycle"
+          "lifecycle",
+          "runtime-config"
         ],
         "sound": [
           "led",
@@ -906,8 +908,8 @@
           "reference": "candidate/shared/{lang}/reference/scheduler.md"
         },
         "servo": {
-          "guide": "{lang}/guides/servo.md",
-          "reference": "{lang}/reference/servo.md"
+          "guide": "candidate/x2/{lang}/guides/servo.md",
+          "reference": "candidate/x2/{lang}/reference/servo.md"
         },
         "sound": {
           "guide": "{lang}/guides/sound.md",
@@ -1182,7 +1184,8 @@
           "lifecycle"
         ],
         "servo": [
-          "lifecycle"
+          "lifecycle",
+          "runtime-config"
         ],
         "sound": [
           "led",

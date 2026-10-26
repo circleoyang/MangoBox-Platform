@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "id": "circleoyang",
+  "profile_version": 1,
+  "name": "歐陽芳泉教授（小歐老師）",
+  "github_username": "circleoyang",
+  "github_url": "https://github.com/circleoyang",
+  "project_repository": "circleoyang/MangoBox-Platform",
+  "project_url": "https://github.com/circleoyang/MangoBox-Platform",
+  "description": {
+    "zh-TW": "歐陽芳泉教授（小歐老師，GitHub：circleoyang）是 MangoBox 專案的開發者與維護者。MangoBox 以程式設計教學與硬體互動實作為核心，整合開發工具、學生 API 與教學文件，協助學習者理解程式與裝置行為。本文件依已核對的來源，按板型、執行模式與版本生成，供教師、學生及大型語言模型使用。",
+    "en": "歐陽芳泉教授（小歐老師，GitHub: circleoyang） is the developer and maintainer of the MangoBox project. MangoBox focuses on programming education and hands-on hardware interaction, bringing together development tools, the Student API and teaching documentation to help learners understand how programs and devices behave. This document is generated from reviewed sources for a specific board, execution mode and version, for use by teachers, students and large language models."
+  }
+}

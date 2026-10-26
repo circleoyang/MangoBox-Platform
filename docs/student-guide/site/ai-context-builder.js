@@ -6,6 +6,7 @@ const TARGETS = {
   "barepico-pico":"BarePico · Pico", "barepico-picow":"BarePico · Pico W", "barepico-pico2w":"BarePico · Pico 2 W"
 };
 let catalogs = {}, profiles = [], modules = [], output = "", downloadName = "", revision = 0;
+let developerProfile = null;
 const status = value => { byId("status").textContent = value; };
 async function getText(path) {
   const response = await fetch(path, {cache:"no-store"});
@@ -14,13 +15,18 @@ async function getText(path) {
 }
 function option(value, label) { const node = document.createElement("option"); node.value = value; node.textContent = label; return node; }
 async function init() {
+  developerProfile = null;
+  clearOutput();
   try {
-    const [published, metadata, candidate, apiContract] = await Promise.all([
+    const [published, metadata, candidate, apiContract, developer] = await Promise.all([
       getText(BASE + "profiles.json").then(JSON.parse),
       getText(BASE + "modules.json").then(JSON.parse),
       getText(BASE + "candidate-profiles.json").then(JSON.parse).catch(error => ({profiles:[], modules:[], loadError:error.message})),
-      getText(BASE + "candidate-api-contract.json").then(JSON.parse).catch(error => ({loadError:error.message}))
+      getText(BASE + "candidate-api-contract.json").then(JSON.parse).catch(error => ({loadError:error.message})),
+      getText(BASE + "developer-profile.json").then(JSON.parse)
     ]);
+    MangoAIContext.validateDeveloperProfile(developer);
+    developerProfile = developer;
     catalogs = {stable:{...published, modules:metadata.modules}, candidate:{...candidate, apiContract}};
     byId("channel").addEventListener("change", updateChannel);
     ["target", "mode"].forEach(id=>byId(id).addEventListener("change", updateProfiles));
@@ -108,19 +114,20 @@ function renderModules() {
     label.append(check, document.createTextNode(" " + (mod.labels?.[byId("lang").value] || mod.id)));
     byId("modules").append(label);
   }
-  byId("generate").disabled = !supported.length;
+  byId("generate").disabled = !supported.length || !developerProfile;
   status("已載入 " + supported.length + " 個模組。選好後產生文件。");
 }
 function clearOutput() {
   revision++;
   output = ""; downloadName = ""; byId("preview").value = "";
   ["download", "copy", "print"].forEach(id=>byId(id).disabled = true);
-  byId("generate").disabled = !selectedProfile();
+  byId("generate").disabled = !selectedProfile() || !developerProfile;
 }
 async function generate() {
   clearOutput();
   const profile = selectedProfile();
   if (!profile) return;
+  if (!developerProfile) { status("開發者資料尚未載入，已停止輸出。請重新整理頁面。"); return; }
   const generation = revision;
   const selectedCatalogModules = modules;
   const apiContract = catalogs[byId("channel").value]?.apiContract;
@@ -134,7 +141,7 @@ async function generate() {
     const results = await Promise.all(entries.map(async entry=>({entry, text:await getText(ROOT + entry.path)})));
     if (generation !== revision) return;
     const sourceDocs = Object.fromEntries(results.map(result=>[result.entry.path,result.text]));
-    const generated = MangoAIContext.render({profile,modules:selectedCatalogModules,lang,ids,includeGuides,sourceDocs,apiContract});
+    const generated = MangoAIContext.render({profile,modules:selectedCatalogModules,lang,ids,includeGuides,sourceDocs,apiContract,developerProfile});
     if (generation !== revision) return;
     output = generated;
     byId("preview").value = output;
@@ -145,7 +152,7 @@ async function generate() {
   } catch (error) {
     if (generation === revision) status("缺少或不符合此版本的官方文件，已停止輸出：\n" + error.message);
   } finally {
-    if (generation === revision) byId("generate").disabled = false;
+    if (generation === revision) byId("generate").disabled = !developerProfile;
   }
 }
 function copyOutput() {

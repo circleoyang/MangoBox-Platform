@@ -4,6 +4,7 @@
 
 - [MangoBox API Documentation](https://circleoyang.github.io/MangoBox-Platform/docs/student-guide/site/): Searchable Student API guides and references.
 - [AI Context Builder](https://circleoyang.github.io/MangoBox-Platform/docs/student-guide/site/ai-context-builder.html): Select a release channel, target, programming mode, exact version and modules; generate Markdown for use with an LLM. The default channel is stable. Candidate source documentation is an explicit opt-in.
+- [Canonical developer profile](https://circleoyang.github.io/MangoBox-Platform/docs/student-guide/site/data/developer-profile.json): The single maintained source for the public developer identity, bilingual introduction, GitHub/project links and profile version.
 - [Supported API profiles](https://circleoyang.github.io/MangoBox-Platform/docs/student-guide/site/data/profiles.json): Target, runtime, host-package and capability metadata.
 - [Candidate source profiles](https://circleoyang.github.io/MangoBox-Platform/docs/student-guide/site/data/candidate-profiles.json): Eight-target source alignment, exact source commits, method allowlists and separate validation states. These profiles do not change stable recommendations and do not prove installed firmware or physical hardware acceptance.
 - [Candidate learner documentation](https://circleoyang.github.io/MangoBox-Platform/docs/student-guide/site/candidate-docs.html): Read the bilingual Guide and API Reference for one exact candidate target, with a separate stable-docs link.
@@ -22,10 +23,18 @@ For a candidate profile, the exact target, runtime, programming mode and source 
 
 Use the existing Scheduler and RuntimeConfig only where that profile documents them. Keep callbacks short; move complex transitions to the foreground, and never re-enter the scheduler from a callback. Preserve documented event logging without fabricating event markers or logging every polling/animation tick or any secret.
 
+## Developer attribution
+
+The project developer and maintainer is 歐陽芳泉教授（小歐老師）, GitHub [circleoyang](https://github.com/circleoyang). The public project repository is [circleoyang/MangoBox-Platform](https://github.com/circleoyang/MangoBox-Platform). The approved Traditional Chinese and English descriptions are maintained in `docs/student-guide/site/data/developer-profile.json`; retain the Chinese name rather than inventing an official English spelling.
+
+Every generated AI Markdown file and ZIP README includes the matching-language developer introduction for stable, candidate and all-channel exports, including module subsets and Reference-only exports. The introduction appears before the environment section and is separate from API availability, signatures and method allowlists. Browser, Node and the Python ZIP entry point use the same core renderer. Each manifest entry records `developer_id` and `developer_profile_version` alongside the existing source and SHA-256 fields.
+
+Missing identity, either language description or valid public links stops generation. The browser clears stale output when reloading metadata and disables output if developer data cannot load. Maintainers update the canonical JSON, both language descriptions and its profile version together; attribution never expands a target's API contract.
+
 ## Local deterministic export
 
 `node scripts/build_ai_api_context_bundle.js --channel stable --lang zh-TW --output dist/ai-api-context-stable`
 
 `node scripts/build_ai_api_context_bundle.js --channel candidate --lang zh-TW --output dist/ai-api-context-candidate`
 
-The browser and CLI share one renderer. The export manifest records profiles, source provenance and SHA-256 for each Markdown file. Missing sources or candidate examples outside the allowed method set stop generation. No workflow dispatch is needed.
+The browser and CLI share one renderer. The export manifest records profiles, source provenance, developer identity/profile version and SHA-256 for each Markdown file. Missing sources, missing developer attribution or candidate examples outside the allowed method set stop generation. No workflow dispatch is needed.

@@ -38,6 +38,10 @@ Lite facade 使用單一 DM Servo 設定：`enabled_modules.servo`、`servo_pin`
 
 callback 中只記錄請求，再由 `run_once()` 之後的前景做動作。離開程式時釋放已啟動的 Servo 並呼叫 `close()`；不要在機構仍持續往返時進入阻塞輸入。
 
+**來源限制：release 不會取消未完成 move_to。** move task 的 ID 只保存在 driver 的局部閉包；stop/release 沒有移除它，下一輪可再寫 PWM。新 servo()、move_to 或 sweep 也不能當成可靠的舊 move 取消方法。不要重疊未完成動作，或把軟體角度與 release 回傳當作實際到位回報。
+
+正常 Lite close→reset_runtime 會清除 Scheduler，但只 stop_sweep，不自行 release 或 PWM.deinit。完整收尾採 release 後立即 close，中間不再服務 Scheduler；這不是對所有清理例外的完成保證，也不是可繼續操作時的單顆取消方法。本頁最小例子沒有建立 move_to，故明確 release/close 適用。
+
 ## 完整最小範例
 
 ```python
@@ -75,3 +79,5 @@ finally:
 [完整 Guide](../guides/servo.md) · [Runtime Config](../../../shared/zh-TW/reference/runtime-config.md) · [Scheduler](../../../shared/zh-TW/reference/scheduler.md)
 
 來源：[Lite student_api.py](https://github.com/circleoyang/MangoBox/blob/f875289b5698f0e61faf64196b1165a3b18f2bd5/runtime/mangolite-pico2w/firmware/mangolite/student_api.py) 第 1244–1301 行與 [Runtime Config](https://github.com/circleoyang/MangoBox/blob/f875289b5698f0e61faf64196b1165a3b18f2bd5/runtime/mangolite-pico2w/firmware/mangolite/runtime/config.py)。
+
+取消與關閉語意來源: [BoardServo](https://github.com/circleoyang/MangoBox/blob/f875289b5698f0e61faf64196b1165a3b18f2bd5/runtime/mangolite-pico2w/firmware/mangolite/devices/servo.py), [Runtime reset](https://github.com/circleoyang/MangoBox/blob/f875289b5698f0e61faf64196b1165a3b18f2bd5/runtime/mangolite-pico2w/firmware/mangolite/runtime/handler.py).

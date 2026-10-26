@@ -38,6 +38,10 @@ Immediate positioning needs no persistent event loop. Runtime Scheduler advances
 
 Record pending requests in callbacks and perform actions in the foreground after `run_once()` returns. Release an activated servo and call `close()` when finishing. Stop continuous sweeping before entering blocking input.
 
+**Source limitation: release does not cancel an unfinished move_to.** The move task ID is retained only in a driver closure. Stop/release leaves it active, allowing a later tick to write PWM again. A new servo(), move_to or sweep is not a reliable cancellation method for that old move. Do not overlap pending actions or treat the stored angle and a release return as physical arrival feedback.
+
+The normal Lite close→reset_runtime path clears Scheduler but only stops sweep; it does not release or deinitialize PWM. End the session with release immediately followed by close and no Scheduler service in between. This is not a guarantee against every cleanup exception or a per-servo cancellation method for continued use. The minimal example creates no move_to and explicitly releases/closes.
+
 ## Complete minimal example
 
 ```python
@@ -75,3 +79,5 @@ Check profile/runtime, DM enablement/GPIO/angle/PWM, immediate positioning and S
 [Complete Guide](../guides/servo.md) · [Runtime Config](../../../shared/en/reference/runtime-config.md) · [Scheduler](../../../shared/en/reference/scheduler.md)
 
 Source: [Lite student_api.py](https://github.com/circleoyang/MangoBox/blob/f875289b5698f0e61faf64196b1165a3b18f2bd5/runtime/mangolite-pico2w/firmware/mangolite/student_api.py), lines 1244–1301, and [Runtime Config](https://github.com/circleoyang/MangoBox/blob/f875289b5698f0e61faf64196b1165a3b18f2bd5/runtime/mangolite-pico2w/firmware/mangolite/runtime/config.py).
+
+Cancellation and close sources: [BoardServo](https://github.com/circleoyang/MangoBox/blob/f875289b5698f0e61faf64196b1165a3b18f2bd5/runtime/mangolite-pico2w/firmware/mangolite/devices/servo.py), [Runtime reset](https://github.com/circleoyang/MangoBox/blob/f875289b5698f0e61faf64196b1165a3b18f2bd5/runtime/mangolite-pico2w/firmware/mangolite/runtime/handler.py).

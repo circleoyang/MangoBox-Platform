@@ -411,7 +411,7 @@
       "requires": [
         "Compatible enabled RuntimeConfig and actual connected peripheral"
       ],
-      "notes": "",
+      "notes": "Current expiry ownership limitation: a new duration=0 LED operation does not cancel an earlier timed restore/stop task. That earlier expiry can overwrite the newer frame/brightness or stop the newer effect.",
       "available_in_default_build": true,
       "build_variants": [],
       "source_path": "runtime/mangox2-pico/firmware/mangox2/student_api.py",
@@ -458,7 +458,7 @@
       "requires": [
         "Compatible enabled RuntimeConfig and actual connected peripheral"
       ],
-      "notes": "",
+      "notes": "Current expiry ownership limitation: a new duration=0 LED operation does not cancel an earlier timed restore/stop task. That earlier expiry can overwrite the newer frame/brightness or stop the newer effect.",
       "available_in_default_build": true,
       "build_variants": [],
       "source_path": "runtime/mangox2-pico/firmware/mangox2/student_api.py",
@@ -722,7 +722,7 @@
       "parameters": [],
       "returns": "None",
       "requires": [],
-      "notes": "",
+      "notes": "Servo cleanup on the normal reset_runtime path: clears Scheduler tasks, including unfinished move_to tasks, and stops servo sweeps. It does not set servo PWM duty to 0 or deinitialize PWM, so close() is not a promise that servo holding output is released.",
       "available_in_default_build": true,
       "build_variants": [],
       "source_path": "runtime/mangox2-pico/firmware/mangox2/student_api_services.py",
@@ -1338,7 +1338,7 @@
       "requires": [
         "Compatible enabled RuntimeConfig and actual connected peripheral"
       ],
-      "notes": "",
+      "notes": "Current expiry ownership limitation: a new duration=0 LED operation does not cancel an earlier timed restore/stop task. That earlier expiry can overwrite the newer frame/brightness or stop the newer effect.",
       "available_in_default_build": true,
       "build_variants": [],
       "source_path": "runtime/mangox2-pico/firmware/mangox2/student_api.py",
@@ -1385,7 +1385,7 @@
       "requires": [
         "Compatible enabled RuntimeConfig and actual connected peripheral"
       ],
-      "notes": "",
+      "notes": "Current expiry ownership limitation: a new duration=0 LED operation does not cancel an earlier timed restore/stop task. That earlier expiry can overwrite the newer frame/brightness or stop the newer effect.",
       "available_in_default_build": true,
       "build_variants": [],
       "source_path": "runtime/mangox2-pico/firmware/mangox2/student_api.py",
@@ -1403,8 +1403,8 @@
         "mangox2-pico2w"
       ],
       "role": "advanced",
-      "zh": "停止燈效；與 `led_off()` 的「停止並清黑」語意不同。",
-      "en": "Stop the current RGB animation without the stronger clear-to-black semantics of led_off()",
+      "zh": "停止指定燈條已追蹤的燈效並清黑畫面；與 led_off() 使用相同清除路徑。",
+      "en": "Stop the selected RGB strip's tracked effects and clear its frame to black.",
       "parameters": [
         {
           "name": "strip",
@@ -1512,7 +1512,7 @@
       "requires": [
         "Compatible enabled RuntimeConfig and actual connected peripheral"
       ],
-      "notes": "",
+      "notes": "Current expiry ownership limitation: a new duration=0 LED operation does not cancel an earlier timed restore/stop task. That earlier expiry can overwrite the newer frame/brightness or stop the newer effect.",
       "available_in_default_build": true,
       "build_variants": [],
       "source_path": "runtime/mangox2-pico/firmware/mangox2/student_api.py",
@@ -1559,7 +1559,7 @@
       "requires": [
         "Compatible enabled RuntimeConfig and actual connected peripheral"
       ],
-      "notes": "",
+      "notes": "Current expiry ownership limitation: a new duration=0 LED operation does not cancel an earlier timed restore/stop task. That earlier expiry can overwrite the newer frame/brightness or stop the newer effect.",
       "available_in_default_build": true,
       "build_variants": [],
       "source_path": "runtime/mangox2-pico/firmware/mangox2/student_api.py",
@@ -1606,7 +1606,7 @@
       "requires": [
         "Compatible enabled RuntimeConfig and actual connected peripheral"
       ],
-      "notes": "",
+      "notes": "Current expiry ownership limitation: a new duration=0 LED operation does not cancel an earlier timed restore/stop task. That earlier expiry can overwrite the newer frame/brightness or stop the newer effect.",
       "available_in_default_build": true,
       "build_variants": [],
       "source_path": "runtime/mangox2-pico/firmware/mangox2/student_api.py",
@@ -1660,7 +1660,7 @@
       "requires": [
         "Compatible enabled RuntimeConfig and actual connected peripheral"
       ],
-      "notes": "",
+      "notes": "Current expiry ownership limitation: a new duration=0 LED operation does not cancel an earlier timed restore/stop task. That earlier expiry can overwrite the newer frame/brightness or stop the newer effect.",
       "available_in_default_build": true,
       "build_variants": [],
       "source_path": "runtime/mangox2-pico/firmware/mangox2/student_api.py",
@@ -1721,7 +1721,7 @@
       "requires": [
         "Compatible enabled RuntimeConfig and actual connected peripheral"
       ],
-      "notes": "",
+      "notes": "Current expiry ownership limitation: a new duration=0 LED operation does not cancel an earlier timed restore/stop task. That earlier expiry can overwrite the newer frame/brightness or stop the newer effect.",
       "available_in_default_build": true,
       "build_variants": [],
       "source_path": "runtime/mangox2-pico/firmware/mangox2/student_api.py",
@@ -1775,7 +1775,7 @@
       "requires": [
         "Compatible enabled RuntimeConfig and actual connected peripheral"
       ],
-      "notes": "",
+      "notes": "Current expiry ownership limitation: a new duration=0 LED operation does not cancel an earlier timed restore/stop task. That earlier expiry can overwrite the newer frame/brightness or stop the newer effect.",
       "available_in_default_build": true,
       "build_variants": [],
       "source_path": "runtime/mangox2-pico/firmware/mangox2/student_api.py",
@@ -1829,7 +1829,7 @@
       "requires": [
         "Compatible enabled RuntimeConfig and actual connected peripheral"
       ],
-      "notes": "",
+      "notes": "Current expiry ownership limitation: a new duration=0 LED operation does not cancel an earlier timed restore/stop task. That earlier expiry can overwrite the newer frame/brightness or stop the newer effect.",
       "available_in_default_build": true,
       "build_variants": [],
       "source_path": "runtime/mangox2-pico/firmware/mangox2/student_api.py",
@@ -1883,7 +1883,7 @@
       "requires": [
         "Compatible enabled RuntimeConfig and actual connected peripheral"
       ],
-      "notes": "",
+      "notes": "Current expiry ownership limitation: a new duration=0 LED operation does not cancel an earlier timed restore/stop task. That earlier expiry can overwrite the newer frame/brightness or stop the newer effect.",
       "available_in_default_build": true,
       "build_variants": [],
       "source_path": "runtime/mangox2-pico/firmware/mangox2/student_api.py",
@@ -1944,7 +1944,7 @@
       "requires": [
         "Compatible enabled RuntimeConfig and actual connected peripheral"
       ],
-      "notes": "",
+      "notes": "Current expiry ownership limitation: a new duration=0 LED operation does not cancel an earlier timed restore/stop task. That earlier expiry can overwrite the newer frame/brightness or stop the newer effect.",
       "available_in_default_build": true,
       "build_variants": [],
       "source_path": "runtime/mangox2-pico/firmware/mangox2/student_api.py",
@@ -1991,7 +1991,7 @@
       "requires": [
         "Compatible enabled RuntimeConfig and actual connected peripheral"
       ],
-      "notes": "",
+      "notes": "Current expiry ownership limitation: a new duration=0 LED operation does not cancel an earlier timed restore/stop task. That earlier expiry can overwrite the newer frame/brightness or stop the newer effect.",
       "available_in_default_build": true,
       "build_variants": [],
       "source_path": "runtime/mangox2-pico/firmware/mangox2/student_api.py",
@@ -2045,7 +2045,7 @@
       "requires": [
         "Compatible enabled RuntimeConfig and actual connected peripheral"
       ],
-      "notes": "",
+      "notes": "Current expiry ownership limitation: a new duration=0 LED operation does not cancel an earlier timed restore/stop task. That earlier expiry can overwrite the newer frame/brightness or stop the newer effect.",
       "available_in_default_build": true,
       "build_variants": [],
       "source_path": "runtime/mangox2-pico/firmware/mangox2/student_api.py",
@@ -4695,7 +4695,7 @@
       "requires": [
         "Compatible enabled RuntimeConfig and actual connected peripheral"
       ],
-      "notes": "",
+      "notes": "Current expiry ownership limitation: a new duration=0 LED operation does not cancel an earlier timed restore/stop task. That earlier expiry can overwrite the newer frame/brightness or stop the newer effect.",
       "available_in_default_build": true,
       "build_variants": [],
       "source_path": "runtime/mangox2-pico/firmware/mangox2/student_api.py",
@@ -5061,7 +5061,7 @@
       "requires": [
         "Compatible enabled RuntimeConfig and actual connected peripheral"
       ],
-      "notes": "",
+      "notes": "The first move is immediate when no previous angle is known. Later gradual moves create a Scheduler task whose ID is not retained by the driver. Repeated move_to calls can leave competing tasks; servo_stop(), servo_release() and a later direct angle command do not cancel an unfinished move_to.",
       "available_in_default_build": true,
       "build_variants": [],
       "source_path": "runtime/mangox2-pico/firmware/mangox2/student_api_servo_multi.py",
@@ -5094,7 +5094,7 @@
       "requires": [
         "Compatible enabled RuntimeConfig and actual connected peripheral"
       ],
-      "notes": "",
+      "notes": "Stops the tracked sweep and sets PWM duty to 0; it does not deinitialize PWM or cancel an unfinished servo_move_to(). That move can write PWM again on the next due Scheduler tick.",
       "available_in_default_build": true,
       "build_variants": [],
       "source_path": "runtime/mangox2-pico/firmware/mangox2/student_api_servo_multi.py",
@@ -5167,7 +5167,7 @@
       "requires": [
         "Compatible enabled RuntimeConfig and actual connected peripheral"
       ],
-      "notes": "",
+      "notes": "Stops only the tracked sweep task and retains the current PWM output. It does not cancel an unfinished servo_move_to() task, which can continue writing PWM on later Scheduler ticks.",
       "available_in_default_build": true,
       "build_variants": [],
       "source_path": "runtime/mangox2-pico/firmware/mangox2/student_api_servo_multi.py",
@@ -5473,7 +5473,7 @@
       "requires": [
         "Compatible enabled RuntimeConfig and actual connected peripheral"
       ],
-      "notes": "",
+      "notes": "Restarting start_bee(), even with duration=0, does not cancel an earlier scheduled stop_bee expiry; that stale expiry can stop the new beeper. The carrier handler does not retain the stop-task ID.",
       "available_in_default_build": true,
       "build_variants": [],
       "source_path": "runtime/mangox2-pico/firmware/mangox2/student_api.py",
@@ -7126,7 +7126,7 @@
       "requires": [
         "Compatible enabled RuntimeConfig and actual connected peripheral"
       ],
-      "notes": "",
+      "notes": "Current expiry ownership limitation: a new duration=0 LED operation does not cancel an earlier timed restore/stop task. That earlier expiry can overwrite the newer frame/brightness or stop the newer effect.",
       "available_in_default_build": true,
       "build_variants": [],
       "source_path": "runtime/mangolite-pico2w/firmware/mangolite/student_api.py",
@@ -7172,7 +7172,7 @@
       "requires": [
         "Compatible enabled RuntimeConfig and actual connected peripheral"
       ],
-      "notes": "",
+      "notes": "Current expiry ownership limitation: a new duration=0 LED operation does not cancel an earlier timed restore/stop task. That earlier expiry can overwrite the newer frame/brightness or stop the newer effect.",
       "available_in_default_build": true,
       "build_variants": [],
       "source_path": "runtime/mangolite-pico2w/firmware/mangolite/student_api.py",
@@ -7428,7 +7428,7 @@
       "parameters": [],
       "returns": "None",
       "requires": [],
-      "notes": "",
+      "notes": "Servo cleanup on the normal reset_runtime path: clears Scheduler tasks, including unfinished move_to tasks, and stops servo sweeps. It does not set servo PWM duty to 0 or deinitialize PWM, so close() is not a promise that servo holding output is released.",
       "available_in_default_build": true,
       "build_variants": [],
       "source_path": "runtime/mangolite-pico2w/firmware/mangolite/student_api_ble_control.py",
@@ -8075,7 +8075,7 @@
       "requires": [
         "Compatible enabled RuntimeConfig and actual connected peripheral"
       ],
-      "notes": "",
+      "notes": "Current expiry ownership limitation: a new duration=0 LED operation does not cancel an earlier timed restore/stop task. That earlier expiry can overwrite the newer frame/brightness or stop the newer effect.",
       "available_in_default_build": true,
       "build_variants": [],
       "source_path": "runtime/mangolite-pico2w/firmware/mangolite/student_api.py",
@@ -8121,7 +8121,7 @@
       "requires": [
         "Compatible enabled RuntimeConfig and actual connected peripheral"
       ],
-      "notes": "",
+      "notes": "Current expiry ownership limitation: a new duration=0 LED operation does not cancel an earlier timed restore/stop task. That earlier expiry can overwrite the newer frame/brightness or stop the newer effect.",
       "available_in_default_build": true,
       "build_variants": [],
       "source_path": "runtime/mangolite-pico2w/firmware/mangolite/student_api.py",
@@ -8138,8 +8138,8 @@
         "mangolite-pico2w"
       ],
       "role": "advanced",
-      "zh": "停止燈效；與 `led_off()` 的「停止並清黑」語意不同。",
-      "en": "Stop the current RGB animation without the stronger clear-to-black semantics of led_off()",
+      "zh": "停止指定燈條已追蹤的燈效並清黑畫面；與 led_off() 使用相同清除路徑。",
+      "en": "Stop the selected RGB strip's tracked effects and clear the student frame to black; a system overlay may remain visible.",
       "parameters": [
         {
           "name": "strip",
@@ -8245,7 +8245,7 @@
       "requires": [
         "Compatible enabled RuntimeConfig and actual connected peripheral"
       ],
-      "notes": "",
+      "notes": "Current expiry ownership limitation: a new duration=0 LED operation does not cancel an earlier timed restore/stop task. That earlier expiry can overwrite the newer frame/brightness or stop the newer effect.",
       "available_in_default_build": true,
       "build_variants": [],
       "source_path": "runtime/mangolite-pico2w/firmware/mangolite/student_api.py",
@@ -8291,7 +8291,7 @@
       "requires": [
         "Compatible enabled RuntimeConfig and actual connected peripheral"
       ],
-      "notes": "",
+      "notes": "Current expiry ownership limitation: a new duration=0 LED operation does not cancel an earlier timed restore/stop task. That earlier expiry can overwrite the newer frame/brightness or stop the newer effect.",
       "available_in_default_build": true,
       "build_variants": [],
       "source_path": "runtime/mangolite-pico2w/firmware/mangolite/student_api.py",
@@ -8337,7 +8337,7 @@
       "requires": [
         "Compatible enabled RuntimeConfig and actual connected peripheral"
       ],
-      "notes": "",
+      "notes": "Current expiry ownership limitation: a new duration=0 LED operation does not cancel an earlier timed restore/stop task. That earlier expiry can overwrite the newer frame/brightness or stop the newer effect.",
       "available_in_default_build": true,
       "build_variants": [],
       "source_path": "runtime/mangolite-pico2w/firmware/mangolite/student_api.py",
@@ -8390,7 +8390,7 @@
       "requires": [
         "Compatible enabled RuntimeConfig and actual connected peripheral"
       ],
-      "notes": "",
+      "notes": "Current expiry ownership limitation: a new duration=0 LED operation does not cancel an earlier timed restore/stop task. That earlier expiry can overwrite the newer frame/brightness or stop the newer effect.",
       "available_in_default_build": true,
       "build_variants": [],
       "source_path": "runtime/mangolite-pico2w/firmware/mangolite/student_api.py",
@@ -8450,7 +8450,7 @@
       "requires": [
         "Compatible enabled RuntimeConfig and actual connected peripheral"
       ],
-      "notes": "",
+      "notes": "Current expiry ownership limitation: a new duration=0 LED operation does not cancel an earlier timed restore/stop task. That earlier expiry can overwrite the newer frame/brightness or stop the newer effect.",
       "available_in_default_build": true,
       "build_variants": [],
       "source_path": "runtime/mangolite-pico2w/firmware/mangolite/student_api.py",
@@ -8503,7 +8503,7 @@
       "requires": [
         "Compatible enabled RuntimeConfig and actual connected peripheral"
       ],
-      "notes": "",
+      "notes": "Current expiry ownership limitation: a new duration=0 LED operation does not cancel an earlier timed restore/stop task. That earlier expiry can overwrite the newer frame/brightness or stop the newer effect.",
       "available_in_default_build": true,
       "build_variants": [],
       "source_path": "runtime/mangolite-pico2w/firmware/mangolite/student_api.py",
@@ -8556,7 +8556,7 @@
       "requires": [
         "Compatible enabled RuntimeConfig and actual connected peripheral"
       ],
-      "notes": "",
+      "notes": "Current expiry ownership limitation: a new duration=0 LED operation does not cancel an earlier timed restore/stop task. That earlier expiry can overwrite the newer frame/brightness or stop the newer effect.",
       "available_in_default_build": true,
       "build_variants": [],
       "source_path": "runtime/mangolite-pico2w/firmware/mangolite/student_api.py",
@@ -8609,7 +8609,7 @@
       "requires": [
         "Compatible enabled RuntimeConfig and actual connected peripheral"
       ],
-      "notes": "",
+      "notes": "Current expiry ownership limitation: a new duration=0 LED operation does not cancel an earlier timed restore/stop task. That earlier expiry can overwrite the newer frame/brightness or stop the newer effect.",
       "available_in_default_build": true,
       "build_variants": [],
       "source_path": "runtime/mangolite-pico2w/firmware/mangolite/student_api.py",
@@ -8669,7 +8669,7 @@
       "requires": [
         "Compatible enabled RuntimeConfig and actual connected peripheral"
       ],
-      "notes": "",
+      "notes": "Current expiry ownership limitation: a new duration=0 LED operation does not cancel an earlier timed restore/stop task. That earlier expiry can overwrite the newer frame/brightness or stop the newer effect.",
       "available_in_default_build": true,
       "build_variants": [],
       "source_path": "runtime/mangolite-pico2w/firmware/mangolite/student_api.py",
@@ -8715,7 +8715,7 @@
       "requires": [
         "Compatible enabled RuntimeConfig and actual connected peripheral"
       ],
-      "notes": "",
+      "notes": "Current expiry ownership limitation: a new duration=0 LED operation does not cancel an earlier timed restore/stop task. That earlier expiry can overwrite the newer frame/brightness or stop the newer effect.",
       "available_in_default_build": true,
       "build_variants": [],
       "source_path": "runtime/mangolite-pico2w/firmware/mangolite/student_api.py",
@@ -8768,7 +8768,7 @@
       "requires": [
         "Compatible enabled RuntimeConfig and actual connected peripheral"
       ],
-      "notes": "",
+      "notes": "Current expiry ownership limitation: a new duration=0 LED operation does not cancel an earlier timed restore/stop task. That earlier expiry can overwrite the newer frame/brightness or stop the newer effect.",
       "available_in_default_build": true,
       "build_variants": [],
       "source_path": "runtime/mangolite-pico2w/firmware/mangolite/student_api.py",
@@ -11511,7 +11511,7 @@
       "requires": [
         "Compatible enabled RuntimeConfig and actual connected peripheral"
       ],
-      "notes": "",
+      "notes": "Current expiry ownership limitation: a new duration=0 LED operation does not cancel an earlier timed restore/stop task. That earlier expiry can overwrite the newer frame/brightness or stop the newer effect.",
       "available_in_default_build": true,
       "build_variants": [],
       "source_path": "runtime/mangolite-pico2w/firmware/mangolite/student_api.py",
@@ -11845,7 +11845,7 @@
       "requires": [
         "Compatible enabled RuntimeConfig and actual connected peripheral"
       ],
-      "notes": "",
+      "notes": "The first move is immediate when no previous angle is known. Later gradual moves create a Scheduler task whose ID is not retained by the driver. Repeated move_to calls can leave competing tasks; servo_stop(), servo_release() and a later direct angle command do not cancel an unfinished move_to.",
       "available_in_default_build": true,
       "build_variants": [],
       "source_path": "runtime/mangolite-pico2w/firmware/mangolite/student_api.py",
@@ -11869,7 +11869,7 @@
       "requires": [
         "Compatible enabled RuntimeConfig and actual connected peripheral"
       ],
-      "notes": "",
+      "notes": "Stops the tracked sweep and sets PWM duty to 0; it does not deinitialize PWM or cancel an unfinished servo_move_to(). That move can write PWM again on the next due Scheduler tick.",
       "available_in_default_build": true,
       "build_variants": [],
       "source_path": "runtime/mangolite-pico2w/firmware/mangolite/student_api.py",
@@ -11925,7 +11925,7 @@
       "requires": [
         "Compatible enabled RuntimeConfig and actual connected peripheral"
       ],
-      "notes": "",
+      "notes": "Stops only the tracked sweep task and retains the current PWM output. It does not cancel an unfinished servo_move_to() task, which can continue writing PWM on later Scheduler ticks.",
       "available_in_default_build": true,
       "build_variants": [],
       "source_path": "runtime/mangolite-pico2w/firmware/mangolite/student_api.py",
@@ -12216,7 +12216,7 @@
       "requires": [
         "Compatible enabled RuntimeConfig and actual connected peripheral"
       ],
-      "notes": "",
+      "notes": "Restarting start_bee(), even with duration=0, does not cancel an earlier scheduled stop_bee expiry; that stale expiry can stop the new beeper. The carrier handler does not retain the stop-task ID.",
       "available_in_default_build": true,
       "build_variants": [],
       "source_path": "runtime/mangolite-pico2w/firmware/mangolite/student_api.py",
@@ -13947,7 +13947,7 @@
       "requires": [
         "Compatible enabled RuntimeConfig and actual connected peripheral"
       ],
-      "notes": "period is the animation update interval, not a complete effect cycle. duration=0 continues; expiry stops the animation task and can leave the last frame visible. Use led_off() for an explicit dark frame.",
+      "notes": "period is the animation update interval, not a complete effect cycle. duration=0 continues; expiry stops the animation task and can leave the last frame visible. Use led_off() for an explicit dark frame. Current expiry ownership limitation: a new duration=0 LED operation does not cancel an earlier timed restore/stop task. That earlier expiry can overwrite the newer frame/brightness or stop the newer effect.",
       "available_in_default_build": true,
       "build_variants": [],
       "source_path": "runtime/barepico/firmware/barepico/core.py",
@@ -13994,7 +13994,7 @@
       "requires": [
         "Compatible enabled RuntimeConfig and actual connected peripheral"
       ],
-      "notes": "With duration>0 the Scheduler restores the previous pixel frame/value or brightness after expiry; duration=0 keeps the selected value. LED ranges include both endpoints. Enabled named strip and valid configured index are required.",
+      "notes": "With duration>0 the Scheduler restores the previous pixel frame/value or brightness after expiry; duration=0 keeps the selected value. LED ranges include both endpoints. Enabled named strip and valid configured index are required. Current expiry ownership limitation: a new duration=0 LED operation does not cancel an earlier timed restore/stop task. That earlier expiry can overwrite the newer frame/brightness or stop the newer effect.",
       "available_in_default_build": true,
       "build_variants": [],
       "source_path": "runtime/barepico/firmware/barepico/core.py",
@@ -14225,7 +14225,7 @@
       "parameters": [],
       "returns": "None",
       "requires": [],
-      "notes": "",
+      "notes": "Servo cleanup on a normally completed close outside an active Scheduler callback: releases each instantiated servo, deinitializes its PWM, sets the driver PWM reference to None, clears the servo map and clears Scheduler tasks. This is stronger than servo_release() alone; this statement does not cover cleanup exceptions or the BarePico Scheduler pending-task snapshot cancellation limitation.",
       "available_in_default_build": true,
       "build_variants": [],
       "source_path": "runtime/barepico/firmware/barepico/student_ble_control_vnext.py",
@@ -14724,7 +14724,7 @@
       "requires": [
         "Compatible enabled RuntimeConfig and actual connected peripheral"
       ],
-      "notes": "With duration>0 the Scheduler restores the previous pixel frame/value or brightness after expiry; duration=0 keeps the selected value. LED ranges include both endpoints. Enabled named strip and valid configured index are required.",
+      "notes": "With duration>0 the Scheduler restores the previous pixel frame/value or brightness after expiry; duration=0 keeps the selected value. LED ranges include both endpoints. Enabled named strip and valid configured index are required. Current expiry ownership limitation: a new duration=0 LED operation does not cancel an earlier timed restore/stop task. That earlier expiry can overwrite the newer frame/brightness or stop the newer effect.",
       "available_in_default_build": true,
       "build_variants": [],
       "source_path": "runtime/barepico/firmware/barepico/core.py",
@@ -14771,7 +14771,7 @@
       "requires": [
         "Compatible enabled RuntimeConfig and actual connected peripheral"
       ],
-      "notes": "With duration>0 the Scheduler restores the previous pixel frame/value or brightness after expiry; duration=0 keeps the selected value. LED ranges include both endpoints. Enabled named strip and valid configured index are required.",
+      "notes": "With duration>0 the Scheduler restores the previous pixel frame/value or brightness after expiry; duration=0 keeps the selected value. LED ranges include both endpoints. Enabled named strip and valid configured index are required. Current expiry ownership limitation: a new duration=0 LED operation does not cancel an earlier timed restore/stop task. That earlier expiry can overwrite the newer frame/brightness or stop the newer effect.",
       "available_in_default_build": true,
       "build_variants": [],
       "source_path": "runtime/barepico/firmware/barepico/core.py",
@@ -14789,8 +14789,8 @@
         "barepico-pico2w"
       ],
       "role": "advanced",
-      "zh": "停止指定燈條的所有燈效並清黑；與 led_off() 一樣會熄燈。",
-      "en": "Stop all effects on the selected RGB strip and clear it to black; like led_off, this turns the strip off.",
+      "zh": "停止指定燈條已追蹤的燈效並清黑畫面；與 led_off() 使用相同清除路徑。",
+      "en": "Stop the selected RGB strip's tracked effects and clear its frame to black.",
       "parameters": [
         {
           "name": "strip",
@@ -14804,7 +14804,7 @@
       "requires": [
         "Compatible enabled RuntimeConfig and actual connected peripheral"
       ],
-      "notes": "Stops the strip effect tasks and clears the frame to black through the canonical driver.",
+      "notes": "Stops the strip effect tasks and clears the frame to black through the canonical driver. Normal clearing makes the frame black. After the known same-cycle Scheduler cancellation defect has orphaned an effect task, that untracked task can repaint on a later tick; clearing is not a repair for that earlier task-ownership failure.",
       "available_in_default_build": true,
       "build_variants": [],
       "source_path": "runtime/barepico/firmware/barepico/core.py",
@@ -14837,7 +14837,7 @@
       "requires": [
         "Compatible enabled RuntimeConfig and actual connected peripheral"
       ],
-      "notes": "Stops the strip effect tasks and clears the frame to black through the canonical driver.",
+      "notes": "Stops the strip effect tasks and clears the frame to black through the canonical driver. Normal clearing makes the frame black. After the known same-cycle Scheduler cancellation defect has orphaned an effect task, that untracked task can repaint on a later tick; clearing is not a repair for that earlier task-ownership failure.",
       "available_in_default_build": true,
       "build_variants": [],
       "source_path": "runtime/barepico/firmware/barepico/core.py",
@@ -14898,7 +14898,7 @@
       "requires": [
         "Compatible enabled RuntimeConfig and actual connected peripheral"
       ],
-      "notes": "With duration>0 the Scheduler restores the previous pixel frame/value or brightness after expiry; duration=0 keeps the selected value. LED ranges include both endpoints. Enabled named strip and valid configured index are required.",
+      "notes": "With duration>0 the Scheduler restores the previous pixel frame/value or brightness after expiry; duration=0 keeps the selected value. LED ranges include both endpoints. Enabled named strip and valid configured index are required. Current expiry ownership limitation: a new duration=0 LED operation does not cancel an earlier timed restore/stop task. That earlier expiry can overwrite the newer frame/brightness or stop the newer effect.",
       "available_in_default_build": true,
       "build_variants": [],
       "source_path": "runtime/barepico/firmware/barepico/core.py",
@@ -14945,7 +14945,7 @@
       "requires": [
         "Compatible enabled RuntimeConfig and actual connected peripheral"
       ],
-      "notes": "With duration>0 the Scheduler restores the previous pixel frame/value or brightness after expiry; duration=0 keeps the selected value. LED ranges include both endpoints. Enabled named strip and valid configured index are required.",
+      "notes": "With duration>0 the Scheduler restores the previous pixel frame/value or brightness after expiry; duration=0 keeps the selected value. LED ranges include both endpoints. Enabled named strip and valid configured index are required. Current expiry ownership limitation: a new duration=0 LED operation does not cancel an earlier timed restore/stop task. That earlier expiry can overwrite the newer frame/brightness or stop the newer effect.",
       "available_in_default_build": true,
       "build_variants": [],
       "source_path": "runtime/barepico/firmware/barepico/core.py",
@@ -14992,7 +14992,7 @@
       "requires": [
         "Compatible enabled RuntimeConfig and actual connected peripheral"
       ],
-      "notes": "With duration>0 the Scheduler restores the previous pixel frame/value or brightness after expiry; duration=0 keeps the selected value. LED ranges include both endpoints. Enabled named strip and valid configured index are required.",
+      "notes": "With duration>0 the Scheduler restores the previous pixel frame/value or brightness after expiry; duration=0 keeps the selected value. LED ranges include both endpoints. Enabled named strip and valid configured index are required. Current expiry ownership limitation: a new duration=0 LED operation does not cancel an earlier timed restore/stop task. That earlier expiry can overwrite the newer frame/brightness or stop the newer effect.",
       "available_in_default_build": true,
       "build_variants": [],
       "source_path": "runtime/barepico/firmware/barepico/core.py",
@@ -15046,7 +15046,7 @@
       "requires": [
         "Compatible enabled RuntimeConfig and actual connected peripheral"
       ],
-      "notes": "With duration>0 the Scheduler restores the previous pixel frame/value or brightness after expiry; duration=0 keeps the selected value. LED ranges include both endpoints. Enabled named strip and valid configured index are required.",
+      "notes": "With duration>0 the Scheduler restores the previous pixel frame/value or brightness after expiry; duration=0 keeps the selected value. LED ranges include both endpoints. Enabled named strip and valid configured index are required. Current expiry ownership limitation: a new duration=0 LED operation does not cancel an earlier timed restore/stop task. That earlier expiry can overwrite the newer frame/brightness or stop the newer effect.",
       "available_in_default_build": true,
       "build_variants": [],
       "source_path": "runtime/barepico/firmware/barepico/core.py",
@@ -15107,7 +15107,7 @@
       "requires": [
         "Compatible enabled RuntimeConfig and actual connected peripheral"
       ],
-      "notes": "With duration>0 the Scheduler restores the previous pixel frame/value or brightness after expiry; duration=0 keeps the selected value. LED ranges include both endpoints. Enabled named strip and valid configured index are required.",
+      "notes": "With duration>0 the Scheduler restores the previous pixel frame/value or brightness after expiry; duration=0 keeps the selected value. LED ranges include both endpoints. Enabled named strip and valid configured index are required. Current expiry ownership limitation: a new duration=0 LED operation does not cancel an earlier timed restore/stop task. That earlier expiry can overwrite the newer frame/brightness or stop the newer effect.",
       "available_in_default_build": true,
       "build_variants": [],
       "source_path": "runtime/barepico/firmware/barepico/core.py",
@@ -15161,7 +15161,7 @@
       "requires": [
         "Compatible enabled RuntimeConfig and actual connected peripheral"
       ],
-      "notes": "period is the animation update interval, not a complete effect cycle. duration=0 continues; expiry stops the animation task and can leave the last frame visible. Use led_off() for an explicit dark frame.",
+      "notes": "period is the animation update interval, not a complete effect cycle. duration=0 continues; expiry stops the animation task and can leave the last frame visible. Use led_off() for an explicit dark frame. Current expiry ownership limitation: a new duration=0 LED operation does not cancel an earlier timed restore/stop task. That earlier expiry can overwrite the newer frame/brightness or stop the newer effect.",
       "available_in_default_build": true,
       "build_variants": [],
       "source_path": "runtime/barepico/firmware/barepico/core.py",
@@ -15215,7 +15215,7 @@
       "requires": [
         "Compatible enabled RuntimeConfig and actual connected peripheral"
       ],
-      "notes": "period is the animation update interval, not a complete effect cycle. duration=0 continues; expiry stops the animation task and can leave the last frame visible. Use led_off() for an explicit dark frame.",
+      "notes": "period is the animation update interval, not a complete effect cycle. duration=0 continues; expiry stops the animation task and can leave the last frame visible. Use led_off() for an explicit dark frame. Current expiry ownership limitation: a new duration=0 LED operation does not cancel an earlier timed restore/stop task. That earlier expiry can overwrite the newer frame/brightness or stop the newer effect.",
       "available_in_default_build": true,
       "build_variants": [],
       "source_path": "runtime/barepico/firmware/barepico/core.py",
@@ -15269,7 +15269,7 @@
       "requires": [
         "Compatible enabled RuntimeConfig and actual connected peripheral"
       ],
-      "notes": "period is the animation update interval, not a complete effect cycle. duration=0 continues; expiry stops the animation task and can leave the last frame visible. Use led_off() for an explicit dark frame.",
+      "notes": "period is the animation update interval, not a complete effect cycle. duration=0 continues; expiry stops the animation task and can leave the last frame visible. Use led_off() for an explicit dark frame. Current expiry ownership limitation: a new duration=0 LED operation does not cancel an earlier timed restore/stop task. That earlier expiry can overwrite the newer frame/brightness or stop the newer effect.",
       "available_in_default_build": true,
       "build_variants": [],
       "source_path": "runtime/barepico/firmware/barepico/core.py",
@@ -15330,7 +15330,7 @@
       "requires": [
         "Compatible enabled RuntimeConfig and actual connected peripheral"
       ],
-      "notes": "period is the animation update interval, not a complete effect cycle. duration=0 continues; expiry stops the animation task and can leave the last frame visible. Use led_off() for an explicit dark frame.",
+      "notes": "period is the animation update interval, not a complete effect cycle. duration=0 continues; expiry stops the animation task and can leave the last frame visible. Use led_off() for an explicit dark frame. Current expiry ownership limitation: a new duration=0 LED operation does not cancel an earlier timed restore/stop task. That earlier expiry can overwrite the newer frame/brightness or stop the newer effect.",
       "available_in_default_build": true,
       "build_variants": [],
       "source_path": "runtime/barepico/firmware/barepico/core.py",
@@ -15377,7 +15377,7 @@
       "requires": [
         "Compatible enabled RuntimeConfig and actual connected peripheral"
       ],
-      "notes": "period is the animation update interval, not a complete effect cycle. duration=0 continues; expiry stops the animation task and can leave the last frame visible. Use led_off() for an explicit dark frame.",
+      "notes": "period is the animation update interval, not a complete effect cycle. duration=0 continues; expiry stops the animation task and can leave the last frame visible. Use led_off() for an explicit dark frame. Current expiry ownership limitation: a new duration=0 LED operation does not cancel an earlier timed restore/stop task. That earlier expiry can overwrite the newer frame/brightness or stop the newer effect.",
       "available_in_default_build": true,
       "build_variants": [],
       "source_path": "runtime/barepico/firmware/barepico/core.py",
@@ -15431,7 +15431,7 @@
       "requires": [
         "Compatible enabled RuntimeConfig and actual connected peripheral"
       ],
-      "notes": "period is the animation update interval, not a complete effect cycle. duration=0 continues; expiry stops the animation task and can leave the last frame visible. Use led_off() for an explicit dark frame.",
+      "notes": "period is the animation update interval, not a complete effect cycle. duration=0 continues; expiry stops the animation task and can leave the last frame visible. Use led_off() for an explicit dark frame. Current expiry ownership limitation: a new duration=0 LED operation does not cancel an earlier timed restore/stop task. That earlier expiry can overwrite the newer frame/brightness or stop the newer effect.",
       "available_in_default_build": true,
       "build_variants": [],
       "source_path": "runtime/barepico/firmware/barepico/core.py",
@@ -15464,7 +15464,7 @@
       "requires": [
         "Compatible enabled RuntimeConfig and actual connected peripheral"
       ],
-      "notes": "Stops the strip effect tasks and clears the frame to black through the canonical driver.",
+      "notes": "Stops the strip effect tasks and clears the frame to black through the canonical driver. Normal clearing makes the frame black. After the known same-cycle Scheduler cancellation defect has orphaned an effect task, that untracked task can repaint on a later tick; clearing is not a repair for that earlier task-ownership failure.",
       "available_in_default_build": true,
       "build_variants": [],
       "source_path": "runtime/barepico/firmware/barepico/core.py",
@@ -17443,7 +17443,7 @@
       "requires": [
         "Compatible enabled RuntimeConfig and actual connected peripheral"
       ],
-      "notes": "period is the animation update interval, not a complete effect cycle. duration=0 continues; expiry stops the animation task and can leave the last frame visible. Use led_off() for an explicit dark frame.",
+      "notes": "period is the animation update interval, not a complete effect cycle. duration=0 continues; expiry stops the animation task and can leave the last frame visible. Use led_off() for an explicit dark frame. Current expiry ownership limitation: a new duration=0 LED operation does not cancel an earlier timed restore/stop task. That earlier expiry can overwrite the newer frame/brightness or stop the newer effect.",
       "available_in_default_build": true,
       "build_variants": [],
       "source_path": "runtime/barepico/firmware/barepico/core.py",
@@ -17524,7 +17524,7 @@
       "parameters": [],
       "returns": "None（方法本身沒有回傳結果；如有事件回呼，其結果另由事件迴圈處理）。",
       "requires": [],
-      "notes": "",
+      "notes": "When one callback removes or clears a later task in the same Scheduler.run() cycle, the current BarePico snapshot loop can reinsert and execute that canceled task. A successful remove_task() return does not guarantee cancellation of an already captured later item.",
       "available_in_default_build": true,
       "build_variants": [],
       "source_path": "runtime/barepico/firmware/barepico/core.py",
@@ -17547,7 +17547,7 @@
       "parameters": [],
       "returns": "int, number of tasks run by this Scheduler cycle; returns 0 when no task is due or the Scheduler is already running",
       "requires": [],
-      "notes": "",
+      "notes": "When one callback removes or clears a later task in the same Scheduler.run() cycle, the current BarePico snapshot loop can reinsert and execute that canceled task. A successful remove_task() return does not guarantee cancellation of an already captured later item.",
       "available_in_default_build": true,
       "build_variants": [],
       "source_path": "runtime/barepico/firmware/barepico/core.py",
@@ -17852,7 +17852,7 @@
       "requires": [
         "Compatible enabled RuntimeConfig and actual connected peripheral"
       ],
-      "notes": "The first move is immediate when no previous angle is known. Later gradual moves use a Scheduler task that is not recorded as the sweep task; do not overlap moves or assume servo_stop()/servo_release() cancels an unfinished move_to.",
+      "notes": "The first move is immediate when no previous angle is known. Later gradual moves create a Scheduler task whose ID is not retained by the driver. Repeated move_to calls can leave competing tasks; servo_stop(), servo_release() and a later direct angle command do not cancel an unfinished move_to.",
       "available_in_default_build": true,
       "build_variants": [],
       "source_path": "runtime/barepico/firmware/barepico/core.py",
@@ -17877,7 +17877,7 @@
       "requires": [
         "Compatible enabled RuntimeConfig and actual connected peripheral"
       ],
-      "notes": "Stops sweep and sets PWM duty to 0; it does not deinitialize PWM. An unfinished servo_move_to() task can write PWM again on a later tick.",
+      "notes": "Stops the tracked sweep and sets PWM duty to 0; it does not deinitialize PWM or cancel an unfinished servo_move_to(). That move can write PWM again on the next due Scheduler tick.",
       "available_in_default_build": true,
       "build_variants": [],
       "source_path": "runtime/barepico/firmware/barepico/core.py",
@@ -17935,7 +17935,7 @@
       "requires": [
         "Compatible enabled RuntimeConfig and actual connected peripheral"
       ],
-      "notes": "Stops the sweep task and retains the current output. It does not cancel an unfinished servo_move_to() task in the current canonical driver.",
+      "notes": "Stops only the tracked sweep task and retains the current PWM output. It does not cancel an unfinished servo_move_to() task, which can continue writing PWM on later Scheduler ticks.",
       "available_in_default_build": true,
       "build_variants": [],
       "source_path": "runtime/barepico/firmware/barepico/core.py",
@@ -18209,7 +18209,7 @@
       "requires": [
         "Compatible enabled RuntimeConfig and actual connected peripheral"
       ],
-      "notes": "Schedules repeated beeps, but each _bee_step calls a synchronous 40ms tone. The cooperative Scheduler can therefore be delayed by each beep.",
+      "notes": "Schedules repeated beeps, but each _bee_step calls a synchronous 40ms tone. The cooperative Scheduler can therefore be delayed by each beep. Use duration=0 or 10..5000 ms. A positive duration from 1 through 9 passes the facade range check, starts the beeper, and then raises ValueError when scheduling its stop task; a beeper task can remain after the exception.",
       "available_in_default_build": true,
       "build_variants": [],
       "source_path": "runtime/barepico/firmware/barepico/core.py",

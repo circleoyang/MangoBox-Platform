@@ -581,6 +581,7 @@
             "Compatible enabled RuntimeConfig and actual connected peripheral"
           ],
           "return_semantics": "None（方法本身沒有回傳結果；如有事件回呼，其結果另由事件迴圈處理）。",
+          "preconditions_and_behavior": "Current expiry ownership limitation: a new duration=0 LED operation does not cancel an earlier timed restore/stop task. That earlier expiry can overwrite the newer frame/brightness or stop the newer effect.",
           "catalog_summary_zh": "以漸亮、漸暗方式播放 RGB 呼吸效果。",
           "catalog_return_reference": "",
           "code_generation_allowed": true,
@@ -628,6 +629,7 @@
             "Compatible enabled RuntimeConfig and actual connected peripheral"
           ],
           "return_semantics": "None（方法本身沒有回傳結果；如有事件回呼，其結果另由事件迴圈處理）。",
+          "preconditions_and_behavior": "Current expiry ownership limitation: a new duration=0 LED operation does not cancel an earlier timed restore/stop task. That earlier expiry can overwrite the newer frame/brightness or stop the newer effect.",
           "catalog_summary_zh": "設定燈條亮度。",
           "catalog_return_reference": "",
           "code_generation_allowed": true,
@@ -889,6 +891,7 @@
           "role": "advanced",
           "requires": [],
           "return_semantics": "None",
+          "preconditions_and_behavior": "Servo cleanup on the normal reset_runtime path: clears Scheduler tasks, including unfinished move_to tasks, and stops servo sweeps. It does not set servo PWM duty to 0 or deinitialize PWM, so close() is not a promise that servo holding output is released.",
           "catalog_summary_zh": "停止 Runtime 或背景資源並關閉物件。",
           "catalog_return_reference": "",
           "code_generation_allowed": true,
@@ -1498,6 +1501,7 @@
             "Compatible enabled RuntimeConfig and actual connected peripheral"
           ],
           "return_semantics": "None（方法本身沒有回傳結果；如有事件回呼，其結果另由事件迴圈處理）。",
+          "preconditions_and_behavior": "Current expiry ownership limitation: a new duration=0 LED operation does not cancel an earlier timed restore/stop task. That earlier expiry can overwrite the newer frame/brightness or stop the newer effect.",
           "catalog_summary_zh": "設定指定索引的 RGB LED 顏色。",
           "catalog_return_reference": "",
           "code_generation_allowed": true,
@@ -1545,6 +1549,7 @@
             "Compatible enabled RuntimeConfig and actual connected peripheral"
           ],
           "return_semantics": "None（方法本身沒有回傳結果；如有事件回呼，其結果另由事件迴圈處理）。",
+          "preconditions_and_behavior": "Current expiry ownership limitation: a new duration=0 LED operation does not cancel an earlier timed restore/stop task. That earlier expiry can overwrite the newer frame/brightness or stop the newer effect.",
           "catalog_summary_zh": "將目前燈條全部 LED 設為同一顏色。",
           "catalog_return_reference": "",
           "code_generation_allowed": true,
@@ -1578,7 +1583,7 @@
             "Compatible enabled RuntimeConfig and actual connected peripheral"
           ],
           "return_semantics": "None（方法本身沒有回傳結果；如有事件回呼，其結果另由事件迴圈處理）。",
-          "catalog_summary_zh": "停止燈效；與 `led_off()` 的「停止並清黑」語意不同。",
+          "catalog_summary_zh": "停止指定燈條已追蹤的燈效並清黑畫面；與 led_off() 使用相同清除路徑。",
           "catalog_return_reference": "",
           "code_generation_allowed": true,
           "available_in_default_build": true
@@ -1672,6 +1677,7 @@
             "Compatible enabled RuntimeConfig and actual connected peripheral"
           ],
           "return_semantics": "None（方法本身沒有回傳結果；如有事件回呼，其結果另由事件迴圈處理）。",
+          "preconditions_and_behavior": "Current expiry ownership limitation: a new duration=0 LED operation does not cancel an earlier timed restore/stop task. That earlier expiry can overwrite the newer frame/brightness or stop the newer effect.",
           "catalog_summary_zh": "設定指定 LED 範圍為同一顏色。",
           "catalog_return_reference": "",
           "code_generation_allowed": true,
@@ -1719,6 +1725,7 @@
             "Compatible enabled RuntimeConfig and actual connected peripheral"
           ],
           "return_semantics": "None（方法本身沒有回傳結果；如有事件回呼，其結果另由事件迴圈處理）。",
+          "preconditions_and_behavior": "Current expiry ownership limitation: a new duration=0 LED operation does not cancel an earlier timed restore/stop task. That earlier expiry can overwrite the newer frame/brightness or stop the newer effect.",
           "catalog_summary_zh": "`brightness()` 的底層/相容名稱。",
           "catalog_return_reference": "",
           "code_generation_allowed": true,
@@ -1766,6 +1773,7 @@
             "Compatible enabled RuntimeConfig and actual connected peripheral"
           ],
           "return_semantics": "None（方法本身沒有回傳結果；如有事件回呼，其結果另由事件迴圈處理）。",
+          "preconditions_and_behavior": "Current expiry ownership limitation: a new duration=0 LED operation does not cancel an earlier timed restore/stop task. That earlier expiry can overwrite the newer frame/brightness or stop the newer effect.",
           "catalog_summary_zh": "`led_all()` 的底層/相容名稱。",
           "catalog_return_reference": "",
           "code_generation_allowed": true,
@@ -1820,6 +1828,7 @@
             "Compatible enabled RuntimeConfig and actual connected peripheral"
           ],
           "return_semantics": "None（方法本身沒有回傳結果；如有事件回呼，其結果另由事件迴圈處理）。",
+          "preconditions_and_behavior": "Current expiry ownership limitation: a new duration=0 LED operation does not cancel an earlier timed restore/stop task. That earlier expiry can overwrite the newer frame/brightness or stop the newer effect.",
           "catalog_summary_zh": "`led()` 的底層/相容名稱。",
           "catalog_return_reference": "",
           "code_generation_allowed": true,
@@ -1881,6 +1890,7 @@
             "Compatible enabled RuntimeConfig and actual connected peripheral"
           ],
           "return_semantics": "None（方法本身沒有回傳結果；如有事件回呼，其結果另由事件迴圈處理）。",
+          "preconditions_and_behavior": "Current expiry ownership limitation: a new duration=0 LED operation does not cancel an earlier timed restore/stop task. That earlier expiry can overwrite the newer frame/brightness or stop the newer effect.",
           "catalog_summary_zh": "`led_range()` 的底層/相容名稱。",
           "catalog_return_reference": "",
           "code_generation_allowed": true,
@@ -1935,6 +1945,7 @@
             "Compatible enabled RuntimeConfig and actual connected peripheral"
           ],
           "return_semantics": "None（方法本身沒有回傳結果；如有事件回呼，其結果另由事件迴圈處理）。",
+          "preconditions_and_behavior": "Current expiry ownership limitation: a new duration=0 LED operation does not cancel an earlier timed restore/stop task. That earlier expiry can overwrite the newer frame/brightness or stop the newer effect.",
           "catalog_summary_zh": "啟動底層呼吸動畫；`breath()` 使用相同語意。",
           "catalog_return_reference": "",
           "code_generation_allowed": true,
@@ -1989,6 +2000,7 @@
             "Compatible enabled RuntimeConfig and actual connected peripheral"
           ],
           "return_semantics": "None（方法本身沒有回傳結果；如有事件回呼，其結果另由事件迴圈處理）。",
+          "preconditions_and_behavior": "Current expiry ownership limitation: a new duration=0 LED operation does not cancel an earlier timed restore/stop task. That earlier expiry can overwrite the newer frame/brightness or stop the newer effect.",
           "catalog_summary_zh": "依序以多個顏色播放 color wipe 動畫。",
           "catalog_return_reference": "",
           "code_generation_allowed": true,
@@ -2043,6 +2055,7 @@
             "Compatible enabled RuntimeConfig and actual connected peripheral"
           ],
           "return_semantics": "None（方法本身沒有回傳結果；如有事件回呼，其結果另由事件迴圈處理）。",
+          "preconditions_and_behavior": "Current expiry ownership limitation: a new duration=0 LED operation does not cancel an earlier timed restore/stop task. That earlier expiry can overwrite the newer frame/brightness or stop the newer effect.",
           "catalog_summary_zh": "播放火焰感 flicker 動畫。",
           "catalog_return_reference": "",
           "code_generation_allowed": true,
@@ -2104,6 +2117,7 @@
             "Compatible enabled RuntimeConfig and actual connected peripheral"
           ],
           "return_semantics": "None（方法本身沒有回傳結果；如有事件回呼，其結果另由事件迴圈處理）。",
+          "preconditions_and_behavior": "Current expiry ownership limitation: a new duration=0 LED operation does not cancel an earlier timed restore/stop task. That earlier expiry can overwrite the newer frame/brightness or stop the newer effect.",
           "catalog_summary_zh": "播放流星式 RGB 動畫。",
           "catalog_return_reference": "",
           "code_generation_allowed": true,
@@ -2151,6 +2165,7 @@
             "Compatible enabled RuntimeConfig and actual connected peripheral"
           ],
           "return_semantics": "None（方法本身沒有回傳結果；如有事件回呼，其結果另由事件迴圈處理）。",
+          "preconditions_and_behavior": "Current expiry ownership limitation: a new duration=0 LED operation does not cancel an earlier timed restore/stop task. That earlier expiry can overwrite the newer frame/brightness or stop the newer effect.",
           "catalog_summary_zh": "啟動底層彩虹循環動畫。",
           "catalog_return_reference": "",
           "code_generation_allowed": true,
@@ -2205,6 +2220,7 @@
             "Compatible enabled RuntimeConfig and actual connected peripheral"
           ],
           "return_semantics": "None（方法本身沒有回傳結果；如有事件回呼，其結果另由事件迴圈處理）。",
+          "preconditions_and_behavior": "Current expiry ownership limitation: a new duration=0 LED operation does not cancel an earlier timed restore/stop task. That earlier expiry can overwrite the newer frame/brightness or stop the newer effect.",
           "catalog_summary_zh": "播放隨機 sparkle 動畫。",
           "catalog_return_reference": "",
           "code_generation_allowed": true,
@@ -4954,6 +4970,7 @@
             "Compatible enabled RuntimeConfig and actual connected peripheral"
           ],
           "return_semantics": "None（方法本身沒有回傳結果；如有事件回呼，其結果另由事件迴圈處理）。",
+          "preconditions_and_behavior": "Current expiry ownership limitation: a new duration=0 LED operation does not cancel an earlier timed restore/stop task. That earlier expiry can overwrite the newer frame/brightness or stop the newer effect.",
           "catalog_summary_zh": "播放彩虹色循環動畫。",
           "catalog_return_reference": "",
           "code_generation_allowed": true,
@@ -5423,6 +5440,7 @@
             "Compatible enabled RuntimeConfig and actual connected peripheral"
           ],
           "return_semantics": "None（方法本身沒有回傳結果；如有事件回呼，其結果另由事件迴圈處理）。",
+          "preconditions_and_behavior": "The first move is immediate when no previous angle is known. Later gradual moves create a Scheduler task whose ID is not retained by the driver. Repeated move_to calls can leave competing tasks; servo_stop(), servo_release() and a later direct angle command do not cancel an unfinished move_to.",
           "catalog_summary_zh": "以 step 與 period 控制逐步移動到目標角度。",
           "catalog_return_reference": "",
           "code_generation_allowed": true,
@@ -5456,6 +5474,7 @@
             "Compatible enabled RuntimeConfig and actual connected peripheral"
           ],
           "return_semantics": "None（方法本身沒有回傳結果；如有事件回呼，其結果另由事件迴圈處理）。",
+          "preconditions_and_behavior": "Stops the tracked sweep and sets PWM duty to 0; it does not deinitialize PWM or cancel an unfinished servo_move_to(). That move can write PWM again on the next due Scheduler tick.",
           "catalog_summary_zh": "停止對舵機輸出保持訊號。",
           "catalog_return_reference": "",
           "code_generation_allowed": true,
@@ -5529,6 +5548,7 @@
             "Compatible enabled RuntimeConfig and actual connected peripheral"
           ],
           "return_semantics": "None（方法本身沒有回傳結果；如有事件回呼，其結果另由事件迴圈處理）。",
+          "preconditions_and_behavior": "Stops only the tracked sweep task and retains the current PWM output. It does not cancel an unfinished servo_move_to() task, which can continue writing PWM on later Scheduler ticks.",
           "catalog_summary_zh": "停止指定舵機的 sweep 動畫。",
           "catalog_return_reference": "",
           "code_generation_allowed": true,
@@ -5902,6 +5922,7 @@
             "Compatible enabled RuntimeConfig and actual connected peripheral"
           ],
           "return_semantics": "None（方法本身沒有回傳結果；如有事件回呼，其結果另由事件迴圈處理）。",
+          "preconditions_and_behavior": "Restarting start_bee(), even with duration=0, does not cancel an earlier scheduled stop_bee expiry; that stale expiry can stop the new beeper. The carrier handler does not retain the stop-task ID.",
           "catalog_summary_zh": "啟動週期性蜂鳴器效果。",
           "catalog_return_reference": "",
           "code_generation_allowed": true,
@@ -7889,6 +7910,7 @@
             "Compatible enabled RuntimeConfig and actual connected peripheral"
           ],
           "return_semantics": "None（方法本身沒有回傳結果；如有事件回呼，其結果另由事件迴圈處理）。",
+          "preconditions_and_behavior": "Current expiry ownership limitation: a new duration=0 LED operation does not cancel an earlier timed restore/stop task. That earlier expiry can overwrite the newer frame/brightness or stop the newer effect.",
           "catalog_summary_zh": "以漸亮、漸暗方式播放 RGB 呼吸效果。",
           "catalog_return_reference": "",
           "code_generation_allowed": true,
@@ -7935,6 +7957,7 @@
             "Compatible enabled RuntimeConfig and actual connected peripheral"
           ],
           "return_semantics": "None（方法本身沒有回傳結果；如有事件回呼，其結果另由事件迴圈處理）。",
+          "preconditions_and_behavior": "Current expiry ownership limitation: a new duration=0 LED operation does not cancel an earlier timed restore/stop task. That earlier expiry can overwrite the newer frame/brightness or stop the newer effect.",
           "catalog_summary_zh": "設定燈條亮度。",
           "catalog_return_reference": "",
           "code_generation_allowed": true,
@@ -8188,6 +8211,7 @@
           "role": "advanced",
           "requires": [],
           "return_semantics": "None",
+          "preconditions_and_behavior": "Servo cleanup on the normal reset_runtime path: clears Scheduler tasks, including unfinished move_to tasks, and stops servo sweeps. It does not set servo PWM duty to 0 or deinitialize PWM, so close() is not a promise that servo holding output is released.",
           "catalog_summary_zh": "停止 Runtime 或背景資源並關閉物件。",
           "catalog_return_reference": "",
           "code_generation_allowed": true,
@@ -8828,6 +8852,7 @@
             "Compatible enabled RuntimeConfig and actual connected peripheral"
           ],
           "return_semantics": "None（方法本身沒有回傳結果；如有事件回呼，其結果另由事件迴圈處理）。",
+          "preconditions_and_behavior": "Current expiry ownership limitation: a new duration=0 LED operation does not cancel an earlier timed restore/stop task. That earlier expiry can overwrite the newer frame/brightness or stop the newer effect.",
           "catalog_summary_zh": "設定指定索引的 RGB LED 顏色。",
           "catalog_return_reference": "",
           "code_generation_allowed": true,
@@ -8874,6 +8899,7 @@
             "Compatible enabled RuntimeConfig and actual connected peripheral"
           ],
           "return_semantics": "None（方法本身沒有回傳結果；如有事件回呼，其結果另由事件迴圈處理）。",
+          "preconditions_and_behavior": "Current expiry ownership limitation: a new duration=0 LED operation does not cancel an earlier timed restore/stop task. That earlier expiry can overwrite the newer frame/brightness or stop the newer effect.",
           "catalog_summary_zh": "將目前燈條全部 LED 設為同一顏色。",
           "catalog_return_reference": "",
           "code_generation_allowed": true,
@@ -8906,7 +8932,7 @@
             "Compatible enabled RuntimeConfig and actual connected peripheral"
           ],
           "return_semantics": "None（方法本身沒有回傳結果；如有事件回呼，其結果另由事件迴圈處理）。",
-          "catalog_summary_zh": "停止燈效；與 `led_off()` 的「停止並清黑」語意不同。",
+          "catalog_summary_zh": "停止指定燈條已追蹤的燈效並清黑畫面；與 led_off() 使用相同清除路徑。",
           "catalog_return_reference": "",
           "code_generation_allowed": true,
           "available_in_default_build": true
@@ -8998,6 +9024,7 @@
             "Compatible enabled RuntimeConfig and actual connected peripheral"
           ],
           "return_semantics": "None（方法本身沒有回傳結果；如有事件回呼，其結果另由事件迴圈處理）。",
+          "preconditions_and_behavior": "Current expiry ownership limitation: a new duration=0 LED operation does not cancel an earlier timed restore/stop task. That earlier expiry can overwrite the newer frame/brightness or stop the newer effect.",
           "catalog_summary_zh": "設定指定 LED 範圍為同一顏色。",
           "catalog_return_reference": "",
           "code_generation_allowed": true,
@@ -9044,6 +9071,7 @@
             "Compatible enabled RuntimeConfig and actual connected peripheral"
           ],
           "return_semantics": "None（方法本身沒有回傳結果；如有事件回呼，其結果另由事件迴圈處理）。",
+          "preconditions_and_behavior": "Current expiry ownership limitation: a new duration=0 LED operation does not cancel an earlier timed restore/stop task. That earlier expiry can overwrite the newer frame/brightness or stop the newer effect.",
           "catalog_summary_zh": "`brightness()` 的底層/相容名稱。",
           "catalog_return_reference": "",
           "code_generation_allowed": true,
@@ -9090,6 +9118,7 @@
             "Compatible enabled RuntimeConfig and actual connected peripheral"
           ],
           "return_semantics": "None（方法本身沒有回傳結果；如有事件回呼，其結果另由事件迴圈處理）。",
+          "preconditions_and_behavior": "Current expiry ownership limitation: a new duration=0 LED operation does not cancel an earlier timed restore/stop task. That earlier expiry can overwrite the newer frame/brightness or stop the newer effect.",
           "catalog_summary_zh": "`led_all()` 的底層/相容名稱。",
           "catalog_return_reference": "",
           "code_generation_allowed": true,
@@ -9143,6 +9172,7 @@
             "Compatible enabled RuntimeConfig and actual connected peripheral"
           ],
           "return_semantics": "None（方法本身沒有回傳結果；如有事件回呼，其結果另由事件迴圈處理）。",
+          "preconditions_and_behavior": "Current expiry ownership limitation: a new duration=0 LED operation does not cancel an earlier timed restore/stop task. That earlier expiry can overwrite the newer frame/brightness or stop the newer effect.",
           "catalog_summary_zh": "`led()` 的底層/相容名稱。",
           "catalog_return_reference": "",
           "code_generation_allowed": true,
@@ -9203,6 +9233,7 @@
             "Compatible enabled RuntimeConfig and actual connected peripheral"
           ],
           "return_semantics": "None（方法本身沒有回傳結果；如有事件回呼，其結果另由事件迴圈處理）。",
+          "preconditions_and_behavior": "Current expiry ownership limitation: a new duration=0 LED operation does not cancel an earlier timed restore/stop task. That earlier expiry can overwrite the newer frame/brightness or stop the newer effect.",
           "catalog_summary_zh": "`led_range()` 的底層/相容名稱。",
           "catalog_return_reference": "",
           "code_generation_allowed": true,
@@ -9256,6 +9287,7 @@
             "Compatible enabled RuntimeConfig and actual connected peripheral"
           ],
           "return_semantics": "None（方法本身沒有回傳結果；如有事件回呼，其結果另由事件迴圈處理）。",
+          "preconditions_and_behavior": "Current expiry ownership limitation: a new duration=0 LED operation does not cancel an earlier timed restore/stop task. That earlier expiry can overwrite the newer frame/brightness or stop the newer effect.",
           "catalog_summary_zh": "啟動底層呼吸動畫；`breath()` 使用相同語意。",
           "catalog_return_reference": "",
           "code_generation_allowed": true,
@@ -9309,6 +9341,7 @@
             "Compatible enabled RuntimeConfig and actual connected peripheral"
           ],
           "return_semantics": "None（方法本身沒有回傳結果；如有事件回呼，其結果另由事件迴圈處理）。",
+          "preconditions_and_behavior": "Current expiry ownership limitation: a new duration=0 LED operation does not cancel an earlier timed restore/stop task. That earlier expiry can overwrite the newer frame/brightness or stop the newer effect.",
           "catalog_summary_zh": "依序以多個顏色播放 color wipe 動畫。",
           "catalog_return_reference": "",
           "code_generation_allowed": true,
@@ -9362,6 +9395,7 @@
             "Compatible enabled RuntimeConfig and actual connected peripheral"
           ],
           "return_semantics": "None（方法本身沒有回傳結果；如有事件回呼，其結果另由事件迴圈處理）。",
+          "preconditions_and_behavior": "Current expiry ownership limitation: a new duration=0 LED operation does not cancel an earlier timed restore/stop task. That earlier expiry can overwrite the newer frame/brightness or stop the newer effect.",
           "catalog_summary_zh": "播放火焰感 flicker 動畫。",
           "catalog_return_reference": "",
           "code_generation_allowed": true,
@@ -9422,6 +9456,7 @@
             "Compatible enabled RuntimeConfig and actual connected peripheral"
           ],
           "return_semantics": "None（方法本身沒有回傳結果；如有事件回呼，其結果另由事件迴圈處理）。",
+          "preconditions_and_behavior": "Current expiry ownership limitation: a new duration=0 LED operation does not cancel an earlier timed restore/stop task. That earlier expiry can overwrite the newer frame/brightness or stop the newer effect.",
           "catalog_summary_zh": "播放流星式 RGB 動畫。",
           "catalog_return_reference": "",
           "code_generation_allowed": true,
@@ -9468,6 +9503,7 @@
             "Compatible enabled RuntimeConfig and actual connected peripheral"
           ],
           "return_semantics": "None（方法本身沒有回傳結果；如有事件回呼，其結果另由事件迴圈處理）。",
+          "preconditions_and_behavior": "Current expiry ownership limitation: a new duration=0 LED operation does not cancel an earlier timed restore/stop task. That earlier expiry can overwrite the newer frame/brightness or stop the newer effect.",
           "catalog_summary_zh": "啟動底層彩虹循環動畫。",
           "catalog_return_reference": "",
           "code_generation_allowed": true,
@@ -9521,6 +9557,7 @@
             "Compatible enabled RuntimeConfig and actual connected peripheral"
           ],
           "return_semantics": "None（方法本身沒有回傳結果；如有事件回呼，其結果另由事件迴圈處理）。",
+          "preconditions_and_behavior": "Current expiry ownership limitation: a new duration=0 LED operation does not cancel an earlier timed restore/stop task. That earlier expiry can overwrite the newer frame/brightness or stop the newer effect.",
           "catalog_summary_zh": "播放隨機 sparkle 動畫。",
           "catalog_return_reference": "",
           "code_generation_allowed": true,
@@ -12360,6 +12397,7 @@
             "Compatible enabled RuntimeConfig and actual connected peripheral"
           ],
           "return_semantics": "None（方法本身沒有回傳結果；如有事件回呼，其結果另由事件迴圈處理）。",
+          "preconditions_and_behavior": "Current expiry ownership limitation: a new duration=0 LED operation does not cancel an earlier timed restore/stop task. That earlier expiry can overwrite the newer frame/brightness or stop the newer effect.",
           "catalog_summary_zh": "播放彩虹色循環動畫。",
           "catalog_return_reference": "",
           "code_generation_allowed": true,
@@ -12795,6 +12833,7 @@
             "Compatible enabled RuntimeConfig and actual connected peripheral"
           ],
           "return_semantics": "None（方法本身沒有回傳結果；如有事件回呼，其結果另由事件迴圈處理）。",
+          "preconditions_and_behavior": "The first move is immediate when no previous angle is known. Later gradual moves create a Scheduler task whose ID is not retained by the driver. Repeated move_to calls can leave competing tasks; servo_stop(), servo_release() and a later direct angle command do not cancel an unfinished move_to.",
           "catalog_summary_zh": "以 step 與 period 控制逐步移動到目標角度。",
           "catalog_return_reference": "",
           "code_generation_allowed": true,
@@ -12819,6 +12858,7 @@
             "Compatible enabled RuntimeConfig and actual connected peripheral"
           ],
           "return_semantics": "None（方法本身沒有回傳結果；如有事件回呼，其結果另由事件迴圈處理）。",
+          "preconditions_and_behavior": "Stops the tracked sweep and sets PWM duty to 0; it does not deinitialize PWM or cancel an unfinished servo_move_to(). That move can write PWM again on the next due Scheduler tick.",
           "catalog_summary_zh": "停止對舵機輸出保持訊號。",
           "catalog_return_reference": "",
           "code_generation_allowed": true,
@@ -12875,6 +12915,7 @@
             "Compatible enabled RuntimeConfig and actual connected peripheral"
           ],
           "return_semantics": "None（方法本身沒有回傳結果；如有事件回呼，其結果另由事件迴圈處理）。",
+          "preconditions_and_behavior": "Stops only the tracked sweep task and retains the current PWM output. It does not cancel an unfinished servo_move_to() task, which can continue writing PWM on later Scheduler ticks.",
           "catalog_summary_zh": "停止指定舵機的 sweep 動畫。",
           "catalog_return_reference": "",
           "code_generation_allowed": true,
@@ -13232,6 +13273,7 @@
             "Compatible enabled RuntimeConfig and actual connected peripheral"
           ],
           "return_semantics": "None（方法本身沒有回傳結果；如有事件回呼，其結果另由事件迴圈處理）。",
+          "preconditions_and_behavior": "Restarting start_bee(), even with duration=0, does not cancel an earlier scheduled stop_bee expiry; that stale expiry can stop the new beeper. The carrier handler does not retain the stop-task ID.",
           "catalog_summary_zh": "啟動週期性蜂鳴器效果。",
           "catalog_return_reference": "",
           "code_generation_allowed": true,
@@ -15528,7 +15570,7 @@
             "Compatible enabled RuntimeConfig and actual connected peripheral"
           ],
           "return_semantics": "None（方法本身沒有回傳結果；如有事件回呼，其結果另由事件迴圈處理）。",
-          "preconditions_and_behavior": "period is the animation update interval, not a complete effect cycle. duration=0 continues; expiry stops the animation task and can leave the last frame visible. Use led_off() for an explicit dark frame.",
+          "preconditions_and_behavior": "period is the animation update interval, not a complete effect cycle. duration=0 continues; expiry stops the animation task and can leave the last frame visible. Use led_off() for an explicit dark frame. Current expiry ownership limitation: a new duration=0 LED operation does not cancel an earlier timed restore/stop task. That earlier expiry can overwrite the newer frame/brightness or stop the newer effect.",
           "catalog_summary_zh": "以漸亮、漸暗方式播放 RGB 呼吸效果。",
           "catalog_return_reference": "",
           "code_generation_allowed": true,
@@ -15576,7 +15618,7 @@
             "Compatible enabled RuntimeConfig and actual connected peripheral"
           ],
           "return_semantics": "None（方法本身沒有回傳結果；如有事件回呼，其結果另由事件迴圈處理）。",
-          "preconditions_and_behavior": "With duration>0 the Scheduler restores the previous pixel frame/value or brightness after expiry; duration=0 keeps the selected value. LED ranges include both endpoints. Enabled named strip and valid configured index are required.",
+          "preconditions_and_behavior": "With duration>0 the Scheduler restores the previous pixel frame/value or brightness after expiry; duration=0 keeps the selected value. LED ranges include both endpoints. Enabled named strip and valid configured index are required. Current expiry ownership limitation: a new duration=0 LED operation does not cancel an earlier timed restore/stop task. That earlier expiry can overwrite the newer frame/brightness or stop the newer effect.",
           "catalog_summary_zh": "設定燈條亮度。",
           "catalog_return_reference": "",
           "code_generation_allowed": true,
@@ -15805,6 +15847,7 @@
           "role": "advanced",
           "requires": [],
           "return_semantics": "None",
+          "preconditions_and_behavior": "Servo cleanup on a normally completed close outside an active Scheduler callback: releases each instantiated servo, deinitializes its PWM, sets the driver PWM reference to None, clears the servo map and clears Scheduler tasks. This is stronger than servo_release() alone; this statement does not cover cleanup exceptions or the BarePico Scheduler pending-task snapshot cancellation limitation.",
           "catalog_summary_zh": "停止 Runtime 或背景資源並關閉物件。",
           "catalog_return_reference": "",
           "code_generation_allowed": true,
@@ -16429,7 +16472,7 @@
             "Compatible enabled RuntimeConfig and actual connected peripheral"
           ],
           "return_semantics": "None（方法本身沒有回傳結果；如有事件回呼，其結果另由事件迴圈處理）。",
-          "preconditions_and_behavior": "With duration>0 the Scheduler restores the previous pixel frame/value or brightness after expiry; duration=0 keeps the selected value. LED ranges include both endpoints. Enabled named strip and valid configured index are required.",
+          "preconditions_and_behavior": "With duration>0 the Scheduler restores the previous pixel frame/value or brightness after expiry; duration=0 keeps the selected value. LED ranges include both endpoints. Enabled named strip and valid configured index are required. Current expiry ownership limitation: a new duration=0 LED operation does not cancel an earlier timed restore/stop task. That earlier expiry can overwrite the newer frame/brightness or stop the newer effect.",
           "catalog_summary_zh": "設定指定索引的 RGB LED 顏色。",
           "catalog_return_reference": "",
           "code_generation_allowed": true,
@@ -16477,7 +16520,7 @@
             "Compatible enabled RuntimeConfig and actual connected peripheral"
           ],
           "return_semantics": "None（方法本身沒有回傳結果；如有事件回呼，其結果另由事件迴圈處理）。",
-          "preconditions_and_behavior": "With duration>0 the Scheduler restores the previous pixel frame/value or brightness after expiry; duration=0 keeps the selected value. LED ranges include both endpoints. Enabled named strip and valid configured index are required.",
+          "preconditions_and_behavior": "With duration>0 the Scheduler restores the previous pixel frame/value or brightness after expiry; duration=0 keeps the selected value. LED ranges include both endpoints. Enabled named strip and valid configured index are required. Current expiry ownership limitation: a new duration=0 LED operation does not cancel an earlier timed restore/stop task. That earlier expiry can overwrite the newer frame/brightness or stop the newer effect.",
           "catalog_summary_zh": "將目前燈條全部 LED 設為同一顏色。",
           "catalog_return_reference": "",
           "code_generation_allowed": true,
@@ -16511,8 +16554,8 @@
             "Compatible enabled RuntimeConfig and actual connected peripheral"
           ],
           "return_semantics": "None（方法本身沒有回傳結果；如有事件回呼，其結果另由事件迴圈處理）。",
-          "preconditions_and_behavior": "Stops the strip effect tasks and clears the frame to black through the canonical driver.",
-          "catalog_summary_zh": "停止指定燈條的所有燈效並清黑；與 led_off() 一樣會熄燈。",
+          "preconditions_and_behavior": "Stops the strip effect tasks and clears the frame to black through the canonical driver. Normal clearing makes the frame black. After the known same-cycle Scheduler cancellation defect has orphaned an effect task, that untracked task can repaint on a later tick; clearing is not a repair for that earlier task-ownership failure.",
+          "catalog_summary_zh": "停止指定燈條已追蹤的燈效並清黑畫面；與 led_off() 使用相同清除路徑。",
           "catalog_return_reference": "",
           "code_generation_allowed": true,
           "available_in_default_build": true
@@ -16545,7 +16588,7 @@
             "Compatible enabled RuntimeConfig and actual connected peripheral"
           ],
           "return_semantics": "None（方法本身沒有回傳結果；如有事件回呼，其結果另由事件迴圈處理）。",
-          "preconditions_and_behavior": "Stops the strip effect tasks and clears the frame to black through the canonical driver.",
+          "preconditions_and_behavior": "Stops the strip effect tasks and clears the frame to black through the canonical driver. Normal clearing makes the frame black. After the known same-cycle Scheduler cancellation defect has orphaned an effect task, that untracked task can repaint on a later tick; clearing is not a repair for that earlier task-ownership failure.",
           "catalog_summary_zh": "停止目前燈效並清除燈條。",
           "catalog_return_reference": "",
           "code_generation_allowed": true,
@@ -16607,7 +16650,7 @@
             "Compatible enabled RuntimeConfig and actual connected peripheral"
           ],
           "return_semantics": "None（方法本身沒有回傳結果；如有事件回呼，其結果另由事件迴圈處理）。",
-          "preconditions_and_behavior": "With duration>0 the Scheduler restores the previous pixel frame/value or brightness after expiry; duration=0 keeps the selected value. LED ranges include both endpoints. Enabled named strip and valid configured index are required.",
+          "preconditions_and_behavior": "With duration>0 the Scheduler restores the previous pixel frame/value or brightness after expiry; duration=0 keeps the selected value. LED ranges include both endpoints. Enabled named strip and valid configured index are required. Current expiry ownership limitation: a new duration=0 LED operation does not cancel an earlier timed restore/stop task. That earlier expiry can overwrite the newer frame/brightness or stop the newer effect.",
           "catalog_summary_zh": "設定指定 LED 範圍為同一顏色。",
           "catalog_return_reference": "",
           "code_generation_allowed": true,
@@ -16655,7 +16698,7 @@
             "Compatible enabled RuntimeConfig and actual connected peripheral"
           ],
           "return_semantics": "None（方法本身沒有回傳結果；如有事件回呼，其結果另由事件迴圈處理）。",
-          "preconditions_and_behavior": "With duration>0 the Scheduler restores the previous pixel frame/value or brightness after expiry; duration=0 keeps the selected value. LED ranges include both endpoints. Enabled named strip and valid configured index are required.",
+          "preconditions_and_behavior": "With duration>0 the Scheduler restores the previous pixel frame/value or brightness after expiry; duration=0 keeps the selected value. LED ranges include both endpoints. Enabled named strip and valid configured index are required. Current expiry ownership limitation: a new duration=0 LED operation does not cancel an earlier timed restore/stop task. That earlier expiry can overwrite the newer frame/brightness or stop the newer effect.",
           "catalog_summary_zh": "`brightness()` 的底層/相容名稱。",
           "catalog_return_reference": "",
           "code_generation_allowed": true,
@@ -16703,7 +16746,7 @@
             "Compatible enabled RuntimeConfig and actual connected peripheral"
           ],
           "return_semantics": "None（方法本身沒有回傳結果；如有事件回呼，其結果另由事件迴圈處理）。",
-          "preconditions_and_behavior": "With duration>0 the Scheduler restores the previous pixel frame/value or brightness after expiry; duration=0 keeps the selected value. LED ranges include both endpoints. Enabled named strip and valid configured index are required.",
+          "preconditions_and_behavior": "With duration>0 the Scheduler restores the previous pixel frame/value or brightness after expiry; duration=0 keeps the selected value. LED ranges include both endpoints. Enabled named strip and valid configured index are required. Current expiry ownership limitation: a new duration=0 LED operation does not cancel an earlier timed restore/stop task. That earlier expiry can overwrite the newer frame/brightness or stop the newer effect.",
           "catalog_summary_zh": "`led_all()` 的底層/相容名稱。",
           "catalog_return_reference": "",
           "code_generation_allowed": true,
@@ -16758,7 +16801,7 @@
             "Compatible enabled RuntimeConfig and actual connected peripheral"
           ],
           "return_semantics": "None（方法本身沒有回傳結果；如有事件回呼，其結果另由事件迴圈處理）。",
-          "preconditions_and_behavior": "With duration>0 the Scheduler restores the previous pixel frame/value or brightness after expiry; duration=0 keeps the selected value. LED ranges include both endpoints. Enabled named strip and valid configured index are required.",
+          "preconditions_and_behavior": "With duration>0 the Scheduler restores the previous pixel frame/value or brightness after expiry; duration=0 keeps the selected value. LED ranges include both endpoints. Enabled named strip and valid configured index are required. Current expiry ownership limitation: a new duration=0 LED operation does not cancel an earlier timed restore/stop task. That earlier expiry can overwrite the newer frame/brightness or stop the newer effect.",
           "catalog_summary_zh": "`led()` 的底層/相容名稱。",
           "catalog_return_reference": "",
           "code_generation_allowed": true,
@@ -16820,7 +16863,7 @@
             "Compatible enabled RuntimeConfig and actual connected peripheral"
           ],
           "return_semantics": "None（方法本身沒有回傳結果；如有事件回呼，其結果另由事件迴圈處理）。",
-          "preconditions_and_behavior": "With duration>0 the Scheduler restores the previous pixel frame/value or brightness after expiry; duration=0 keeps the selected value. LED ranges include both endpoints. Enabled named strip and valid configured index are required.",
+          "preconditions_and_behavior": "With duration>0 the Scheduler restores the previous pixel frame/value or brightness after expiry; duration=0 keeps the selected value. LED ranges include both endpoints. Enabled named strip and valid configured index are required. Current expiry ownership limitation: a new duration=0 LED operation does not cancel an earlier timed restore/stop task. That earlier expiry can overwrite the newer frame/brightness or stop the newer effect.",
           "catalog_summary_zh": "`led_range()` 的底層/相容名稱。",
           "catalog_return_reference": "",
           "code_generation_allowed": true,
@@ -16875,7 +16918,7 @@
             "Compatible enabled RuntimeConfig and actual connected peripheral"
           ],
           "return_semantics": "None（方法本身沒有回傳結果；如有事件回呼，其結果另由事件迴圈處理）。",
-          "preconditions_and_behavior": "period is the animation update interval, not a complete effect cycle. duration=0 continues; expiry stops the animation task and can leave the last frame visible. Use led_off() for an explicit dark frame.",
+          "preconditions_and_behavior": "period is the animation update interval, not a complete effect cycle. duration=0 continues; expiry stops the animation task and can leave the last frame visible. Use led_off() for an explicit dark frame. Current expiry ownership limitation: a new duration=0 LED operation does not cancel an earlier timed restore/stop task. That earlier expiry can overwrite the newer frame/brightness or stop the newer effect.",
           "catalog_summary_zh": "啟動底層呼吸動畫；`breath()` 使用相同語意。",
           "catalog_return_reference": "",
           "code_generation_allowed": true,
@@ -16930,7 +16973,7 @@
             "Compatible enabled RuntimeConfig and actual connected peripheral"
           ],
           "return_semantics": "None（方法本身沒有回傳結果；如有事件回呼，其結果另由事件迴圈處理）。",
-          "preconditions_and_behavior": "period is the animation update interval, not a complete effect cycle. duration=0 continues; expiry stops the animation task and can leave the last frame visible. Use led_off() for an explicit dark frame.",
+          "preconditions_and_behavior": "period is the animation update interval, not a complete effect cycle. duration=0 continues; expiry stops the animation task and can leave the last frame visible. Use led_off() for an explicit dark frame. Current expiry ownership limitation: a new duration=0 LED operation does not cancel an earlier timed restore/stop task. That earlier expiry can overwrite the newer frame/brightness or stop the newer effect.",
           "catalog_summary_zh": "依序以多個顏色播放 color wipe 動畫。",
           "catalog_return_reference": "",
           "code_generation_allowed": true,
@@ -16985,7 +17028,7 @@
             "Compatible enabled RuntimeConfig and actual connected peripheral"
           ],
           "return_semantics": "None（方法本身沒有回傳結果；如有事件回呼，其結果另由事件迴圈處理）。",
-          "preconditions_and_behavior": "period is the animation update interval, not a complete effect cycle. duration=0 continues; expiry stops the animation task and can leave the last frame visible. Use led_off() for an explicit dark frame.",
+          "preconditions_and_behavior": "period is the animation update interval, not a complete effect cycle. duration=0 continues; expiry stops the animation task and can leave the last frame visible. Use led_off() for an explicit dark frame. Current expiry ownership limitation: a new duration=0 LED operation does not cancel an earlier timed restore/stop task. That earlier expiry can overwrite the newer frame/brightness or stop the newer effect.",
           "catalog_summary_zh": "播放火焰感 flicker 動畫。",
           "catalog_return_reference": "",
           "code_generation_allowed": true,
@@ -17047,7 +17090,7 @@
             "Compatible enabled RuntimeConfig and actual connected peripheral"
           ],
           "return_semantics": "None（方法本身沒有回傳結果；如有事件回呼，其結果另由事件迴圈處理）。",
-          "preconditions_and_behavior": "period is the animation update interval, not a complete effect cycle. duration=0 continues; expiry stops the animation task and can leave the last frame visible. Use led_off() for an explicit dark frame.",
+          "preconditions_and_behavior": "period is the animation update interval, not a complete effect cycle. duration=0 continues; expiry stops the animation task and can leave the last frame visible. Use led_off() for an explicit dark frame. Current expiry ownership limitation: a new duration=0 LED operation does not cancel an earlier timed restore/stop task. That earlier expiry can overwrite the newer frame/brightness or stop the newer effect.",
           "catalog_summary_zh": "播放流星式 RGB 動畫。",
           "catalog_return_reference": "",
           "code_generation_allowed": true,
@@ -17095,7 +17138,7 @@
             "Compatible enabled RuntimeConfig and actual connected peripheral"
           ],
           "return_semantics": "None（方法本身沒有回傳結果；如有事件回呼，其結果另由事件迴圈處理）。",
-          "preconditions_and_behavior": "period is the animation update interval, not a complete effect cycle. duration=0 continues; expiry stops the animation task and can leave the last frame visible. Use led_off() for an explicit dark frame.",
+          "preconditions_and_behavior": "period is the animation update interval, not a complete effect cycle. duration=0 continues; expiry stops the animation task and can leave the last frame visible. Use led_off() for an explicit dark frame. Current expiry ownership limitation: a new duration=0 LED operation does not cancel an earlier timed restore/stop task. That earlier expiry can overwrite the newer frame/brightness or stop the newer effect.",
           "catalog_summary_zh": "啟動底層彩虹循環動畫。",
           "catalog_return_reference": "",
           "code_generation_allowed": true,
@@ -17150,7 +17193,7 @@
             "Compatible enabled RuntimeConfig and actual connected peripheral"
           ],
           "return_semantics": "None（方法本身沒有回傳結果；如有事件回呼，其結果另由事件迴圈處理）。",
-          "preconditions_and_behavior": "period is the animation update interval, not a complete effect cycle. duration=0 continues; expiry stops the animation task and can leave the last frame visible. Use led_off() for an explicit dark frame.",
+          "preconditions_and_behavior": "period is the animation update interval, not a complete effect cycle. duration=0 continues; expiry stops the animation task and can leave the last frame visible. Use led_off() for an explicit dark frame. Current expiry ownership limitation: a new duration=0 LED operation does not cancel an earlier timed restore/stop task. That earlier expiry can overwrite the newer frame/brightness or stop the newer effect.",
           "catalog_summary_zh": "播放隨機 sparkle 動畫。",
           "catalog_return_reference": "",
           "code_generation_allowed": true,
@@ -17184,7 +17227,7 @@
             "Compatible enabled RuntimeConfig and actual connected peripheral"
           ],
           "return_semantics": "None（方法本身沒有回傳結果；如有事件回呼，其結果另由事件迴圈處理）。",
-          "preconditions_and_behavior": "Stops the strip effect tasks and clears the frame to black through the canonical driver.",
+          "preconditions_and_behavior": "Stops the strip effect tasks and clears the frame to black through the canonical driver. Normal clearing makes the frame black. After the known same-cycle Scheduler cancellation defect has orphaned an effect task, that untracked task can repaint on a later tick; clearing is not a repair for that earlier task-ownership failure.",
           "catalog_summary_zh": "相容名稱；委派給 `led_off()`。",
           "catalog_return_reference": "",
           "code_generation_allowed": true,
@@ -20307,7 +20350,7 @@
             "Compatible enabled RuntimeConfig and actual connected peripheral"
           ],
           "return_semantics": "None（方法本身沒有回傳結果；如有事件回呼，其結果另由事件迴圈處理）。",
-          "preconditions_and_behavior": "period is the animation update interval, not a complete effect cycle. duration=0 continues; expiry stops the animation task and can leave the last frame visible. Use led_off() for an explicit dark frame.",
+          "preconditions_and_behavior": "period is the animation update interval, not a complete effect cycle. duration=0 continues; expiry stops the animation task and can leave the last frame visible. Use led_off() for an explicit dark frame. Current expiry ownership limitation: a new duration=0 LED operation does not cancel an earlier timed restore/stop task. That earlier expiry can overwrite the newer frame/brightness or stop the newer effect.",
           "catalog_summary_zh": "播放彩虹色循環動畫。",
           "catalog_return_reference": "",
           "code_generation_allowed": true,
@@ -20389,6 +20432,7 @@
           "role": "teaching",
           "requires": [],
           "return_semantics": "None（方法本身沒有回傳結果；如有事件回呼，其結果另由事件迴圈處理）。",
+          "preconditions_and_behavior": "When one callback removes or clears a later task in the same Scheduler.run() cycle, the current BarePico snapshot loop can reinsert and execute that canceled task. A successful remove_task() return does not guarantee cancellation of an already captured later item.",
           "catalog_summary_zh": "持續處理 scheduler 與感測事件，直到中止或關閉。",
           "catalog_return_reference": "",
           "code_generation_allowed": true,
@@ -20412,6 +20456,7 @@
           "role": "advanced",
           "requires": [],
           "return_semantics": "int, number of tasks run by this Scheduler cycle; returns 0 when no task is due or the Scheduler is already running",
+          "preconditions_and_behavior": "When one callback removes or clears a later task in the same Scheduler.run() cycle, the current BarePico snapshot loop can reinsert and execute that canceled task. A successful remove_task() return does not guarantee cancellation of an already captured later item.",
           "catalog_summary_zh": "進階用法：只執行一次 scheduler。",
           "catalog_return_reference": "",
           "code_generation_allowed": true,
@@ -20806,7 +20851,7 @@
             "Compatible enabled RuntimeConfig and actual connected peripheral"
           ],
           "return_semantics": "None（方法本身沒有回傳結果；如有事件回呼，其結果另由事件迴圈處理）。",
-          "preconditions_and_behavior": "The first move is immediate when no previous angle is known. Later gradual moves use a Scheduler task that is not recorded as the sweep task; do not overlap moves or assume servo_stop()/servo_release() cancels an unfinished move_to.",
+          "preconditions_and_behavior": "The first move is immediate when no previous angle is known. Later gradual moves create a Scheduler task whose ID is not retained by the driver. Repeated move_to calls can leave competing tasks; servo_stop(), servo_release() and a later direct angle command do not cancel an unfinished move_to.",
           "catalog_summary_zh": "以 step 與 period 控制逐步移動到目標角度。",
           "catalog_return_reference": "",
           "code_generation_allowed": true,
@@ -20832,7 +20877,7 @@
             "Compatible enabled RuntimeConfig and actual connected peripheral"
           ],
           "return_semantics": "None（方法本身沒有回傳結果；如有事件回呼，其結果另由事件迴圈處理）。",
-          "preconditions_and_behavior": "Stops sweep and sets PWM duty to 0; it does not deinitialize PWM. An unfinished servo_move_to() task can write PWM again on a later tick.",
+          "preconditions_and_behavior": "Stops the tracked sweep and sets PWM duty to 0; it does not deinitialize PWM or cancel an unfinished servo_move_to(). That move can write PWM again on the next due Scheduler tick.",
           "catalog_summary_zh": "停止對舵機輸出保持訊號。",
           "catalog_return_reference": "",
           "code_generation_allowed": true,
@@ -20891,7 +20936,7 @@
             "Compatible enabled RuntimeConfig and actual connected peripheral"
           ],
           "return_semantics": "None（方法本身沒有回傳結果；如有事件回呼，其結果另由事件迴圈處理）。",
-          "preconditions_and_behavior": "Stops the sweep task and retains the current output. It does not cancel an unfinished servo_move_to() task in the current canonical driver.",
+          "preconditions_and_behavior": "Stops only the tracked sweep task and retains the current PWM output. It does not cancel an unfinished servo_move_to() task, which can continue writing PWM on later Scheduler ticks.",
           "catalog_summary_zh": "停止指定舵機的 sweep 動畫。",
           "catalog_return_reference": "",
           "code_generation_allowed": true,
@@ -21245,7 +21290,7 @@
             "Compatible enabled RuntimeConfig and actual connected peripheral"
           ],
           "return_semantics": "None（方法本身沒有回傳結果；如有事件回呼，其結果另由事件迴圈處理）。",
-          "preconditions_and_behavior": "Schedules repeated beeps, but each _bee_step calls a synchronous 40ms tone. The cooperative Scheduler can therefore be delayed by each beep.",
+          "preconditions_and_behavior": "Schedules repeated beeps, but each _bee_step calls a synchronous 40ms tone. The cooperative Scheduler can therefore be delayed by each beep. Use duration=0 or 10..5000 ms. A positive duration from 1 through 9 passes the facade range check, starts the beeper, and then raises ValueError when scheduling its stop task; a beeper task can remain after the exception.",
           "catalog_summary_zh": "啟動週期性蜂鳴器效果。",
           "catalog_return_reference": "",
           "code_generation_allowed": true,
@@ -22851,6 +22896,7 @@
           "source_function": "remove_task",
           "binding_line": 49,
           "requires": [],
+          "preconditions_and_behavior": "Remove only the task you own; never clear all module tasks.",
           "targets": [
             "barepico-pico",
             "barepico-picow",
@@ -22858,8 +22904,7 @@
           ],
           "role": "advanced",
           "code_generation_allowed": true,
-          "return_semantics": "BarePico: bool removed; carrier: None.",
-          "preconditions_and_behavior": "Remove only the task you own; never clear all module tasks."
+          "return_semantics": "BarePico: bool removed; carrier: None."
         }
       ]
     }
@@ -23178,16 +23223,40 @@
       "git_blob_sha": "9c701ec079cddca75861ba06e44c9c411e3f3446"
     },
     {
+      "path": "runtime/mangolite-pico2w/firmware/mangolite/devices/buzzer.py",
+      "evidence_role": "implementation_or_build",
+      "sha256": "bbaa3379add1752721ef624485680f669f396bdbae589cd586a73bd3ec78e018",
+      "git_blob_sha": "e669f35a297b46132cbe06e79a831a41fee611d6"
+    },
+    {
       "path": "runtime/mangolite-pico2w/firmware/mangolite/devices/light.py",
       "evidence_role": "implementation_or_build",
       "sha256": "ef781a9cf3de08c11cf09afb7044303d76583d8395caac9a0b9223c75382ed77",
       "git_blob_sha": "bb4d9fd04e312881f83da776ace465f2dd184c7c"
     },
     {
+      "path": "runtime/mangolite-pico2w/firmware/mangolite/devices/rgb.py",
+      "evidence_role": "implementation_or_build",
+      "sha256": "bfab38db78c6152208bd82117cd6dc3f2ec67ecfaed8653cd03a7b787fdf82ab",
+      "git_blob_sha": "1187662a1e57d8720a6cbcce5807e64a39896a4e"
+    },
+    {
+      "path": "runtime/mangolite-pico2w/firmware/mangolite/devices/servo.py",
+      "evidence_role": "implementation_or_build",
+      "sha256": "96417fbdd41475fd8c9f281a49389f29a9829aa078808dd2c0d246504f9ed896",
+      "git_blob_sha": "0cdd2d00c9183471605d4dd272b1e2bbbf6266d8"
+    },
+    {
       "path": "runtime/mangolite-pico2w/firmware/mangolite/runtime/config.py",
       "evidence_role": "implementation_or_build",
       "sha256": "cdca22e1b3264226a5658d560e972c06fcb0ea6ca630f51af02a3efcb2d562d0",
       "git_blob_sha": "ded9a184ca7fb97c8436ad7c6772a2cab15deed2"
+    },
+    {
+      "path": "runtime/mangolite-pico2w/firmware/mangolite/runtime/handler.py",
+      "evidence_role": "implementation_or_build",
+      "sha256": "3360025767dcb518f9ab2870a99fb07a13269ccf0dffa2bfd097db7a0fe25272",
+      "git_blob_sha": "78bfafa0df34c70832645c4bc84548792e4bab54"
     },
     {
       "path": "runtime/mangolite-pico2w/firmware/mangolite/runtime/scheduler.py",
@@ -23334,16 +23403,34 @@
       "git_blob_sha": "f67af499bbc0ca984faba601e8aa823268b8d4d0"
     },
     {
+      "path": "runtime/mangox2-pico/firmware/mangox2/runtime/__init__.py",
+      "evidence_role": "implementation_or_build",
+      "sha256": "02fa7a5df64e510eef0c4866dc409ec9cea2b91aeda922f014f0036a3e9f2720",
+      "git_blob_sha": "647debb170967fefcc9445a8ea06cb6a5136856e"
+    },
+    {
       "path": "runtime/mangox2-pico/firmware/mangox2/runtime/config.py",
       "evidence_role": "implementation_or_build",
       "sha256": "84b3797e8d7df897a389365c46e24f9c1c4ebdc1ca58695cf7422cc6572da66b",
       "git_blob_sha": "c74f5c30901c988c5fe977591969ff91b9a0a1f5"
     },
     {
+      "path": "runtime/mangox2-pico/firmware/mangox2/runtime/handler.py",
+      "evidence_role": "implementation_or_build",
+      "sha256": "4e7307765f4eadf24e487b507e2cddd96be80244b971fe9d916536a30b719ec8",
+      "git_blob_sha": "c05aa9dab104906193fe98bb6a4f753e1035872b"
+    },
+    {
       "path": "runtime/mangox2-pico/firmware/mangox2/runtime/scheduler.py",
       "evidence_role": "implementation_or_build",
       "sha256": "d0bd9faeb16df3452a219e135ced931a63b5efdd43fda34797feae52308cbf30",
       "git_blob_sha": "fbd009f0f186e1b1b31de22f4effd31d44209d02"
+    },
+    {
+      "path": "runtime/mangox2-pico/firmware/mangox2/runtime/servo_multi_handler.py",
+      "evidence_role": "implementation_or_build",
+      "sha256": "d54c4d933ea25f0d7f81a6de962204d1fe5e4c1953635a502079634f0adbf5dc",
+      "git_blob_sha": "6c3b0a25bdb5c1abe7f02633266cf0d1a76b9a35"
     },
     {
       "path": "runtime/mangox2-pico/firmware/mangox2/student_api.py",

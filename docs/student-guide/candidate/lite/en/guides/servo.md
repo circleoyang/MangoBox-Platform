@@ -61,6 +61,10 @@ After `servo_release()`, external force may move the shaft. Do not suspend a hea
 
 `step` is an angle increment and `period` is milliseconds. Both are converted to integers and bounded below by 1. A smaller step gives finer command increments, without guaranteeing physical speed or position accuracy. Choose endpoints within the verified mechanical range.
 
+**Confirmed candidate limitation: neither `servo_stop()` nor `servo_release()` cancels an unfinished `servo_move_to()`.** Release sets PWM duty to zero immediately, but an old move task can write output again on its next tick. A new servo() or move_to does not reliably replace that task either. Do not overlap move_to calls. This page's complete examples use direct positioning or bounded sweeps, so they create no pending move_to.
+
+The normal Carrier close path clears Scheduler through reset_runtime, including pending move tasks, but it does not release/deinitialize Servo PWM. Explicitly release and then close when ending the session, without another run_once between them. Do not describe close as automatically disabling the holding signal or treat session shutdown as a per-servo cancellation method for continued use.
+
 ## 5. Complete interaction: one bounded action per command
 
 Enter `1` or `2` for positions within 15 degrees of the midpoint, `3` for a three-second sweep, or `q` to finish. Each action stops sweeping and releases PWM before waiting for another command.
@@ -132,3 +136,5 @@ Compare `step=2, period=60` with `step=4, period=60` over the same safe range. R
 [Complete Servo Reference](../reference/servo.md) · [Scheduler](../../../shared/en/guides/scheduler.md) · [Runtime Config](../../../shared/en/guides/runtime-config.md)
 
 Source: [Lite student_api.py](https://github.com/circleoyang/MangoBox/blob/f875289b5698f0e61faf64196b1165a3b18f2bd5/runtime/mangolite-pico2w/firmware/mangolite/student_api.py) and [Runtime Config](https://github.com/circleoyang/MangoBox/blob/f875289b5698f0e61faf64196b1165a3b18f2bd5/runtime/mangolite-pico2w/firmware/mangolite/runtime/config.py), pinned to `f875289b5698f0e61faf64196b1165a3b18f2bd5`.
+
+Cancellation and close sources: [BoardServo](https://github.com/circleoyang/MangoBox/blob/f875289b5698f0e61faf64196b1165a3b18f2bd5/runtime/mangolite-pico2w/firmware/mangolite/devices/servo.py), [Runtime reset](https://github.com/circleoyang/MangoBox/blob/f875289b5698f0e61faf64196b1165a3b18f2bd5/runtime/mangolite-pico2w/firmware/mangolite/runtime/handler.py).

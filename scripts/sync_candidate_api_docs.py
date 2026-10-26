@@ -156,8 +156,10 @@ def render(snapshot):
             if family == "barepico" and method["name"] == "capabilities":
                 zh = "回傳 target、MCU、wireless 與 carrier 硬體旗標的識別 dict；不是 API 方法清單或實機測試。"
                 en = "Return a target/MCU/wireless/carrier identity dict; not an API method inventory or a hardware test."
-            if family == "barepico" and method["name"] == "led_clear":
-                en = "Stop all effects on the selected RGB strip and clear it to black; like led_off, this turns the strip off."
+            if method["name"] == "led_clear":
+                en = "Stop the selected RGB strip's tracked effects and clear its frame to black."
+                if family == "mangolite":
+                    en = "Stop the selected RGB strip's tracked effects and clear the student frame to black; a system overlay may remain visible."
             if family == "mangolite" and module == "servo":
                 zh = "操作 MangoLite 的單一已配置伺服機；此簽章不接受 name 參數。"
                 en = "Operate the single configured MangoLite servo; this signature does not accept a name argument."
@@ -195,6 +197,11 @@ def render(snapshot):
                     documents[module]["reference"] = "candidate/lite/{lang}/reference/" + module + ".md"
                     if module == "servo":
                         documents[module]["guide"] = "candidate/lite/{lang}/guides/servo.md"
+                if family == "mangox2" and module == "servo":
+                    documents[module] = {
+                        "guide": "candidate/x2/{lang}/guides/servo.md",
+                        "reference": "candidate/x2/{lang}/reference/servo.md",
+                    }
             runtime = snapshot["versions"][family]
             profile = {
                 "id": target + "__hlmp__candidate-" + runtime,

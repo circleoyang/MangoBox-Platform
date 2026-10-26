@@ -61,6 +61,10 @@ finally:
 
 `step` 是每步角度，`period` 是毫秒；兩者會轉為整數且至少為 1。較小 step 通常讓命令角度變化更細，但不是實際角速度或定位精度保證。只在已核對的機構範圍內選擇端點。
 
+**已確認的候選限制：未完成的 `servo_move_to()` 不會被 `servo_stop()` 或 `servo_release()` 取消。** release 當下把 PWM 設為0，舊 move task 下一輪仍可能再次輸出；另一個 servo() 或 move_to 也不能可靠取代舊任務。不要重疊 move_to。本頁完整範例只用立即定位或有限 sweep，因此其 stop/release 流程不會留下 move_to。
+
+正常 Carrier `close()` 會經 reset_runtime 清除 Scheduler，包含未完成的 move task，但不會自行 release/deinit Servo PWM。結束本頁 session 時明確 release 再 close，中間不再 run_once；不要把 close 說成自動關閉保持訊號，也不要把 session 清理當成持續使用中的單顆取消 API。
+
 ## 5. 完整互動範例：輸入指令做一次短動作
 
 輸入 `1` 或 `2` 可要求中間角度左右 15 度範圍內的位置，`3` 會往返三秒，`q` 結束。每次動作後會先停止往返並解除保持，再等待下一個輸入；等待輸入時不留下持續 sweep。
@@ -132,3 +136,5 @@ finally:
 [完整 Servo Reference](../reference/servo.md) · [Scheduler](../../../shared/zh-TW/guides/scheduler.md) · [Runtime Config](../../../shared/zh-TW/guides/runtime-config.md)
 
 來源：[Lite student_api.py](https://github.com/circleoyang/MangoBox/blob/f875289b5698f0e61faf64196b1165a3b18f2bd5/runtime/mangolite-pico2w/firmware/mangolite/student_api.py) 與 [Runtime Config](https://github.com/circleoyang/MangoBox/blob/f875289b5698f0e61faf64196b1165a3b18f2bd5/runtime/mangolite-pico2w/firmware/mangolite/runtime/config.py)，固定於 `f875289b5698f0e61faf64196b1165a3b18f2bd5`。
+
+取消與關閉語意來源: [BoardServo](https://github.com/circleoyang/MangoBox/blob/f875289b5698f0e61faf64196b1165a3b18f2bd5/runtime/mangolite-pico2w/firmware/mangolite/devices/servo.py), [Runtime reset](https://github.com/circleoyang/MangoBox/blob/f875289b5698f0e61faf64196b1165a3b18f2bd5/runtime/mangolite-pico2w/firmware/mangolite/runtime/handler.py).
