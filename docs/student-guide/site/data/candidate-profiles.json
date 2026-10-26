@@ -1,0 +1,3517 @@
+{
+  "schema_version": 1,
+  "source_repository": "circleoyang/MangoBox",
+  "source_commit": "f875289b5698f0e61faf64196b1165a3b18f2bd5",
+  "source_date": "2026-10-26",
+  "source_status": "candidate-source-reviewed",
+  "generated_from": "docs/student-guide/contracts/source-snapshot.vnext.json",
+  "profiles": [
+    {
+      "id": "mangox2-pico__hlmp__candidate-0.2.10-rc2",
+      "target": "mangox2-pico",
+      "mode": "high_level_micropython",
+      "runtime": "0.2.10-rc2",
+      "release_status": "candidate",
+      "documentation_root": "candidate/shared",
+      "label": {
+        "zh-TW": "來源候選 · Runtime 0.2.10-rc2",
+        "en": "Source candidate · Runtime 0.2.10-rc2"
+      },
+      "source_repository": "circleoyang/MangoBox",
+      "source_commit": "f875289b5698f0e61faf64196b1165a3b18f2bd5",
+      "source_date": "2026-10-26",
+      "capabilities": [
+        "button",
+        "buzzer",
+        "clock",
+        "dfplayer",
+        "dht11",
+        "ir",
+        "joystick",
+        "led",
+        "lifecycle",
+        "light",
+        "line_tracking",
+        "motor",
+        "obstacle",
+        "oled",
+        "pir",
+        "pot",
+        "runtime-config",
+        "scheduler",
+        "servo",
+        "sound",
+        "ultrasonic"
+      ],
+      "documents": {
+        "button": {
+          "guide": "{lang}/guides/button.md",
+          "reference": "{lang}/reference/button.md"
+        },
+        "buzzer": {
+          "guide": "{lang}/guides/buzzer.md",
+          "reference": "{lang}/reference/buzzer.md"
+        },
+        "clock": {
+          "guide": "candidate/wired/{lang}/guides/clock.md",
+          "reference": "candidate/wired/{lang}/reference/clock.md"
+        },
+        "dfplayer": {
+          "guide": "candidate/shared/{lang}/guides/dfplayer.md",
+          "reference": "candidate/shared/{lang}/reference/dfplayer.md"
+        },
+        "dht11": {
+          "guide": "candidate/carrier/{lang}/guides/dht11.md",
+          "reference": "candidate/carrier/{lang}/reference/dht11.md"
+        },
+        "ir": {
+          "guide": "{lang}/guides/ir.md",
+          "reference": "{lang}/reference/ir.md"
+        },
+        "joystick": {
+          "guide": "{lang}/guides/joystick.md",
+          "reference": "{lang}/reference/joystick.md"
+        },
+        "led": {
+          "guide": "{lang}/guides/led.md",
+          "reference": "{lang}/reference/led.md"
+        },
+        "lifecycle": {
+          "guide": "candidate/shared/{lang}/guides/lifecycle.md",
+          "reference": "candidate/shared/{lang}/reference/lifecycle.md"
+        },
+        "light": {
+          "guide": "{lang}/guides/light.md",
+          "reference": "{lang}/reference/light.md"
+        },
+        "line_tracking": {
+          "guide": "{lang}/guides/line_tracking.md",
+          "reference": "{lang}/reference/line_tracking.md"
+        },
+        "motor": {
+          "guide": "{lang}/guides/motor.md",
+          "reference": "{lang}/reference/motor.md"
+        },
+        "obstacle": {
+          "guide": "{lang}/guides/obstacle.md",
+          "reference": "{lang}/reference/obstacle.md"
+        },
+        "oled": {
+          "guide": "candidate/shared/{lang}/guides/oled.md",
+          "reference": "candidate/shared/{lang}/reference/oled.md"
+        },
+        "pir": {
+          "guide": "{lang}/guides/pir.md",
+          "reference": "{lang}/reference/pir.md"
+        },
+        "pot": {
+          "guide": "{lang}/guides/pot.md",
+          "reference": "{lang}/reference/pot.md"
+        },
+        "runtime-config": {
+          "guide": "candidate/shared/{lang}/guides/runtime-config.md",
+          "reference": "candidate/shared/{lang}/reference/runtime-config.md"
+        },
+        "scheduler": {
+          "guide": "candidate/shared/{lang}/guides/scheduler.md",
+          "reference": "candidate/shared/{lang}/reference/scheduler.md"
+        },
+        "servo": {
+          "guide": "candidate/x2/{lang}/guides/servo.md",
+          "reference": "candidate/x2/{lang}/reference/servo.md"
+        },
+        "sound": {
+          "guide": "{lang}/guides/sound.md",
+          "reference": "{lang}/reference/sound.md"
+        },
+        "ultrasonic": {
+          "guide": "{lang}/guides/ultrasonic.md",
+          "reference": "{lang}/reference/ultrasonic.md"
+        }
+      },
+      "allowed_methods": [
+        "alarm",
+        "alarm_list",
+        "alarm_remove",
+        "arc_left",
+        "arc_right",
+        "audio_begin",
+        "audio_volume",
+        "backward",
+        "bee",
+        "beep",
+        "block_state",
+        "breath",
+        "brightness",
+        "calibrate_joystick",
+        "capabilities",
+        "clear",
+        "clear_oled",
+        "clear_screen",
+        "clock_status",
+        "clock_sync_host",
+        "close",
+        "coast",
+        "config.get",
+        "date",
+        "dht",
+        "dht_attach",
+        "dht_status",
+        "distance",
+        "drive_tank",
+        "enable_time_services",
+        "flash_text",
+        "forward",
+        "is_blocked",
+        "is_ir_pressed",
+        "is_joystick_pressed",
+        "is_motion_detected",
+        "is_near",
+        "joystick",
+        "led",
+        "led_all",
+        "led_clear",
+        "led_off",
+        "led_range",
+        "led_set_brightness",
+        "led_show_all",
+        "led_show_one",
+        "led_show_range",
+        "led_start_breathing",
+        "led_start_color_wipe",
+        "led_start_fire_flicker",
+        "led_start_meteor",
+        "led_start_rainbow",
+        "led_start_random_sparkle",
+        "led_turn_off",
+        "light",
+        "line_left",
+        "line_right",
+        "line_state",
+        "motor_brake",
+        "motor_coast",
+        "motor_run",
+        "mp3",
+        "mp3_play",
+        "mp3_status",
+        "mp3_stop",
+        "music",
+        "oled_line",
+        "oled_media_info",
+        "oled_media_list",
+        "oled_menu",
+        "oled_pixel",
+        "oled_play_media",
+        "oled_progress",
+        "oled_rect",
+        "oled_stop_media",
+        "oled_waveform",
+        "on",
+        "on_blocked",
+        "on_clear",
+        "on_distance_change",
+        "on_enter",
+        "on_far",
+        "on_ir_pressed",
+        "on_ir_released",
+        "on_joystick_change",
+        "on_joystick_pressed",
+        "on_joystick_released",
+        "on_leave",
+        "on_light_above",
+        "on_light_below",
+        "on_light_change",
+        "on_line_both",
+        "on_line_change",
+        "on_line_clear",
+        "on_line_left",
+        "on_line_right",
+        "on_motion_cleared",
+        "on_motion_detected",
+        "on_near",
+        "on_pot_above",
+        "on_pot_below",
+        "on_pot_change",
+        "on_pressed",
+        "on_released",
+        "on_sound_above",
+        "on_sound_below",
+        "on_sound_change",
+        "pivot_left",
+        "pivot_right",
+        "play_song",
+        "play_sound",
+        "play_tone",
+        "pot",
+        "pot_raw",
+        "pot_voltage",
+        "rainbow",
+        "read_button",
+        "read_sensor",
+        "run_forever",
+        "run_once",
+        "say",
+        "scheduler.add_task",
+        "scheduler.remove_task",
+        "select_led_strip",
+        "send_text",
+        "servo",
+        "servo_get_angle",
+        "servo_move_to",
+        "servo_release",
+        "servo_set_angle",
+        "servo_stop",
+        "servo_sweep",
+        "show_image",
+        "sound",
+        "sound_level",
+        "speak",
+        "spin_left",
+        "spin_right",
+        "start_bee",
+        "start_button",
+        "start_flash_text",
+        "start_image_loop",
+        "start_sensor",
+        "stop",
+        "stop_bee",
+        "stop_button",
+        "stop_distance_change",
+        "stop_image_loop",
+        "stop_joystick_change",
+        "stop_light_change",
+        "stop_music",
+        "stop_pot",
+        "stop_sensor",
+        "stop_song",
+        "stop_sound_change",
+        "supports",
+        "text",
+        "time",
+        "tone",
+        "upload_image",
+        "when_pressed",
+        "when_released"
+      ],
+      "validation": {
+        "source": "reviewed signatures and installation paths at recorded commit",
+        "host": "documentation generation checks only; not a Host Python implementation",
+        "windows": "not revalidated by this documentation update",
+        "hardware": "not revalidated by this documentation update"
+      },
+      "notes": [
+        "版本以選定來源的 __version__ 為準，不能替代目前已燒入裝置的版本核對。",
+        "High-Level MicroPython only. Read the exact module reference and configured device names before generating code.",
+        "Audio v1.1 / 365-voice behavior additionally depends on the verified build overlay and matching TF catalog. Overlay-only method names are excluded from this default-build profile."
+      ],
+      "module_dependencies": {
+        "button": [
+          "led",
+          "lifecycle",
+          "runtime-config"
+        ],
+        "buzzer": [
+          "lifecycle",
+          "runtime-config"
+        ],
+        "clock": [
+          "lifecycle"
+        ],
+        "dfplayer": [
+          "lifecycle"
+        ],
+        "dht11": [
+          "lifecycle",
+          "runtime-config",
+          "scheduler"
+        ],
+        "ir": [
+          "led",
+          "lifecycle"
+        ],
+        "joystick": [
+          "buzzer",
+          "lifecycle",
+          "runtime-config"
+        ],
+        "led": [
+          "button",
+          "lifecycle",
+          "runtime-config"
+        ],
+        "lifecycle": [
+          "scheduler"
+        ],
+        "light": [
+          "led",
+          "lifecycle",
+          "runtime-config"
+        ],
+        "line_tracking": [
+          "lifecycle",
+          "motor"
+        ],
+        "motor": [
+          "lifecycle"
+        ],
+        "obstacle": [
+          "led",
+          "lifecycle",
+          "motor"
+        ],
+        "oled": [
+          "lifecycle",
+          "pot"
+        ],
+        "pir": [
+          "led",
+          "lifecycle",
+          "runtime-config"
+        ],
+        "pot": [
+          "led",
+          "lifecycle"
+        ],
+        "runtime-config": [
+          "lifecycle"
+        ],
+        "scheduler": [
+          "lifecycle"
+        ],
+        "servo": [
+          "lifecycle",
+          "runtime-config"
+        ],
+        "sound": [
+          "led",
+          "lifecycle",
+          "runtime-config"
+        ],
+        "ultrasonic": [
+          "lifecycle"
+        ]
+      }
+    },
+    {
+      "id": "mangox2-picow__hlmp__candidate-0.2.10-rc2",
+      "target": "mangox2-picow",
+      "mode": "high_level_micropython",
+      "runtime": "0.2.10-rc2",
+      "release_status": "candidate",
+      "documentation_root": "candidate/shared",
+      "label": {
+        "zh-TW": "來源候選 · Runtime 0.2.10-rc2",
+        "en": "Source candidate · Runtime 0.2.10-rc2"
+      },
+      "source_repository": "circleoyang/MangoBox",
+      "source_commit": "f875289b5698f0e61faf64196b1165a3b18f2bd5",
+      "source_date": "2026-10-26",
+      "capabilities": [
+        "button",
+        "buzzer",
+        "clock",
+        "dfplayer",
+        "dht11",
+        "ir",
+        "joystick",
+        "led",
+        "lifecycle",
+        "light",
+        "line_tracking",
+        "motor",
+        "obstacle",
+        "oled",
+        "pir",
+        "pot",
+        "runtime-config",
+        "scheduler",
+        "servo",
+        "sound",
+        "ultrasonic",
+        "wifi"
+      ],
+      "documents": {
+        "button": {
+          "guide": "{lang}/guides/button.md",
+          "reference": "{lang}/reference/button.md"
+        },
+        "buzzer": {
+          "guide": "{lang}/guides/buzzer.md",
+          "reference": "{lang}/reference/buzzer.md"
+        },
+        "clock": {
+          "guide": "candidate/shared/{lang}/guides/clock.md",
+          "reference": "candidate/shared/{lang}/reference/clock.md"
+        },
+        "dfplayer": {
+          "guide": "candidate/shared/{lang}/guides/dfplayer.md",
+          "reference": "candidate/shared/{lang}/reference/dfplayer.md"
+        },
+        "dht11": {
+          "guide": "candidate/carrier/{lang}/guides/dht11.md",
+          "reference": "candidate/carrier/{lang}/reference/dht11.md"
+        },
+        "ir": {
+          "guide": "{lang}/guides/ir.md",
+          "reference": "{lang}/reference/ir.md"
+        },
+        "joystick": {
+          "guide": "{lang}/guides/joystick.md",
+          "reference": "{lang}/reference/joystick.md"
+        },
+        "led": {
+          "guide": "{lang}/guides/led.md",
+          "reference": "{lang}/reference/led.md"
+        },
+        "lifecycle": {
+          "guide": "candidate/shared/{lang}/guides/lifecycle.md",
+          "reference": "candidate/shared/{lang}/reference/lifecycle.md"
+        },
+        "light": {
+          "guide": "{lang}/guides/light.md",
+          "reference": "{lang}/reference/light.md"
+        },
+        "line_tracking": {
+          "guide": "{lang}/guides/line_tracking.md",
+          "reference": "{lang}/reference/line_tracking.md"
+        },
+        "motor": {
+          "guide": "{lang}/guides/motor.md",
+          "reference": "{lang}/reference/motor.md"
+        },
+        "obstacle": {
+          "guide": "{lang}/guides/obstacle.md",
+          "reference": "{lang}/reference/obstacle.md"
+        },
+        "oled": {
+          "guide": "candidate/shared/{lang}/guides/oled.md",
+          "reference": "candidate/shared/{lang}/reference/oled.md"
+        },
+        "pir": {
+          "guide": "{lang}/guides/pir.md",
+          "reference": "{lang}/reference/pir.md"
+        },
+        "pot": {
+          "guide": "{lang}/guides/pot.md",
+          "reference": "{lang}/reference/pot.md"
+        },
+        "runtime-config": {
+          "guide": "candidate/shared/{lang}/guides/runtime-config.md",
+          "reference": "candidate/shared/{lang}/reference/runtime-config.md"
+        },
+        "scheduler": {
+          "guide": "candidate/shared/{lang}/guides/scheduler.md",
+          "reference": "candidate/shared/{lang}/reference/scheduler.md"
+        },
+        "servo": {
+          "guide": "candidate/x2/{lang}/guides/servo.md",
+          "reference": "candidate/x2/{lang}/reference/servo.md"
+        },
+        "sound": {
+          "guide": "{lang}/guides/sound.md",
+          "reference": "{lang}/reference/sound.md"
+        },
+        "ultrasonic": {
+          "guide": "{lang}/guides/ultrasonic.md",
+          "reference": "{lang}/reference/ultrasonic.md"
+        },
+        "wifi": {
+          "guide": "candidate/shared/{lang}/guides/wifi.md",
+          "reference": "candidate/shared/{lang}/reference/wifi.md"
+        }
+      },
+      "allowed_methods": [
+        "alarm",
+        "alarm_list",
+        "alarm_remove",
+        "arc_left",
+        "arc_right",
+        "audio_begin",
+        "audio_volume",
+        "backward",
+        "bee",
+        "beep",
+        "block_state",
+        "breath",
+        "brightness",
+        "calibrate_joystick",
+        "capabilities",
+        "clear",
+        "clear_oled",
+        "clear_screen",
+        "clock_status",
+        "clock_sync_host",
+        "clock_sync_ntp",
+        "close",
+        "coast",
+        "config.get",
+        "date",
+        "dht",
+        "dht_attach",
+        "dht_status",
+        "distance",
+        "drive_tank",
+        "enable_time_services",
+        "flash_text",
+        "forward",
+        "is_blocked",
+        "is_ir_pressed",
+        "is_joystick_pressed",
+        "is_motion_detected",
+        "is_near",
+        "joystick",
+        "led",
+        "led_all",
+        "led_clear",
+        "led_off",
+        "led_range",
+        "led_set_brightness",
+        "led_show_all",
+        "led_show_one",
+        "led_show_range",
+        "led_start_breathing",
+        "led_start_color_wipe",
+        "led_start_fire_flicker",
+        "led_start_meteor",
+        "led_start_rainbow",
+        "led_start_random_sparkle",
+        "led_turn_off",
+        "light",
+        "line_left",
+        "line_right",
+        "line_state",
+        "motor_brake",
+        "motor_coast",
+        "motor_run",
+        "mp3",
+        "mp3_play",
+        "mp3_status",
+        "mp3_stop",
+        "music",
+        "oled_line",
+        "oled_media_info",
+        "oled_media_list",
+        "oled_menu",
+        "oled_pixel",
+        "oled_play_media",
+        "oled_progress",
+        "oled_rect",
+        "oled_stop_media",
+        "oled_waveform",
+        "on",
+        "on_blocked",
+        "on_clear",
+        "on_distance_change",
+        "on_enter",
+        "on_far",
+        "on_ir_pressed",
+        "on_ir_released",
+        "on_joystick_change",
+        "on_joystick_pressed",
+        "on_joystick_released",
+        "on_leave",
+        "on_light_above",
+        "on_light_below",
+        "on_light_change",
+        "on_line_both",
+        "on_line_change",
+        "on_line_clear",
+        "on_line_left",
+        "on_line_right",
+        "on_motion_cleared",
+        "on_motion_detected",
+        "on_near",
+        "on_pot_above",
+        "on_pot_below",
+        "on_pot_change",
+        "on_pressed",
+        "on_released",
+        "on_sound_above",
+        "on_sound_below",
+        "on_sound_change",
+        "pivot_left",
+        "pivot_right",
+        "play_song",
+        "play_sound",
+        "play_tone",
+        "pot",
+        "pot_raw",
+        "pot_voltage",
+        "rainbow",
+        "read_button",
+        "read_sensor",
+        "run_forever",
+        "run_once",
+        "say",
+        "scheduler.add_task",
+        "scheduler.remove_task",
+        "select_led_strip",
+        "send_text",
+        "servo",
+        "servo_get_angle",
+        "servo_move_to",
+        "servo_release",
+        "servo_set_angle",
+        "servo_stop",
+        "servo_sweep",
+        "show_image",
+        "sound",
+        "sound_level",
+        "speak",
+        "spin_left",
+        "spin_right",
+        "start_bee",
+        "start_button",
+        "start_flash_text",
+        "start_image_loop",
+        "start_sensor",
+        "stop",
+        "stop_bee",
+        "stop_button",
+        "stop_distance_change",
+        "stop_image_loop",
+        "stop_joystick_change",
+        "stop_light_change",
+        "stop_music",
+        "stop_pot",
+        "stop_sensor",
+        "stop_song",
+        "stop_sound_change",
+        "supports",
+        "text",
+        "time",
+        "tone",
+        "upload_image",
+        "when_pressed",
+        "when_released",
+        "wifi_ap_start",
+        "wifi_ap_status",
+        "wifi_ap_stop",
+        "wifi_connect",
+        "wifi_disconnect",
+        "wifi_name",
+        "wifi_set_name",
+        "wifi_status"
+      ],
+      "validation": {
+        "source": "reviewed signatures and installation paths at recorded commit",
+        "host": "documentation generation checks only; not a Host Python implementation",
+        "windows": "not revalidated by this documentation update",
+        "hardware": "not revalidated by this documentation update"
+      },
+      "notes": [
+        "版本以選定來源的 __version__ 為準，不能替代目前已燒入裝置的版本核對。",
+        "High-Level MicroPython only. Read the exact module reference and configured device names before generating code.",
+        "Audio v1.1 / 365-voice behavior additionally depends on the verified build overlay and matching TF catalog. Overlay-only method names are excluded from this default-build profile."
+      ],
+      "module_dependencies": {
+        "button": [
+          "led",
+          "lifecycle",
+          "runtime-config"
+        ],
+        "buzzer": [
+          "lifecycle",
+          "runtime-config"
+        ],
+        "clock": [
+          "lifecycle",
+          "wifi"
+        ],
+        "dfplayer": [
+          "lifecycle"
+        ],
+        "dht11": [
+          "lifecycle",
+          "runtime-config",
+          "scheduler"
+        ],
+        "ir": [
+          "led",
+          "lifecycle"
+        ],
+        "joystick": [
+          "buzzer",
+          "lifecycle",
+          "runtime-config"
+        ],
+        "led": [
+          "button",
+          "lifecycle",
+          "runtime-config"
+        ],
+        "lifecycle": [
+          "scheduler"
+        ],
+        "light": [
+          "led",
+          "lifecycle",
+          "runtime-config"
+        ],
+        "line_tracking": [
+          "lifecycle",
+          "motor"
+        ],
+        "motor": [
+          "lifecycle"
+        ],
+        "obstacle": [
+          "led",
+          "lifecycle",
+          "motor"
+        ],
+        "oled": [
+          "lifecycle",
+          "pot"
+        ],
+        "pir": [
+          "led",
+          "lifecycle",
+          "runtime-config"
+        ],
+        "pot": [
+          "led",
+          "lifecycle"
+        ],
+        "runtime-config": [
+          "lifecycle"
+        ],
+        "scheduler": [
+          "lifecycle"
+        ],
+        "servo": [
+          "lifecycle",
+          "runtime-config"
+        ],
+        "sound": [
+          "led",
+          "lifecycle",
+          "runtime-config"
+        ],
+        "ultrasonic": [
+          "lifecycle"
+        ],
+        "wifi": [
+          "lifecycle"
+        ]
+      }
+    },
+    {
+      "id": "mangox2-pico2w__hlmp__candidate-0.2.10-rc2",
+      "target": "mangox2-pico2w",
+      "mode": "high_level_micropython",
+      "runtime": "0.2.10-rc2",
+      "release_status": "candidate",
+      "documentation_root": "candidate/shared",
+      "label": {
+        "zh-TW": "來源候選 · Runtime 0.2.10-rc2",
+        "en": "Source candidate · Runtime 0.2.10-rc2"
+      },
+      "source_repository": "circleoyang/MangoBox",
+      "source_commit": "f875289b5698f0e61faf64196b1165a3b18f2bd5",
+      "source_date": "2026-10-26",
+      "capabilities": [
+        "button",
+        "buzzer",
+        "clock",
+        "dfplayer",
+        "dht11",
+        "ir",
+        "joystick",
+        "led",
+        "lifecycle",
+        "light",
+        "line_tracking",
+        "motor",
+        "obstacle",
+        "oled",
+        "pir",
+        "pot",
+        "runtime-config",
+        "scheduler",
+        "servo",
+        "sound",
+        "ultrasonic",
+        "wifi"
+      ],
+      "documents": {
+        "button": {
+          "guide": "{lang}/guides/button.md",
+          "reference": "{lang}/reference/button.md"
+        },
+        "buzzer": {
+          "guide": "{lang}/guides/buzzer.md",
+          "reference": "{lang}/reference/buzzer.md"
+        },
+        "clock": {
+          "guide": "candidate/shared/{lang}/guides/clock.md",
+          "reference": "candidate/shared/{lang}/reference/clock.md"
+        },
+        "dfplayer": {
+          "guide": "candidate/shared/{lang}/guides/dfplayer.md",
+          "reference": "candidate/shared/{lang}/reference/dfplayer.md"
+        },
+        "dht11": {
+          "guide": "candidate/carrier/{lang}/guides/dht11.md",
+          "reference": "candidate/carrier/{lang}/reference/dht11.md"
+        },
+        "ir": {
+          "guide": "{lang}/guides/ir.md",
+          "reference": "{lang}/reference/ir.md"
+        },
+        "joystick": {
+          "guide": "{lang}/guides/joystick.md",
+          "reference": "{lang}/reference/joystick.md"
+        },
+        "led": {
+          "guide": "{lang}/guides/led.md",
+          "reference": "{lang}/reference/led.md"
+        },
+        "lifecycle": {
+          "guide": "candidate/shared/{lang}/guides/lifecycle.md",
+          "reference": "candidate/shared/{lang}/reference/lifecycle.md"
+        },
+        "light": {
+          "guide": "{lang}/guides/light.md",
+          "reference": "{lang}/reference/light.md"
+        },
+        "line_tracking": {
+          "guide": "{lang}/guides/line_tracking.md",
+          "reference": "{lang}/reference/line_tracking.md"
+        },
+        "motor": {
+          "guide": "{lang}/guides/motor.md",
+          "reference": "{lang}/reference/motor.md"
+        },
+        "obstacle": {
+          "guide": "{lang}/guides/obstacle.md",
+          "reference": "{lang}/reference/obstacle.md"
+        },
+        "oled": {
+          "guide": "candidate/shared/{lang}/guides/oled.md",
+          "reference": "candidate/shared/{lang}/reference/oled.md"
+        },
+        "pir": {
+          "guide": "{lang}/guides/pir.md",
+          "reference": "{lang}/reference/pir.md"
+        },
+        "pot": {
+          "guide": "{lang}/guides/pot.md",
+          "reference": "{lang}/reference/pot.md"
+        },
+        "runtime-config": {
+          "guide": "candidate/shared/{lang}/guides/runtime-config.md",
+          "reference": "candidate/shared/{lang}/reference/runtime-config.md"
+        },
+        "scheduler": {
+          "guide": "candidate/shared/{lang}/guides/scheduler.md",
+          "reference": "candidate/shared/{lang}/reference/scheduler.md"
+        },
+        "servo": {
+          "guide": "candidate/x2/{lang}/guides/servo.md",
+          "reference": "candidate/x2/{lang}/reference/servo.md"
+        },
+        "sound": {
+          "guide": "{lang}/guides/sound.md",
+          "reference": "{lang}/reference/sound.md"
+        },
+        "ultrasonic": {
+          "guide": "{lang}/guides/ultrasonic.md",
+          "reference": "{lang}/reference/ultrasonic.md"
+        },
+        "wifi": {
+          "guide": "candidate/shared/{lang}/guides/wifi.md",
+          "reference": "candidate/shared/{lang}/reference/wifi.md"
+        }
+      },
+      "allowed_methods": [
+        "alarm",
+        "alarm_list",
+        "alarm_remove",
+        "arc_left",
+        "arc_right",
+        "audio_begin",
+        "audio_volume",
+        "backward",
+        "bee",
+        "beep",
+        "block_state",
+        "breath",
+        "brightness",
+        "calibrate_joystick",
+        "capabilities",
+        "clear",
+        "clear_oled",
+        "clear_screen",
+        "clock_status",
+        "clock_sync_host",
+        "clock_sync_ntp",
+        "close",
+        "coast",
+        "config.get",
+        "date",
+        "dht",
+        "dht_attach",
+        "dht_status",
+        "distance",
+        "drive_tank",
+        "enable_time_services",
+        "flash_text",
+        "forward",
+        "is_blocked",
+        "is_ir_pressed",
+        "is_joystick_pressed",
+        "is_motion_detected",
+        "is_near",
+        "joystick",
+        "led",
+        "led_all",
+        "led_clear",
+        "led_off",
+        "led_range",
+        "led_set_brightness",
+        "led_show_all",
+        "led_show_one",
+        "led_show_range",
+        "led_start_breathing",
+        "led_start_color_wipe",
+        "led_start_fire_flicker",
+        "led_start_meteor",
+        "led_start_rainbow",
+        "led_start_random_sparkle",
+        "led_turn_off",
+        "light",
+        "line_left",
+        "line_right",
+        "line_state",
+        "motor_brake",
+        "motor_coast",
+        "motor_run",
+        "mp3",
+        "mp3_play",
+        "mp3_status",
+        "mp3_stop",
+        "music",
+        "oled_line",
+        "oled_media_info",
+        "oled_media_list",
+        "oled_menu",
+        "oled_pixel",
+        "oled_play_media",
+        "oled_progress",
+        "oled_rect",
+        "oled_stop_media",
+        "oled_waveform",
+        "on",
+        "on_blocked",
+        "on_clear",
+        "on_distance_change",
+        "on_enter",
+        "on_far",
+        "on_ir_pressed",
+        "on_ir_released",
+        "on_joystick_change",
+        "on_joystick_pressed",
+        "on_joystick_released",
+        "on_leave",
+        "on_light_above",
+        "on_light_below",
+        "on_light_change",
+        "on_line_both",
+        "on_line_change",
+        "on_line_clear",
+        "on_line_left",
+        "on_line_right",
+        "on_motion_cleared",
+        "on_motion_detected",
+        "on_near",
+        "on_pot_above",
+        "on_pot_below",
+        "on_pot_change",
+        "on_pressed",
+        "on_released",
+        "on_sound_above",
+        "on_sound_below",
+        "on_sound_change",
+        "pivot_left",
+        "pivot_right",
+        "play_song",
+        "play_sound",
+        "play_tone",
+        "pot",
+        "pot_raw",
+        "pot_voltage",
+        "rainbow",
+        "read_button",
+        "read_sensor",
+        "run_forever",
+        "run_once",
+        "say",
+        "scheduler.add_task",
+        "scheduler.remove_task",
+        "select_led_strip",
+        "send_text",
+        "servo",
+        "servo_get_angle",
+        "servo_move_to",
+        "servo_release",
+        "servo_set_angle",
+        "servo_stop",
+        "servo_sweep",
+        "show_image",
+        "sound",
+        "sound_level",
+        "speak",
+        "spin_left",
+        "spin_right",
+        "start_bee",
+        "start_button",
+        "start_flash_text",
+        "start_image_loop",
+        "start_sensor",
+        "stop",
+        "stop_bee",
+        "stop_button",
+        "stop_distance_change",
+        "stop_image_loop",
+        "stop_joystick_change",
+        "stop_light_change",
+        "stop_music",
+        "stop_pot",
+        "stop_sensor",
+        "stop_song",
+        "stop_sound_change",
+        "supports",
+        "text",
+        "time",
+        "tone",
+        "upload_image",
+        "when_pressed",
+        "when_released",
+        "wifi_ap_start",
+        "wifi_ap_status",
+        "wifi_ap_stop",
+        "wifi_connect",
+        "wifi_disconnect",
+        "wifi_name",
+        "wifi_set_name",
+        "wifi_status"
+      ],
+      "validation": {
+        "source": "reviewed signatures and installation paths at recorded commit",
+        "host": "documentation generation checks only; not a Host Python implementation",
+        "windows": "not revalidated by this documentation update",
+        "hardware": "not revalidated by this documentation update"
+      },
+      "notes": [
+        "版本以選定來源的 __version__ 為準，不能替代目前已燒入裝置的版本核對。",
+        "High-Level MicroPython only. Read the exact module reference and configured device names before generating code.",
+        "Audio v1.1 / 365-voice behavior additionally depends on the verified build overlay and matching TF catalog. Overlay-only method names are excluded from this default-build profile."
+      ],
+      "module_dependencies": {
+        "button": [
+          "led",
+          "lifecycle",
+          "runtime-config"
+        ],
+        "buzzer": [
+          "lifecycle",
+          "runtime-config"
+        ],
+        "clock": [
+          "lifecycle",
+          "wifi"
+        ],
+        "dfplayer": [
+          "lifecycle"
+        ],
+        "dht11": [
+          "lifecycle",
+          "runtime-config",
+          "scheduler"
+        ],
+        "ir": [
+          "led",
+          "lifecycle"
+        ],
+        "joystick": [
+          "buzzer",
+          "lifecycle",
+          "runtime-config"
+        ],
+        "led": [
+          "button",
+          "lifecycle",
+          "runtime-config"
+        ],
+        "lifecycle": [
+          "scheduler"
+        ],
+        "light": [
+          "led",
+          "lifecycle",
+          "runtime-config"
+        ],
+        "line_tracking": [
+          "lifecycle",
+          "motor"
+        ],
+        "motor": [
+          "lifecycle"
+        ],
+        "obstacle": [
+          "led",
+          "lifecycle",
+          "motor"
+        ],
+        "oled": [
+          "lifecycle",
+          "pot"
+        ],
+        "pir": [
+          "led",
+          "lifecycle",
+          "runtime-config"
+        ],
+        "pot": [
+          "led",
+          "lifecycle"
+        ],
+        "runtime-config": [
+          "lifecycle"
+        ],
+        "scheduler": [
+          "lifecycle"
+        ],
+        "servo": [
+          "lifecycle",
+          "runtime-config"
+        ],
+        "sound": [
+          "led",
+          "lifecycle",
+          "runtime-config"
+        ],
+        "ultrasonic": [
+          "lifecycle"
+        ],
+        "wifi": [
+          "lifecycle"
+        ]
+      }
+    },
+    {
+      "id": "mangolite-picow__hlmp__candidate-0.6.5-rc2",
+      "target": "mangolite-picow",
+      "mode": "high_level_micropython",
+      "runtime": "0.6.5-rc2",
+      "release_status": "candidate",
+      "documentation_root": "candidate/shared",
+      "label": {
+        "zh-TW": "來源候選 · Runtime 0.6.5-rc2",
+        "en": "Source candidate · Runtime 0.6.5-rc2"
+      },
+      "source_repository": "circleoyang/MangoBox",
+      "source_commit": "f875289b5698f0e61faf64196b1165a3b18f2bd5",
+      "source_date": "2026-10-26",
+      "capabilities": [
+        "ble-control",
+        "button",
+        "buzzer",
+        "clock",
+        "dfplayer",
+        "dht11",
+        "ir",
+        "joystick",
+        "led",
+        "lifecycle",
+        "light",
+        "line_tracking",
+        "motor",
+        "obstacle",
+        "oled",
+        "pir",
+        "pot",
+        "runtime-config",
+        "scheduler",
+        "servo",
+        "sound",
+        "ultrasonic",
+        "wifi"
+      ],
+      "documents": {
+        "ble-control": {
+          "guide": "candidate/shared/{lang}/guides/ble-control.md",
+          "reference": "candidate/shared/{lang}/reference/ble-control.md"
+        },
+        "button": {
+          "guide": "{lang}/guides/button.md",
+          "reference": "{lang}/reference/button.md"
+        },
+        "buzzer": {
+          "guide": "{lang}/guides/buzzer.md",
+          "reference": "{lang}/reference/buzzer.md"
+        },
+        "clock": {
+          "guide": "candidate/shared/{lang}/guides/clock.md",
+          "reference": "candidate/shared/{lang}/reference/clock.md"
+        },
+        "dfplayer": {
+          "guide": "candidate/shared/{lang}/guides/dfplayer.md",
+          "reference": "candidate/shared/{lang}/reference/dfplayer.md"
+        },
+        "dht11": {
+          "guide": "candidate/carrier/{lang}/guides/dht11.md",
+          "reference": "candidate/carrier/{lang}/reference/dht11.md"
+        },
+        "ir": {
+          "guide": "{lang}/guides/ir.md",
+          "reference": "{lang}/reference/ir.md"
+        },
+        "joystick": {
+          "guide": "{lang}/guides/joystick.md",
+          "reference": "{lang}/reference/joystick.md"
+        },
+        "led": {
+          "guide": "{lang}/guides/led.md",
+          "reference": "{lang}/reference/led.md"
+        },
+        "lifecycle": {
+          "guide": "candidate/shared/{lang}/guides/lifecycle.md",
+          "reference": "candidate/shared/{lang}/reference/lifecycle.md"
+        },
+        "light": {
+          "guide": "{lang}/guides/light.md",
+          "reference": "candidate/lite/{lang}/reference/light.md"
+        },
+        "line_tracking": {
+          "guide": "{lang}/guides/line_tracking.md",
+          "reference": "{lang}/reference/line_tracking.md"
+        },
+        "motor": {
+          "guide": "{lang}/guides/motor.md",
+          "reference": "{lang}/reference/motor.md"
+        },
+        "obstacle": {
+          "guide": "{lang}/guides/obstacle.md",
+          "reference": "{lang}/reference/obstacle.md"
+        },
+        "oled": {
+          "guide": "candidate/shared/{lang}/guides/oled.md",
+          "reference": "candidate/shared/{lang}/reference/oled.md"
+        },
+        "pir": {
+          "guide": "{lang}/guides/pir.md",
+          "reference": "{lang}/reference/pir.md"
+        },
+        "pot": {
+          "guide": "{lang}/guides/pot.md",
+          "reference": "{lang}/reference/pot.md"
+        },
+        "runtime-config": {
+          "guide": "candidate/shared/{lang}/guides/runtime-config.md",
+          "reference": "candidate/shared/{lang}/reference/runtime-config.md"
+        },
+        "scheduler": {
+          "guide": "candidate/shared/{lang}/guides/scheduler.md",
+          "reference": "candidate/shared/{lang}/reference/scheduler.md"
+        },
+        "servo": {
+          "guide": "candidate/lite/{lang}/guides/servo.md",
+          "reference": "candidate/lite/{lang}/reference/servo.md"
+        },
+        "sound": {
+          "guide": "{lang}/guides/sound.md",
+          "reference": "candidate/lite/{lang}/reference/sound.md"
+        },
+        "ultrasonic": {
+          "guide": "{lang}/guides/ultrasonic.md",
+          "reference": "{lang}/reference/ultrasonic.md"
+        },
+        "wifi": {
+          "guide": "candidate/shared/{lang}/guides/wifi.md",
+          "reference": "candidate/shared/{lang}/reference/wifi.md"
+        }
+      },
+      "allowed_methods": [
+        "alarm",
+        "alarm_list",
+        "alarm_remove",
+        "arc_left",
+        "arc_right",
+        "audio_begin",
+        "audio_volume",
+        "backward",
+        "bee",
+        "beep",
+        "ble_name",
+        "ble_pairing_close",
+        "ble_pairing_open",
+        "ble_set_name",
+        "ble_status",
+        "block_state",
+        "breath",
+        "brightness",
+        "calibrate_joystick",
+        "capabilities",
+        "clear",
+        "clear_oled",
+        "clear_screen",
+        "clock_status",
+        "clock_sync_host",
+        "clock_sync_ntp",
+        "close",
+        "coast",
+        "config.get",
+        "control_connected",
+        "control_name",
+        "date",
+        "dht",
+        "dht_attach",
+        "dht_status",
+        "distance",
+        "drive_tank",
+        "enable_time_services",
+        "flash_text",
+        "forward",
+        "is_blocked",
+        "is_ir_pressed",
+        "is_joystick_pressed",
+        "is_motion_detected",
+        "is_near",
+        "joystick",
+        "led",
+        "led_all",
+        "led_clear",
+        "led_off",
+        "led_range",
+        "led_set_brightness",
+        "led_show_all",
+        "led_show_one",
+        "led_show_range",
+        "led_start_breathing",
+        "led_start_color_wipe",
+        "led_start_fire_flicker",
+        "led_start_meteor",
+        "led_start_rainbow",
+        "led_start_random_sparkle",
+        "led_turn_off",
+        "light",
+        "line_left",
+        "line_right",
+        "line_state",
+        "motor_brake",
+        "motor_coast",
+        "motor_run",
+        "mp3",
+        "mp3_play",
+        "mp3_status",
+        "mp3_stop",
+        "music",
+        "oled_line",
+        "oled_media_info",
+        "oled_media_list",
+        "oled_menu",
+        "oled_pixel",
+        "oled_play_media",
+        "oled_progress",
+        "oled_rect",
+        "oled_stop_media",
+        "oled_waveform",
+        "on",
+        "on_blocked",
+        "on_clear",
+        "on_control",
+        "on_control_joystick",
+        "on_control_pressed",
+        "on_control_released",
+        "on_distance_change",
+        "on_enter",
+        "on_far",
+        "on_ir_pressed",
+        "on_ir_released",
+        "on_joystick_change",
+        "on_joystick_pressed",
+        "on_joystick_released",
+        "on_leave",
+        "on_light_above",
+        "on_light_below",
+        "on_light_change",
+        "on_line_both",
+        "on_line_change",
+        "on_line_clear",
+        "on_line_left",
+        "on_line_right",
+        "on_motion_cleared",
+        "on_motion_detected",
+        "on_near",
+        "on_pot_above",
+        "on_pot_below",
+        "on_pot_change",
+        "on_pressed",
+        "on_released",
+        "on_sound_above",
+        "on_sound_below",
+        "on_sound_change",
+        "pivot_left",
+        "pivot_right",
+        "play_song",
+        "play_sound",
+        "play_tone",
+        "pot",
+        "pot_raw",
+        "pot_voltage",
+        "rainbow",
+        "read_button",
+        "read_sensor",
+        "run_forever",
+        "run_once",
+        "say",
+        "scheduler.add_task",
+        "scheduler.remove_task",
+        "select_led_strip",
+        "send_text",
+        "servo",
+        "servo_get_angle",
+        "servo_move_to",
+        "servo_release",
+        "servo_set_angle",
+        "servo_stop",
+        "servo_sweep",
+        "show_image",
+        "sound",
+        "sound_level",
+        "speak",
+        "spin_left",
+        "spin_right",
+        "start_bee",
+        "start_button",
+        "start_flash_text",
+        "start_image_loop",
+        "start_sensor",
+        "stop",
+        "stop_bee",
+        "stop_button",
+        "stop_distance_change",
+        "stop_image_loop",
+        "stop_joystick_change",
+        "stop_light_change",
+        "stop_music",
+        "stop_pot",
+        "stop_sensor",
+        "stop_song",
+        "stop_sound_change",
+        "supports",
+        "text",
+        "time",
+        "tone",
+        "upload_image",
+        "when_pressed",
+        "when_released",
+        "wifi_ap_start",
+        "wifi_ap_status",
+        "wifi_ap_stop",
+        "wifi_connect",
+        "wifi_disconnect",
+        "wifi_name",
+        "wifi_set_name",
+        "wifi_status"
+      ],
+      "validation": {
+        "source": "reviewed signatures and installation paths at recorded commit",
+        "host": "documentation generation checks only; not a Host Python implementation",
+        "windows": "not revalidated by this documentation update",
+        "hardware": "not revalidated by this documentation update"
+      },
+      "notes": [
+        "版本以選定來源的 __version__ 為準，不能替代目前已燒入裝置的版本核對。",
+        "High-Level MicroPython only. Read the exact module reference and configured device names before generating code.",
+        "Audio v1.1 / 365-voice behavior additionally depends on the verified build overlay and matching TF catalog. Overlay-only method names are excluded from this default-build profile."
+      ],
+      "module_dependencies": {
+        "ble-control": [
+          "led",
+          "lifecycle"
+        ],
+        "button": [
+          "led",
+          "lifecycle",
+          "runtime-config"
+        ],
+        "buzzer": [
+          "lifecycle",
+          "runtime-config"
+        ],
+        "clock": [
+          "lifecycle",
+          "wifi"
+        ],
+        "dfplayer": [
+          "lifecycle"
+        ],
+        "dht11": [
+          "lifecycle",
+          "runtime-config",
+          "scheduler"
+        ],
+        "ir": [
+          "led",
+          "lifecycle"
+        ],
+        "joystick": [
+          "buzzer",
+          "lifecycle",
+          "runtime-config"
+        ],
+        "led": [
+          "button",
+          "lifecycle",
+          "runtime-config"
+        ],
+        "lifecycle": [
+          "scheduler"
+        ],
+        "light": [
+          "led",
+          "lifecycle",
+          "runtime-config"
+        ],
+        "line_tracking": [
+          "lifecycle",
+          "motor"
+        ],
+        "motor": [
+          "lifecycle"
+        ],
+        "obstacle": [
+          "led",
+          "lifecycle",
+          "motor"
+        ],
+        "oled": [
+          "lifecycle",
+          "pot"
+        ],
+        "pir": [
+          "led",
+          "lifecycle",
+          "runtime-config"
+        ],
+        "pot": [
+          "led",
+          "lifecycle"
+        ],
+        "runtime-config": [
+          "lifecycle"
+        ],
+        "scheduler": [
+          "lifecycle"
+        ],
+        "servo": [
+          "lifecycle",
+          "runtime-config"
+        ],
+        "sound": [
+          "led",
+          "lifecycle",
+          "runtime-config"
+        ],
+        "ultrasonic": [
+          "lifecycle"
+        ],
+        "wifi": [
+          "lifecycle"
+        ]
+      }
+    },
+    {
+      "id": "mangolite-pico2w__hlmp__candidate-0.6.5-rc2",
+      "target": "mangolite-pico2w",
+      "mode": "high_level_micropython",
+      "runtime": "0.6.5-rc2",
+      "release_status": "candidate",
+      "documentation_root": "candidate/shared",
+      "label": {
+        "zh-TW": "來源候選 · Runtime 0.6.5-rc2",
+        "en": "Source candidate · Runtime 0.6.5-rc2"
+      },
+      "source_repository": "circleoyang/MangoBox",
+      "source_commit": "f875289b5698f0e61faf64196b1165a3b18f2bd5",
+      "source_date": "2026-10-26",
+      "capabilities": [
+        "ble-control",
+        "button",
+        "buzzer",
+        "clock",
+        "dfplayer",
+        "dht11",
+        "ir",
+        "joystick",
+        "led",
+        "lifecycle",
+        "light",
+        "line_tracking",
+        "motor",
+        "obstacle",
+        "oled",
+        "pir",
+        "pot",
+        "runtime-config",
+        "scheduler",
+        "servo",
+        "sound",
+        "ultrasonic",
+        "wifi"
+      ],
+      "documents": {
+        "ble-control": {
+          "guide": "candidate/shared/{lang}/guides/ble-control.md",
+          "reference": "candidate/shared/{lang}/reference/ble-control.md"
+        },
+        "button": {
+          "guide": "{lang}/guides/button.md",
+          "reference": "{lang}/reference/button.md"
+        },
+        "buzzer": {
+          "guide": "{lang}/guides/buzzer.md",
+          "reference": "{lang}/reference/buzzer.md"
+        },
+        "clock": {
+          "guide": "candidate/shared/{lang}/guides/clock.md",
+          "reference": "candidate/shared/{lang}/reference/clock.md"
+        },
+        "dfplayer": {
+          "guide": "candidate/shared/{lang}/guides/dfplayer.md",
+          "reference": "candidate/shared/{lang}/reference/dfplayer.md"
+        },
+        "dht11": {
+          "guide": "candidate/carrier/{lang}/guides/dht11.md",
+          "reference": "candidate/carrier/{lang}/reference/dht11.md"
+        },
+        "ir": {
+          "guide": "{lang}/guides/ir.md",
+          "reference": "{lang}/reference/ir.md"
+        },
+        "joystick": {
+          "guide": "{lang}/guides/joystick.md",
+          "reference": "{lang}/reference/joystick.md"
+        },
+        "led": {
+          "guide": "{lang}/guides/led.md",
+          "reference": "{lang}/reference/led.md"
+        },
+        "lifecycle": {
+          "guide": "candidate/shared/{lang}/guides/lifecycle.md",
+          "reference": "candidate/shared/{lang}/reference/lifecycle.md"
+        },
+        "light": {
+          "guide": "{lang}/guides/light.md",
+          "reference": "candidate/lite/{lang}/reference/light.md"
+        },
+        "line_tracking": {
+          "guide": "{lang}/guides/line_tracking.md",
+          "reference": "{lang}/reference/line_tracking.md"
+        },
+        "motor": {
+          "guide": "{lang}/guides/motor.md",
+          "reference": "{lang}/reference/motor.md"
+        },
+        "obstacle": {
+          "guide": "{lang}/guides/obstacle.md",
+          "reference": "{lang}/reference/obstacle.md"
+        },
+        "oled": {
+          "guide": "candidate/shared/{lang}/guides/oled.md",
+          "reference": "candidate/shared/{lang}/reference/oled.md"
+        },
+        "pir": {
+          "guide": "{lang}/guides/pir.md",
+          "reference": "{lang}/reference/pir.md"
+        },
+        "pot": {
+          "guide": "{lang}/guides/pot.md",
+          "reference": "{lang}/reference/pot.md"
+        },
+        "runtime-config": {
+          "guide": "candidate/shared/{lang}/guides/runtime-config.md",
+          "reference": "candidate/shared/{lang}/reference/runtime-config.md"
+        },
+        "scheduler": {
+          "guide": "candidate/shared/{lang}/guides/scheduler.md",
+          "reference": "candidate/shared/{lang}/reference/scheduler.md"
+        },
+        "servo": {
+          "guide": "candidate/lite/{lang}/guides/servo.md",
+          "reference": "candidate/lite/{lang}/reference/servo.md"
+        },
+        "sound": {
+          "guide": "{lang}/guides/sound.md",
+          "reference": "candidate/lite/{lang}/reference/sound.md"
+        },
+        "ultrasonic": {
+          "guide": "{lang}/guides/ultrasonic.md",
+          "reference": "{lang}/reference/ultrasonic.md"
+        },
+        "wifi": {
+          "guide": "candidate/shared/{lang}/guides/wifi.md",
+          "reference": "candidate/shared/{lang}/reference/wifi.md"
+        }
+      },
+      "allowed_methods": [
+        "alarm",
+        "alarm_list",
+        "alarm_remove",
+        "arc_left",
+        "arc_right",
+        "audio_begin",
+        "audio_volume",
+        "backward",
+        "bee",
+        "beep",
+        "ble_name",
+        "ble_pairing_close",
+        "ble_pairing_open",
+        "ble_set_name",
+        "ble_status",
+        "block_state",
+        "breath",
+        "brightness",
+        "calibrate_joystick",
+        "capabilities",
+        "clear",
+        "clear_oled",
+        "clear_screen",
+        "clock_status",
+        "clock_sync_host",
+        "clock_sync_ntp",
+        "close",
+        "coast",
+        "config.get",
+        "control_connected",
+        "control_name",
+        "date",
+        "dht",
+        "dht_attach",
+        "dht_status",
+        "distance",
+        "drive_tank",
+        "enable_time_services",
+        "flash_text",
+        "forward",
+        "is_blocked",
+        "is_ir_pressed",
+        "is_joystick_pressed",
+        "is_motion_detected",
+        "is_near",
+        "joystick",
+        "led",
+        "led_all",
+        "led_clear",
+        "led_off",
+        "led_range",
+        "led_set_brightness",
+        "led_show_all",
+        "led_show_one",
+        "led_show_range",
+        "led_start_breathing",
+        "led_start_color_wipe",
+        "led_start_fire_flicker",
+        "led_start_meteor",
+        "led_start_rainbow",
+        "led_start_random_sparkle",
+        "led_turn_off",
+        "light",
+        "line_left",
+        "line_right",
+        "line_state",
+        "motor_brake",
+        "motor_coast",
+        "motor_run",
+        "mp3",
+        "mp3_play",
+        "mp3_status",
+        "mp3_stop",
+        "music",
+        "oled_line",
+        "oled_media_info",
+        "oled_media_list",
+        "oled_menu",
+        "oled_pixel",
+        "oled_play_media",
+        "oled_progress",
+        "oled_rect",
+        "oled_stop_media",
+        "oled_waveform",
+        "on",
+        "on_blocked",
+        "on_clear",
+        "on_control",
+        "on_control_joystick",
+        "on_control_pressed",
+        "on_control_released",
+        "on_distance_change",
+        "on_enter",
+        "on_far",
+        "on_ir_pressed",
+        "on_ir_released",
+        "on_joystick_change",
+        "on_joystick_pressed",
+        "on_joystick_released",
+        "on_leave",
+        "on_light_above",
+        "on_light_below",
+        "on_light_change",
+        "on_line_both",
+        "on_line_change",
+        "on_line_clear",
+        "on_line_left",
+        "on_line_right",
+        "on_motion_cleared",
+        "on_motion_detected",
+        "on_near",
+        "on_pot_above",
+        "on_pot_below",
+        "on_pot_change",
+        "on_pressed",
+        "on_released",
+        "on_sound_above",
+        "on_sound_below",
+        "on_sound_change",
+        "pivot_left",
+        "pivot_right",
+        "play_song",
+        "play_sound",
+        "play_tone",
+        "pot",
+        "pot_raw",
+        "pot_voltage",
+        "rainbow",
+        "read_button",
+        "read_sensor",
+        "run_forever",
+        "run_once",
+        "say",
+        "scheduler.add_task",
+        "scheduler.remove_task",
+        "select_led_strip",
+        "send_text",
+        "servo",
+        "servo_get_angle",
+        "servo_move_to",
+        "servo_release",
+        "servo_set_angle",
+        "servo_stop",
+        "servo_sweep",
+        "show_image",
+        "sound",
+        "sound_level",
+        "speak",
+        "spin_left",
+        "spin_right",
+        "start_bee",
+        "start_button",
+        "start_flash_text",
+        "start_image_loop",
+        "start_sensor",
+        "stop",
+        "stop_bee",
+        "stop_button",
+        "stop_distance_change",
+        "stop_image_loop",
+        "stop_joystick_change",
+        "stop_light_change",
+        "stop_music",
+        "stop_pot",
+        "stop_sensor",
+        "stop_song",
+        "stop_sound_change",
+        "supports",
+        "text",
+        "time",
+        "tone",
+        "upload_image",
+        "when_pressed",
+        "when_released",
+        "wifi_ap_start",
+        "wifi_ap_status",
+        "wifi_ap_stop",
+        "wifi_connect",
+        "wifi_disconnect",
+        "wifi_name",
+        "wifi_set_name",
+        "wifi_status"
+      ],
+      "validation": {
+        "source": "reviewed signatures and installation paths at recorded commit",
+        "host": "documentation generation checks only; not a Host Python implementation",
+        "windows": "not revalidated by this documentation update",
+        "hardware": "not revalidated by this documentation update"
+      },
+      "notes": [
+        "版本以選定來源的 __version__ 為準，不能替代目前已燒入裝置的版本核對。",
+        "High-Level MicroPython only. Read the exact module reference and configured device names before generating code.",
+        "Audio v1.1 / 365-voice behavior additionally depends on the verified build overlay and matching TF catalog. Overlay-only method names are excluded from this default-build profile."
+      ],
+      "module_dependencies": {
+        "ble-control": [
+          "led",
+          "lifecycle"
+        ],
+        "button": [
+          "led",
+          "lifecycle",
+          "runtime-config"
+        ],
+        "buzzer": [
+          "lifecycle",
+          "runtime-config"
+        ],
+        "clock": [
+          "lifecycle",
+          "wifi"
+        ],
+        "dfplayer": [
+          "lifecycle"
+        ],
+        "dht11": [
+          "lifecycle",
+          "runtime-config",
+          "scheduler"
+        ],
+        "ir": [
+          "led",
+          "lifecycle"
+        ],
+        "joystick": [
+          "buzzer",
+          "lifecycle",
+          "runtime-config"
+        ],
+        "led": [
+          "button",
+          "lifecycle",
+          "runtime-config"
+        ],
+        "lifecycle": [
+          "scheduler"
+        ],
+        "light": [
+          "led",
+          "lifecycle",
+          "runtime-config"
+        ],
+        "line_tracking": [
+          "lifecycle",
+          "motor"
+        ],
+        "motor": [
+          "lifecycle"
+        ],
+        "obstacle": [
+          "led",
+          "lifecycle",
+          "motor"
+        ],
+        "oled": [
+          "lifecycle",
+          "pot"
+        ],
+        "pir": [
+          "led",
+          "lifecycle",
+          "runtime-config"
+        ],
+        "pot": [
+          "led",
+          "lifecycle"
+        ],
+        "runtime-config": [
+          "lifecycle"
+        ],
+        "scheduler": [
+          "lifecycle"
+        ],
+        "servo": [
+          "lifecycle",
+          "runtime-config"
+        ],
+        "sound": [
+          "led",
+          "lifecycle",
+          "runtime-config"
+        ],
+        "ultrasonic": [
+          "lifecycle"
+        ],
+        "wifi": [
+          "lifecycle"
+        ]
+      }
+    },
+    {
+      "id": "barepico-pico__hlmp__candidate-0.1.0-rc6",
+      "target": "barepico-pico",
+      "mode": "high_level_micropython",
+      "runtime": "0.1.0-rc6",
+      "release_status": "candidate",
+      "documentation_root": "candidate/shared",
+      "label": {
+        "zh-TW": "來源候選 · Runtime 0.1.0-rc6",
+        "en": "Source candidate · Runtime 0.1.0-rc6"
+      },
+      "source_repository": "circleoyang/MangoBox",
+      "source_commit": "f875289b5698f0e61faf64196b1165a3b18f2bd5",
+      "source_date": "2026-10-26",
+      "capabilities": [
+        "button",
+        "buzzer",
+        "clock",
+        "dfplayer",
+        "dht11",
+        "led",
+        "lifecycle",
+        "light",
+        "motor",
+        "oled",
+        "pot",
+        "runtime-config",
+        "scheduler",
+        "servo",
+        "ultrasonic"
+      ],
+      "documents": {
+        "button": {
+          "guide": "candidate/barepico/{lang}/guides/button.md",
+          "reference": "candidate/barepico/{lang}/reference/button.md"
+        },
+        "buzzer": {
+          "guide": "candidate/barepico/{lang}/guides/buzzer.md",
+          "reference": "candidate/barepico/{lang}/reference/buzzer.md"
+        },
+        "clock": {
+          "guide": "candidate/wired/{lang}/guides/clock.md",
+          "reference": "candidate/wired/{lang}/reference/clock.md"
+        },
+        "dfplayer": {
+          "guide": "candidate/shared/{lang}/guides/dfplayer.md",
+          "reference": "candidate/shared/{lang}/reference/dfplayer.md"
+        },
+        "dht11": {
+          "guide": "candidate/barepico/{lang}/guides/dht11.md",
+          "reference": "candidate/barepico/{lang}/reference/dht11.md"
+        },
+        "led": {
+          "guide": "candidate/barepico/{lang}/guides/led.md",
+          "reference": "candidate/barepico/{lang}/reference/led.md"
+        },
+        "lifecycle": {
+          "guide": "candidate/shared/{lang}/guides/lifecycle.md",
+          "reference": "candidate/shared/{lang}/reference/lifecycle.md"
+        },
+        "light": {
+          "guide": "candidate/barepico/{lang}/guides/light.md",
+          "reference": "candidate/barepico/{lang}/reference/light.md"
+        },
+        "motor": {
+          "guide": "candidate/barepico/{lang}/guides/motor.md",
+          "reference": "candidate/barepico/{lang}/reference/motor.md"
+        },
+        "oled": {
+          "guide": "candidate/shared/{lang}/guides/oled.md",
+          "reference": "candidate/shared/{lang}/reference/oled.md"
+        },
+        "pot": {
+          "guide": "candidate/barepico/{lang}/guides/pot.md",
+          "reference": "candidate/barepico/{lang}/reference/pot.md"
+        },
+        "runtime-config": {
+          "guide": "candidate/shared/{lang}/guides/runtime-config.md",
+          "reference": "candidate/shared/{lang}/reference/runtime-config.md"
+        },
+        "scheduler": {
+          "guide": "candidate/shared/{lang}/guides/scheduler.md",
+          "reference": "candidate/shared/{lang}/reference/scheduler.md"
+        },
+        "servo": {
+          "guide": "candidate/barepico/{lang}/guides/servo.md",
+          "reference": "candidate/barepico/{lang}/reference/servo.md"
+        },
+        "ultrasonic": {
+          "guide": "candidate/barepico/{lang}/guides/ultrasonic.md",
+          "reference": "candidate/barepico/{lang}/reference/ultrasonic.md"
+        }
+      },
+      "allowed_methods": [
+        "alarm",
+        "alarm_list",
+        "alarm_remove",
+        "arc_left",
+        "arc_right",
+        "audio_begin",
+        "audio_on_event",
+        "audio_playlist",
+        "audio_status",
+        "audio_volume",
+        "backward",
+        "bee",
+        "beep",
+        "breath",
+        "brightness",
+        "capabilities",
+        "clear",
+        "clear_oled",
+        "clear_screen",
+        "clock_status",
+        "clock_sync_host",
+        "close",
+        "coast",
+        "config.get",
+        "date",
+        "dht",
+        "dht_attach",
+        "distance",
+        "drive_tank",
+        "enable_time_services",
+        "flash_text",
+        "forward",
+        "humi",
+        "is_near",
+        "led",
+        "led_all",
+        "led_clear",
+        "led_off",
+        "led_range",
+        "led_set_brightness",
+        "led_show_all",
+        "led_show_one",
+        "led_show_range",
+        "led_start_breathing",
+        "led_start_color_wipe",
+        "led_start_fire_flicker",
+        "led_start_meteor",
+        "led_start_rainbow",
+        "led_start_random_sparkle",
+        "led_turn_off",
+        "light",
+        "motor_brake",
+        "motor_coast",
+        "motor_run",
+        "mp3",
+        "mp3_stop",
+        "music",
+        "oled_line",
+        "oled_media_info",
+        "oled_media_list",
+        "oled_menu",
+        "oled_pixel",
+        "oled_play_media",
+        "oled_progress",
+        "oled_rect",
+        "oled_stop_media",
+        "oled_waveform",
+        "on",
+        "on_dht",
+        "on_distance_change",
+        "on_enter",
+        "on_far",
+        "on_leave",
+        "on_light_above",
+        "on_light_below",
+        "on_near",
+        "on_pot_above",
+        "on_pot_below",
+        "on_pot_change",
+        "on_pressed",
+        "on_released",
+        "pivot_left",
+        "pivot_right",
+        "play_song",
+        "play_sound",
+        "play_tone",
+        "pot",
+        "pot_raw",
+        "pot_voltage",
+        "rainbow",
+        "read_button",
+        "read_sensor",
+        "run_forever",
+        "run_once",
+        "say",
+        "scheduler.add_task",
+        "scheduler.remove_task",
+        "select_led_strip",
+        "select_servo",
+        "send_text",
+        "servo",
+        "servo_get_angle",
+        "servo_move_to",
+        "servo_release",
+        "servo_set_angle",
+        "servo_stop",
+        "servo_sweep",
+        "show_image",
+        "sound",
+        "speak",
+        "spin_left",
+        "spin_right",
+        "start_bee",
+        "start_button",
+        "start_flash_text",
+        "start_image_loop",
+        "start_sensor",
+        "stop",
+        "stop_bee",
+        "stop_button",
+        "stop_dht",
+        "stop_distance_change",
+        "stop_image_loop",
+        "stop_light",
+        "stop_music",
+        "stop_pot",
+        "stop_sensor",
+        "stop_song",
+        "temp",
+        "text",
+        "time",
+        "tone",
+        "upload_image",
+        "when_pressed",
+        "when_released"
+      ],
+      "validation": {
+        "source": "reviewed signatures and installation paths at recorded commit",
+        "host": "documentation generation checks only; not a Host Python implementation",
+        "windows": "not revalidated by this documentation update",
+        "hardware": "not revalidated by this documentation update"
+      },
+      "notes": [
+        "版本以選定來源的 __version__ 為準，不能替代目前已燒入裝置的版本核對。",
+        "High-Level MicroPython only. Read the exact module reference and configured device names before generating code.",
+        "Audio v1.1 / 365-voice behavior additionally depends on the verified build overlay and matching TF catalog. Overlay-only method names are excluded from this default-build profile."
+      ],
+      "module_dependencies": {
+        "button": [
+          "lifecycle",
+          "runtime-config"
+        ],
+        "buzzer": [
+          "lifecycle",
+          "runtime-config"
+        ],
+        "clock": [
+          "lifecycle"
+        ],
+        "dfplayer": [
+          "lifecycle"
+        ],
+        "dht11": [
+          "lifecycle"
+        ],
+        "led": [
+          "lifecycle",
+          "runtime-config"
+        ],
+        "lifecycle": [
+          "scheduler"
+        ],
+        "light": [
+          "lifecycle",
+          "runtime-config"
+        ],
+        "motor": [
+          "lifecycle",
+          "runtime-config"
+        ],
+        "oled": [
+          "lifecycle",
+          "pot"
+        ],
+        "pot": [
+          "lifecycle",
+          "runtime-config"
+        ],
+        "runtime-config": [
+          "lifecycle"
+        ],
+        "scheduler": [
+          "lifecycle"
+        ],
+        "servo": [
+          "lifecycle",
+          "runtime-config"
+        ],
+        "ultrasonic": [
+          "lifecycle",
+          "runtime-config"
+        ]
+      }
+    },
+    {
+      "id": "barepico-picow__hlmp__candidate-0.1.0-rc6",
+      "target": "barepico-picow",
+      "mode": "high_level_micropython",
+      "runtime": "0.1.0-rc6",
+      "release_status": "candidate",
+      "documentation_root": "candidate/shared",
+      "label": {
+        "zh-TW": "來源候選 · Runtime 0.1.0-rc6",
+        "en": "Source candidate · Runtime 0.1.0-rc6"
+      },
+      "source_repository": "circleoyang/MangoBox",
+      "source_commit": "f875289b5698f0e61faf64196b1165a3b18f2bd5",
+      "source_date": "2026-10-26",
+      "capabilities": [
+        "ble-control",
+        "button",
+        "buzzer",
+        "clock",
+        "dfplayer",
+        "dht11",
+        "led",
+        "lifecycle",
+        "light",
+        "motor",
+        "oled",
+        "pot",
+        "runtime-config",
+        "scheduler",
+        "servo",
+        "ultrasonic",
+        "wifi"
+      ],
+      "documents": {
+        "ble-control": {
+          "guide": "candidate/shared/{lang}/guides/ble-control.md",
+          "reference": "candidate/shared/{lang}/reference/ble-control.md"
+        },
+        "button": {
+          "guide": "candidate/barepico/{lang}/guides/button.md",
+          "reference": "candidate/barepico/{lang}/reference/button.md"
+        },
+        "buzzer": {
+          "guide": "candidate/barepico/{lang}/guides/buzzer.md",
+          "reference": "candidate/barepico/{lang}/reference/buzzer.md"
+        },
+        "clock": {
+          "guide": "candidate/shared/{lang}/guides/clock.md",
+          "reference": "candidate/shared/{lang}/reference/clock.md"
+        },
+        "dfplayer": {
+          "guide": "candidate/shared/{lang}/guides/dfplayer.md",
+          "reference": "candidate/shared/{lang}/reference/dfplayer.md"
+        },
+        "dht11": {
+          "guide": "candidate/barepico/{lang}/guides/dht11.md",
+          "reference": "candidate/barepico/{lang}/reference/dht11.md"
+        },
+        "led": {
+          "guide": "candidate/barepico/{lang}/guides/led.md",
+          "reference": "candidate/barepico/{lang}/reference/led.md"
+        },
+        "lifecycle": {
+          "guide": "candidate/shared/{lang}/guides/lifecycle.md",
+          "reference": "candidate/shared/{lang}/reference/lifecycle.md"
+        },
+        "light": {
+          "guide": "candidate/barepico/{lang}/guides/light.md",
+          "reference": "candidate/barepico/{lang}/reference/light.md"
+        },
+        "motor": {
+          "guide": "candidate/barepico/{lang}/guides/motor.md",
+          "reference": "candidate/barepico/{lang}/reference/motor.md"
+        },
+        "oled": {
+          "guide": "candidate/shared/{lang}/guides/oled.md",
+          "reference": "candidate/shared/{lang}/reference/oled.md"
+        },
+        "pot": {
+          "guide": "candidate/barepico/{lang}/guides/pot.md",
+          "reference": "candidate/barepico/{lang}/reference/pot.md"
+        },
+        "runtime-config": {
+          "guide": "candidate/shared/{lang}/guides/runtime-config.md",
+          "reference": "candidate/shared/{lang}/reference/runtime-config.md"
+        },
+        "scheduler": {
+          "guide": "candidate/shared/{lang}/guides/scheduler.md",
+          "reference": "candidate/shared/{lang}/reference/scheduler.md"
+        },
+        "servo": {
+          "guide": "candidate/barepico/{lang}/guides/servo.md",
+          "reference": "candidate/barepico/{lang}/reference/servo.md"
+        },
+        "ultrasonic": {
+          "guide": "candidate/barepico/{lang}/guides/ultrasonic.md",
+          "reference": "candidate/barepico/{lang}/reference/ultrasonic.md"
+        },
+        "wifi": {
+          "guide": "candidate/shared/{lang}/guides/wifi.md",
+          "reference": "candidate/shared/{lang}/reference/wifi.md"
+        }
+      },
+      "allowed_methods": [
+        "alarm",
+        "alarm_list",
+        "alarm_remove",
+        "arc_left",
+        "arc_right",
+        "audio_begin",
+        "audio_on_event",
+        "audio_playlist",
+        "audio_status",
+        "audio_volume",
+        "backward",
+        "bee",
+        "beep",
+        "ble_name",
+        "ble_pairing_close",
+        "ble_pairing_open",
+        "ble_set_name",
+        "ble_status",
+        "breath",
+        "brightness",
+        "capabilities",
+        "clear",
+        "clear_oled",
+        "clear_screen",
+        "clock_status",
+        "clock_sync_host",
+        "clock_sync_ntp",
+        "close",
+        "coast",
+        "config.get",
+        "control_connected",
+        "control_name",
+        "date",
+        "dht",
+        "dht_attach",
+        "distance",
+        "drive_tank",
+        "enable_time_services",
+        "flash_text",
+        "forward",
+        "humi",
+        "is_near",
+        "led",
+        "led_all",
+        "led_clear",
+        "led_off",
+        "led_range",
+        "led_set_brightness",
+        "led_show_all",
+        "led_show_one",
+        "led_show_range",
+        "led_start_breathing",
+        "led_start_color_wipe",
+        "led_start_fire_flicker",
+        "led_start_meteor",
+        "led_start_rainbow",
+        "led_start_random_sparkle",
+        "led_turn_off",
+        "light",
+        "motor_brake",
+        "motor_coast",
+        "motor_run",
+        "mp3",
+        "mp3_stop",
+        "music",
+        "oled_line",
+        "oled_media_info",
+        "oled_media_list",
+        "oled_menu",
+        "oled_pixel",
+        "oled_play_media",
+        "oled_progress",
+        "oled_rect",
+        "oled_stop_media",
+        "oled_waveform",
+        "on",
+        "on_control",
+        "on_control_joystick",
+        "on_control_pressed",
+        "on_control_released",
+        "on_dht",
+        "on_distance_change",
+        "on_enter",
+        "on_far",
+        "on_leave",
+        "on_light_above",
+        "on_light_below",
+        "on_near",
+        "on_pot_above",
+        "on_pot_below",
+        "on_pot_change",
+        "on_pressed",
+        "on_released",
+        "pivot_left",
+        "pivot_right",
+        "play_song",
+        "play_sound",
+        "play_tone",
+        "pot",
+        "pot_raw",
+        "pot_voltage",
+        "rainbow",
+        "read_button",
+        "read_sensor",
+        "run_forever",
+        "run_once",
+        "say",
+        "scheduler.add_task",
+        "scheduler.remove_task",
+        "select_led_strip",
+        "select_servo",
+        "send_text",
+        "servo",
+        "servo_get_angle",
+        "servo_move_to",
+        "servo_release",
+        "servo_set_angle",
+        "servo_stop",
+        "servo_sweep",
+        "show_image",
+        "sound",
+        "speak",
+        "spin_left",
+        "spin_right",
+        "start_bee",
+        "start_button",
+        "start_flash_text",
+        "start_image_loop",
+        "start_sensor",
+        "stop",
+        "stop_bee",
+        "stop_button",
+        "stop_dht",
+        "stop_distance_change",
+        "stop_image_loop",
+        "stop_light",
+        "stop_music",
+        "stop_pot",
+        "stop_sensor",
+        "stop_song",
+        "temp",
+        "text",
+        "time",
+        "tone",
+        "upload_image",
+        "when_pressed",
+        "when_released",
+        "wifi_ap_start",
+        "wifi_ap_status",
+        "wifi_ap_stop",
+        "wifi_connect",
+        "wifi_disconnect",
+        "wifi_name",
+        "wifi_set_name",
+        "wifi_status"
+      ],
+      "validation": {
+        "source": "reviewed signatures and installation paths at recorded commit",
+        "host": "documentation generation checks only; not a Host Python implementation",
+        "windows": "not revalidated by this documentation update",
+        "hardware": "not revalidated by this documentation update"
+      },
+      "notes": [
+        "版本以選定來源的 __version__ 為準，不能替代目前已燒入裝置的版本核對。",
+        "High-Level MicroPython only. Read the exact module reference and configured device names before generating code.",
+        "Audio v1.1 / 365-voice behavior additionally depends on the verified build overlay and matching TF catalog. Overlay-only method names are excluded from this default-build profile."
+      ],
+      "module_dependencies": {
+        "ble-control": [
+          "led",
+          "lifecycle"
+        ],
+        "button": [
+          "lifecycle",
+          "runtime-config"
+        ],
+        "buzzer": [
+          "lifecycle",
+          "runtime-config"
+        ],
+        "clock": [
+          "lifecycle",
+          "wifi"
+        ],
+        "dfplayer": [
+          "lifecycle"
+        ],
+        "dht11": [
+          "lifecycle"
+        ],
+        "led": [
+          "lifecycle",
+          "runtime-config"
+        ],
+        "lifecycle": [
+          "scheduler"
+        ],
+        "light": [
+          "lifecycle",
+          "runtime-config"
+        ],
+        "motor": [
+          "lifecycle",
+          "runtime-config"
+        ],
+        "oled": [
+          "lifecycle",
+          "pot"
+        ],
+        "pot": [
+          "lifecycle",
+          "runtime-config"
+        ],
+        "runtime-config": [
+          "lifecycle"
+        ],
+        "scheduler": [
+          "lifecycle"
+        ],
+        "servo": [
+          "lifecycle",
+          "runtime-config"
+        ],
+        "ultrasonic": [
+          "lifecycle",
+          "runtime-config"
+        ],
+        "wifi": [
+          "lifecycle"
+        ]
+      }
+    },
+    {
+      "id": "barepico-pico2w__hlmp__candidate-0.1.0-rc6",
+      "target": "barepico-pico2w",
+      "mode": "high_level_micropython",
+      "runtime": "0.1.0-rc6",
+      "release_status": "candidate",
+      "documentation_root": "candidate/shared",
+      "label": {
+        "zh-TW": "來源候選 · Runtime 0.1.0-rc6",
+        "en": "Source candidate · Runtime 0.1.0-rc6"
+      },
+      "source_repository": "circleoyang/MangoBox",
+      "source_commit": "f875289b5698f0e61faf64196b1165a3b18f2bd5",
+      "source_date": "2026-10-26",
+      "capabilities": [
+        "ble-control",
+        "button",
+        "buzzer",
+        "clock",
+        "dfplayer",
+        "dht11",
+        "led",
+        "lifecycle",
+        "light",
+        "motor",
+        "oled",
+        "pot",
+        "runtime-config",
+        "scheduler",
+        "servo",
+        "ultrasonic",
+        "wifi"
+      ],
+      "documents": {
+        "ble-control": {
+          "guide": "candidate/shared/{lang}/guides/ble-control.md",
+          "reference": "candidate/shared/{lang}/reference/ble-control.md"
+        },
+        "button": {
+          "guide": "candidate/barepico/{lang}/guides/button.md",
+          "reference": "candidate/barepico/{lang}/reference/button.md"
+        },
+        "buzzer": {
+          "guide": "candidate/barepico/{lang}/guides/buzzer.md",
+          "reference": "candidate/barepico/{lang}/reference/buzzer.md"
+        },
+        "clock": {
+          "guide": "candidate/shared/{lang}/guides/clock.md",
+          "reference": "candidate/shared/{lang}/reference/clock.md"
+        },
+        "dfplayer": {
+          "guide": "candidate/shared/{lang}/guides/dfplayer.md",
+          "reference": "candidate/shared/{lang}/reference/dfplayer.md"
+        },
+        "dht11": {
+          "guide": "candidate/barepico/{lang}/guides/dht11.md",
+          "reference": "candidate/barepico/{lang}/reference/dht11.md"
+        },
+        "led": {
+          "guide": "candidate/barepico/{lang}/guides/led.md",
+          "reference": "candidate/barepico/{lang}/reference/led.md"
+        },
+        "lifecycle": {
+          "guide": "candidate/shared/{lang}/guides/lifecycle.md",
+          "reference": "candidate/shared/{lang}/reference/lifecycle.md"
+        },
+        "light": {
+          "guide": "candidate/barepico/{lang}/guides/light.md",
+          "reference": "candidate/barepico/{lang}/reference/light.md"
+        },
+        "motor": {
+          "guide": "candidate/barepico/{lang}/guides/motor.md",
+          "reference": "candidate/barepico/{lang}/reference/motor.md"
+        },
+        "oled": {
+          "guide": "candidate/shared/{lang}/guides/oled.md",
+          "reference": "candidate/shared/{lang}/reference/oled.md"
+        },
+        "pot": {
+          "guide": "candidate/barepico/{lang}/guides/pot.md",
+          "reference": "candidate/barepico/{lang}/reference/pot.md"
+        },
+        "runtime-config": {
+          "guide": "candidate/shared/{lang}/guides/runtime-config.md",
+          "reference": "candidate/shared/{lang}/reference/runtime-config.md"
+        },
+        "scheduler": {
+          "guide": "candidate/shared/{lang}/guides/scheduler.md",
+          "reference": "candidate/shared/{lang}/reference/scheduler.md"
+        },
+        "servo": {
+          "guide": "candidate/barepico/{lang}/guides/servo.md",
+          "reference": "candidate/barepico/{lang}/reference/servo.md"
+        },
+        "ultrasonic": {
+          "guide": "candidate/barepico/{lang}/guides/ultrasonic.md",
+          "reference": "candidate/barepico/{lang}/reference/ultrasonic.md"
+        },
+        "wifi": {
+          "guide": "candidate/shared/{lang}/guides/wifi.md",
+          "reference": "candidate/shared/{lang}/reference/wifi.md"
+        }
+      },
+      "allowed_methods": [
+        "alarm",
+        "alarm_list",
+        "alarm_remove",
+        "arc_left",
+        "arc_right",
+        "audio_begin",
+        "audio_on_event",
+        "audio_playlist",
+        "audio_status",
+        "audio_volume",
+        "backward",
+        "bee",
+        "beep",
+        "ble_name",
+        "ble_pairing_close",
+        "ble_pairing_open",
+        "ble_set_name",
+        "ble_status",
+        "breath",
+        "brightness",
+        "capabilities",
+        "clear",
+        "clear_oled",
+        "clear_screen",
+        "clock_status",
+        "clock_sync_host",
+        "clock_sync_ntp",
+        "close",
+        "coast",
+        "config.get",
+        "control_connected",
+        "control_name",
+        "date",
+        "dht",
+        "dht_attach",
+        "distance",
+        "drive_tank",
+        "enable_time_services",
+        "flash_text",
+        "forward",
+        "humi",
+        "is_near",
+        "led",
+        "led_all",
+        "led_clear",
+        "led_off",
+        "led_range",
+        "led_set_brightness",
+        "led_show_all",
+        "led_show_one",
+        "led_show_range",
+        "led_start_breathing",
+        "led_start_color_wipe",
+        "led_start_fire_flicker",
+        "led_start_meteor",
+        "led_start_rainbow",
+        "led_start_random_sparkle",
+        "led_turn_off",
+        "light",
+        "motor_brake",
+        "motor_coast",
+        "motor_run",
+        "mp3",
+        "mp3_stop",
+        "music",
+        "oled_line",
+        "oled_media_info",
+        "oled_media_list",
+        "oled_menu",
+        "oled_pixel",
+        "oled_play_media",
+        "oled_progress",
+        "oled_rect",
+        "oled_stop_media",
+        "oled_waveform",
+        "on",
+        "on_control",
+        "on_control_joystick",
+        "on_control_pressed",
+        "on_control_released",
+        "on_dht",
+        "on_distance_change",
+        "on_enter",
+        "on_far",
+        "on_leave",
+        "on_light_above",
+        "on_light_below",
+        "on_near",
+        "on_pot_above",
+        "on_pot_below",
+        "on_pot_change",
+        "on_pressed",
+        "on_released",
+        "pivot_left",
+        "pivot_right",
+        "play_song",
+        "play_sound",
+        "play_tone",
+        "pot",
+        "pot_raw",
+        "pot_voltage",
+        "rainbow",
+        "read_button",
+        "read_sensor",
+        "run_forever",
+        "run_once",
+        "say",
+        "scheduler.add_task",
+        "scheduler.remove_task",
+        "select_led_strip",
+        "select_servo",
+        "send_text",
+        "servo",
+        "servo_get_angle",
+        "servo_move_to",
+        "servo_release",
+        "servo_set_angle",
+        "servo_stop",
+        "servo_sweep",
+        "show_image",
+        "sound",
+        "speak",
+        "spin_left",
+        "spin_right",
+        "start_bee",
+        "start_button",
+        "start_flash_text",
+        "start_image_loop",
+        "start_sensor",
+        "stop",
+        "stop_bee",
+        "stop_button",
+        "stop_dht",
+        "stop_distance_change",
+        "stop_image_loop",
+        "stop_light",
+        "stop_music",
+        "stop_pot",
+        "stop_sensor",
+        "stop_song",
+        "temp",
+        "text",
+        "time",
+        "tone",
+        "upload_image",
+        "when_pressed",
+        "when_released",
+        "wifi_ap_start",
+        "wifi_ap_status",
+        "wifi_ap_stop",
+        "wifi_connect",
+        "wifi_disconnect",
+        "wifi_name",
+        "wifi_set_name",
+        "wifi_status"
+      ],
+      "validation": {
+        "source": "reviewed signatures and installation paths at recorded commit",
+        "host": "documentation generation checks only; not a Host Python implementation",
+        "windows": "not revalidated by this documentation update",
+        "hardware": "not revalidated by this documentation update"
+      },
+      "notes": [
+        "版本以選定來源的 __version__ 為準，不能替代目前已燒入裝置的版本核對。",
+        "High-Level MicroPython only. Read the exact module reference and configured device names before generating code.",
+        "Audio v1.1 / 365-voice behavior additionally depends on the verified build overlay and matching TF catalog. Overlay-only method names are excluded from this default-build profile."
+      ],
+      "module_dependencies": {
+        "ble-control": [
+          "led",
+          "lifecycle"
+        ],
+        "button": [
+          "lifecycle",
+          "runtime-config"
+        ],
+        "buzzer": [
+          "lifecycle",
+          "runtime-config"
+        ],
+        "clock": [
+          "lifecycle",
+          "wifi"
+        ],
+        "dfplayer": [
+          "lifecycle"
+        ],
+        "dht11": [
+          "lifecycle"
+        ],
+        "led": [
+          "lifecycle",
+          "runtime-config"
+        ],
+        "lifecycle": [
+          "scheduler"
+        ],
+        "light": [
+          "lifecycle",
+          "runtime-config"
+        ],
+        "motor": [
+          "lifecycle",
+          "runtime-config"
+        ],
+        "oled": [
+          "lifecycle",
+          "pot"
+        ],
+        "pot": [
+          "lifecycle",
+          "runtime-config"
+        ],
+        "runtime-config": [
+          "lifecycle"
+        ],
+        "scheduler": [
+          "lifecycle"
+        ],
+        "servo": [
+          "lifecycle",
+          "runtime-config"
+        ],
+        "ultrasonic": [
+          "lifecycle",
+          "runtime-config"
+        ],
+        "wifi": [
+          "lifecycle"
+        ]
+      }
+    }
+  ],
+  "modules": [
+    {
+      "id": "ble-control",
+      "labels": {
+        "zh-TW": "BLE Control 手機控制",
+        "en": "BLE Control"
+      },
+      "summary": {
+        "zh-TW": "以 Dabble 控制 MangoLite 與 BarePico 的 Pico W / Pico 2 W，共四個候選目標。",
+        "en": "Dabble control for four candidate targets: MangoLite and BarePico on Pico W / Pico 2 W."
+      },
+      "capability": "ble-control",
+      "methods": [
+        "ble_name",
+        "ble_pairing_close",
+        "ble_pairing_open",
+        "ble_set_name",
+        "ble_status",
+        "control_connected",
+        "control_name",
+        "on_control",
+        "on_control_joystick",
+        "on_control_pressed",
+        "on_control_released"
+      ]
+    },
+    {
+      "id": "button",
+      "labels": {
+        "zh-TW": "Button 按鈕",
+        "en": "Button"
+      },
+      "summary": {
+        "zh-TW": "讀取按鈕狀態，或在按下／放開時執行事件。",
+        "en": "Read button state or react to press/release events."
+      },
+      "capability": "button",
+      "methods": [
+        "on",
+        "on_enter",
+        "on_leave",
+        "on_pressed",
+        "on_released",
+        "read_button",
+        "read_sensor",
+        "start_button",
+        "start_sensor",
+        "stop_button",
+        "stop_sensor",
+        "when_pressed",
+        "when_released"
+      ]
+    },
+    {
+      "id": "buzzer",
+      "labels": {
+        "zh-TW": "Buzzer 蜂鳴器",
+        "en": "Buzzer"
+      },
+      "summary": {
+        "zh-TW": "播放提示音、音調、旋律與短音效。",
+        "en": "Play beeps, tones, melodies, and short sound effects."
+      },
+      "capability": "buzzer",
+      "methods": [
+        "bee",
+        "beep",
+        "music",
+        "play_song",
+        "play_sound",
+        "play_tone",
+        "sound",
+        "start_bee",
+        "stop_bee",
+        "stop_music",
+        "stop_song",
+        "tone"
+      ]
+    },
+    {
+      "id": "clock",
+      "labels": {
+        "zh-TW": "時鐘、校時與提醒",
+        "en": "Clock, synchronization and alarms"
+      },
+      "capability": "clock",
+      "methods": [
+        "alarm",
+        "alarm_list",
+        "alarm_remove",
+        "clock_status",
+        "clock_sync_host",
+        "clock_sync_ntp",
+        "date",
+        "enable_time_services",
+        "time"
+      ]
+    },
+    {
+      "id": "dfplayer",
+      "labels": {
+        "zh-TW": "DFPlayer 音樂與語音",
+        "en": "DFPlayer music and speech"
+      },
+      "capability": "dfplayer",
+      "methods": [
+        "audio_begin",
+        "audio_on_event",
+        "audio_playlist",
+        "audio_status",
+        "audio_volume",
+        "mp3",
+        "mp3_play",
+        "mp3_status",
+        "mp3_stop",
+        "say",
+        "speak"
+      ]
+    },
+    {
+      "id": "dht11",
+      "labels": {
+        "zh-TW": "DHT11 溫度與濕度",
+        "en": "DHT11 temperature and humidity"
+      },
+      "capability": "dht11",
+      "methods": [
+        "dht",
+        "dht_attach",
+        "dht_status",
+        "humi",
+        "on_dht",
+        "stop_dht",
+        "temp"
+      ]
+    },
+    {
+      "id": "ir",
+      "labels": {
+        "zh-TW": "IR 紅外線遙控器",
+        "en": "IR Remote"
+      },
+      "summary": {
+        "zh-TW": "接收 NEC 紅外線遙控器按鍵與按下／放開事件。",
+        "en": "Receive NEC infrared remote keys and press/release events."
+      },
+      "capability": "ir",
+      "methods": [
+        "is_ir_pressed",
+        "on_ir_pressed",
+        "on_ir_released"
+      ]
+    },
+    {
+      "id": "joystick",
+      "labels": {
+        "zh-TW": "Joystick 搖桿",
+        "en": "Joystick"
+      },
+      "summary": {
+        "zh-TW": "讀取 X／Y -100～100 與搖桿按鍵，也支援中心校準。",
+        "en": "Read normalized X/Y from -100 to 100 plus push-button state, with center calibration."
+      },
+      "capability": "joystick",
+      "methods": [
+        "calibrate_joystick",
+        "is_joystick_pressed",
+        "joystick",
+        "on_joystick_change",
+        "on_joystick_pressed",
+        "on_joystick_released",
+        "stop_joystick_change"
+      ]
+    },
+    {
+      "id": "led",
+      "labels": {
+        "zh-TW": "RGB LED",
+        "en": "RGB LED"
+      },
+      "summary": {
+        "zh-TW": "控制板載、預裝或外接 RGB LED 的顏色與燈效。",
+        "en": "Control onboard, preinstalled, or external RGB LED color and effects."
+      },
+      "capability": "led",
+      "methods": [
+        "breath",
+        "brightness",
+        "led",
+        "led_all",
+        "led_clear",
+        "led_off",
+        "led_range",
+        "led_set_brightness",
+        "led_show_all",
+        "led_show_one",
+        "led_show_range",
+        "led_start_breathing",
+        "led_start_color_wipe",
+        "led_start_fire_flicker",
+        "led_start_meteor",
+        "led_start_rainbow",
+        "led_start_random_sparkle",
+        "led_turn_off",
+        "rainbow",
+        "select_led_strip"
+      ]
+    },
+    {
+      "id": "lifecycle",
+      "labels": {
+        "zh-TW": "程式生命週期與事件記錄",
+        "en": "Program lifecycle and event logging"
+      },
+      "capability": "lifecycle",
+      "methods": [
+        "capabilities",
+        "close",
+        "run_forever",
+        "run_once",
+        "supports"
+      ]
+    },
+    {
+      "id": "light",
+      "labels": {
+        "zh-TW": "Light 光線感測器",
+        "en": "Light Sensor"
+      },
+      "summary": {
+        "zh-TW": "讀取 0～100 相對亮度；0=暗、100=亮，校準由 firmware/runtime 管理。",
+        "en": "Read normalized relative brightness 0–100; 0=dark and 100=bright, with calibration owned by firmware/runtime."
+      },
+      "capability": "light",
+      "methods": [
+        "light",
+        "on_light_above",
+        "on_light_below",
+        "on_light_change",
+        "stop_light",
+        "stop_light_change"
+      ]
+    },
+    {
+      "id": "line_tracking",
+      "labels": {
+        "zh-TW": "Line Tracking 循跡",
+        "en": "Line Tracking"
+      },
+      "summary": {
+        "zh-TW": "讀取左右循跡感測器並判斷 none／left／right／both。",
+        "en": "Read dual line sensors and resolve none/left/right/both states."
+      },
+      "capability": "line_tracking",
+      "methods": [
+        "line_left",
+        "line_right",
+        "line_state",
+        "on_line_both",
+        "on_line_change",
+        "on_line_clear",
+        "on_line_left",
+        "on_line_right"
+      ]
+    },
+    {
+      "id": "motor",
+      "labels": {
+        "zh-TW": "Motor / Drive 馬達與車體",
+        "en": "Motor / Drive"
+      },
+      "summary": {
+        "zh-TW": "控制左右馬達、前後移動、轉向與 Tank Drive。",
+        "en": "Control left/right motors, forward/backward motion, turning, and tank drive."
+      },
+      "capability": "motor",
+      "methods": [
+        "arc_left",
+        "arc_right",
+        "backward",
+        "coast",
+        "drive_tank",
+        "forward",
+        "motor_brake",
+        "motor_coast",
+        "motor_run",
+        "pivot_left",
+        "pivot_right",
+        "spin_left",
+        "spin_right",
+        "stop"
+      ]
+    },
+    {
+      "id": "obstacle",
+      "labels": {
+        "zh-TW": "Obstacle 障礙物感測",
+        "en": "Obstacle Sensor"
+      },
+      "summary": {
+        "zh-TW": "判斷 CLEAR／BLOCKED，並處理 blocked／clear 事件。",
+        "en": "Detect CLEAR/BLOCKED states and blocked/clear events."
+      },
+      "capability": "obstacle",
+      "methods": [
+        "block_state",
+        "is_blocked",
+        "on_blocked",
+        "on_clear"
+      ]
+    },
+    {
+      "id": "oled",
+      "labels": {
+        "zh-TW": "OLED 顯示器",
+        "en": "OLED Display"
+      },
+      "summary": {
+        "zh-TW": "在 OLED 顯示文字與簡單效果。",
+        "en": "Show text and simple effects on the OLED display."
+      },
+      "capability": "oled",
+      "methods": [
+        "clear",
+        "clear_oled",
+        "clear_screen",
+        "flash_text",
+        "oled_line",
+        "oled_media_info",
+        "oled_media_list",
+        "oled_menu",
+        "oled_pixel",
+        "oled_play_media",
+        "oled_progress",
+        "oled_rect",
+        "oled_stop_media",
+        "oled_waveform",
+        "send_text",
+        "show_image",
+        "start_flash_text",
+        "start_image_loop",
+        "stop_image_loop",
+        "text",
+        "upload_image"
+      ]
+    },
+    {
+      "id": "pir",
+      "labels": {
+        "zh-TW": "PIR 人體感測器",
+        "en": "PIR Motion"
+      },
+      "summary": {
+        "zh-TW": "判斷是否偵測到人體或熱源移動，並可處理 detected／cleared 事件。",
+        "en": "Detect motion from people or changing heat sources and react to detected/cleared events."
+      },
+      "capability": "pir",
+      "methods": [
+        "is_motion_detected",
+        "on_motion_cleared",
+        "on_motion_detected"
+      ]
+    },
+    {
+      "id": "pot",
+      "labels": {
+        "zh-TW": "Pot 電位器",
+        "en": "Potentiometer"
+      },
+      "summary": {
+        "zh-TW": "讀取旋鈕百分比、ADC 原始值與估計電壓，支援變化／門檻事件。",
+        "en": "Read knob percentage, scaled ADC input and estimated voltage, with change/threshold events."
+      },
+      "capability": "pot",
+      "methods": [
+        "on_pot_above",
+        "on_pot_below",
+        "on_pot_change",
+        "pot",
+        "pot_raw",
+        "pot_voltage",
+        "stop_pot"
+      ]
+    },
+    {
+      "id": "runtime-config",
+      "labels": {
+        "zh-TW": "Runtime Config／讀取 DM 設定",
+        "en": "Runtime Config / Read DM Settings"
+      },
+      "summary": {
+        "zh-TW": "使用既有 m.config.get() 查詢 DM 定義的硬體名稱、腳位、燈珠數與啟用狀態，不新增 API。",
+        "en": "Read DM-defined names, pins, LED counts and enabled flags with existing m.config.get(), without new APIs."
+      },
+      "capability": "runtime-config",
+      "methods": [
+        "config.get"
+      ]
+    },
+    {
+      "id": "scheduler",
+      "labels": {
+        "zh-TW": "Scheduler 自訂輪詢排程",
+        "en": "Scheduler / Custom Tasks"
+      },
+      "summary": {
+        "zh-TW": "註冊自訂週期性工作與燈效，使用共用事件迴圈而不阻塞其他感測器。",
+        "en": "Register custom periodic tasks and LED effects on the shared cooperative event loop."
+      },
+      "capability": "scheduler",
+      "methods": [
+        "scheduler.add_task",
+        "scheduler.remove_task"
+      ]
+    },
+    {
+      "id": "servo",
+      "labels": {
+        "zh-TW": "Servo 伺服馬達",
+        "en": "Servo"
+      },
+      "summary": {
+        "zh-TW": "控制 Servo 角度、平滑移動與掃動；MangoX2 current contract 亦支援 named Servo。",
+        "en": "Control servo angle, smooth motion and sweep; current MangoX2 contracts also support named servos."
+      },
+      "capability": "servo",
+      "methods": [
+        "select_servo",
+        "servo",
+        "servo_get_angle",
+        "servo_move_to",
+        "servo_release",
+        "servo_set_angle",
+        "servo_stop",
+        "servo_sweep"
+      ]
+    },
+    {
+      "id": "sound",
+      "labels": {
+        "zh-TW": "Sound 聲音感測器",
+        "en": "Sound Sensor"
+      },
+      "summary": {
+        "zh-TW": "讀取 0～100 相對聲音強度（不是 dB）；raw 為短時間窗 peak-to-peak，校準由 firmware/runtime 管理。",
+        "en": "Read relative sound intensity 0–100 (not dB); raw uses short-window peak-to-peak sampling and calibration is firmware/runtime-owned."
+      },
+      "capability": "sound",
+      "methods": [
+        "on_sound_above",
+        "on_sound_below",
+        "on_sound_change",
+        "sound_level",
+        "stop_sound_change"
+      ]
+    },
+    {
+      "id": "ultrasonic",
+      "labels": {
+        "zh-TW": "Ultrasonic 超音波測距",
+        "en": "Ultrasonic Distance"
+      },
+      "summary": {
+        "zh-TW": "讀取距離，並可在靠近或遠離門檻時觸發事件。",
+        "en": "Read distance and react to near/far thresholds."
+      },
+      "capability": "ultrasonic",
+      "methods": [
+        "distance",
+        "is_near",
+        "on_distance_change",
+        "on_far",
+        "on_near",
+        "stop_distance_change"
+      ]
+    },
+    {
+      "id": "wifi",
+      "labels": {
+        "zh-TW": "Wi-Fi：STA 與 AP",
+        "en": "Wi-Fi: STA and AP"
+      },
+      "capability": "wifi",
+      "methods": [
+        "wifi_ap_start",
+        "wifi_ap_status",
+        "wifi_ap_stop",
+        "wifi_connect",
+        "wifi_disconnect",
+        "wifi_name",
+        "wifi_set_name",
+        "wifi_status"
+      ]
+    }
+  ]
+}

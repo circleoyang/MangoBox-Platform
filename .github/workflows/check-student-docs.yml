@@ -8,6 +8,9 @@ on:
       - "scripts/check_student_docs.py"
       - "scripts/check_student_search.py"
       - "scripts/check_api_reference_completeness.py"
+      - "scripts/check_candidate_docs.py"
+      - "scripts/sync_candidate_api_docs.py"
+      - "tests/ai-context-builder/candidate-docs-gate.py"
       - ".github/workflows/check-student-docs.yml"
   push:
     branches:
@@ -17,6 +20,9 @@ on:
       - "scripts/check_student_docs.py"
       - "scripts/check_student_search.py"
       - "scripts/check_api_reference_completeness.py"
+      - "scripts/check_candidate_docs.py"
+      - "scripts/sync_candidate_api_docs.py"
+      - "tests/ai-context-builder/candidate-docs-gate.py"
       - ".github/workflows/check-student-docs.yml"
 
 jobs:
@@ -33,9 +39,18 @@ jobs:
         run: python scripts/check_student_search.py
       - name: Validate structured API Reference coverage
         run: python scripts/check_api_reference_completeness.py
+      - name: Validate candidate source metadata and teaching examples
+        run: |
+          python scripts/sync_candidate_api_docs.py --check
+          python scripts/check_candidate_docs.py
+          python tests/ai-context-builder/candidate-docs-gate.py
       - name: Check documentation JavaScript syntax
         run: |
           node --check docs/student-guide/site/api-contract-overlay-v20260906.js
           node --check docs/student-guide/site/api-reference-details.js
           node --check docs/student-guide/site/method-search.js
           node --check docs/student-guide/site/ble-control-api-overlay-v20260913.js
+          node --check docs/student-guide/site/ai-context-core.js
+          node --check docs/student-guide/site/ai-context-builder.js
+          node --check docs/student-guide/site/candidate-docs.js
+

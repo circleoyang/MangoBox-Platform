@@ -9,6 +9,7 @@ const base=path.resolve(__dirname,"../..");
 const data=path.join(base,"docs/student-guide/site/data");
 const profiles=JSON.parse(fs.readFileSync(path.join(data,"profiles.json"),"utf8"));
 const modules=JSON.parse(fs.readFileSync(path.join(data,"modules.json"),"utf8")).modules;
+const developerProfile=JSON.parse(fs.readFileSync(path.join(data,"developer-profile.json"),"utf8"));
 const docs=path.join(base,"docs/student-guide");
 let runs=0;
 for(const profile of profiles.profiles){
@@ -23,11 +24,13 @@ for(const profile of profiles.profiles){
         const sources={};
         for(const entry of nodeCore.paths(profile,modules,ids,lang,includeGuides))
           sources[entry.path]=fs.readFileSync(path.join(docs,entry.path),"utf8");
-        const opts={profile,modules,ids,lang,includeGuides,sourceDocs:sources};
+        const opts={profile,modules,ids,lang,includeGuides,sourceDocs:sources,developerProfile};
         const fromBrowser=browserCore.render(opts);
         const fromBatch=nodeCore.render(opts);
         assert.strictEqual(fromBrowser,fromBatch,profile.id);
         if(!fromBatch.includes("## Environment"))throw Error("Missing metadata");
+        assert(fromBatch.includes(developerProfile.name) && fromBatch.includes(developerProfile.description[lang]),"Developer attribution missing");
+        assert(fromBatch.indexOf(developerProfile.description[lang]) < fromBatch.indexOf("## Environment"),"Developer introduction must precede environment rules");
         if(ids===null && profile.mode==="high_level_micropython"){
           assert(fromBatch.includes("## Module: scheduler"),"Full HLMP file must teach Scheduler");
           assert(fromBatch.includes("m.scheduler.add_task"),"Scheduler example missing");

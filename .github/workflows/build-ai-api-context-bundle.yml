@@ -7,6 +7,9 @@ on:
       - 'scripts/build_ai_api_context_bundle.py'
       - 'scripts/build_ai_api_context_bundle.js'
       - 'tests/ai-context-builder/parity.js'
+      - 'tests/ai-context-builder/candidate-parity.js'
+      - 'scripts/sync_candidate_api_docs.py'
+      - 'scripts/check_candidate_docs.py'
       - '.github/workflows/build-ai-api-context-bundle.yml'
   push:
     branches: [main]
@@ -15,6 +18,9 @@ on:
       - 'scripts/build_ai_api_context_bundle.py'
       - 'scripts/build_ai_api_context_bundle.js'
       - 'tests/ai-context-builder/parity.js'
+      - 'tests/ai-context-builder/candidate-parity.js'
+      - 'scripts/sync_candidate_api_docs.py'
+      - 'scripts/check_candidate_docs.py'
       - '.github/workflows/build-ai-api-context-bundle.yml'
 jobs:
   contexts:
@@ -27,9 +33,17 @@ jobs:
         with:
           node-version: '22'
       - name: Verify browser/batch parity for all registered profiles
-        run: node tests/ai-context-builder/parity.js
-      - name: Generate ten board/mode combinations
-        run: python scripts/build_ai_api_context_bundle.py --lang zh-TW
+        run: |
+          python scripts/sync_candidate_api_docs.py --check
+          python scripts/check_candidate_docs.py
+          node tests/ai-context-builder/parity.js
+          node tests/ai-context-builder/candidate-parity.js
+      - name: Generate stable and candidate contexts in both languages
+        run: |
+          python scripts/build_ai_api_context_bundle.py --channel stable --lang zh-TW
+          python scripts/build_ai_api_context_bundle.py --channel stable --lang en --output dist/ai-api-context-stable-en
+          python scripts/build_ai_api_context_bundle.py --channel candidate --lang zh-TW --output dist/ai-api-context-candidate-zh-TW
+          python scripts/build_ai_api_context_bundle.py --channel candidate --lang en --output dist/ai-api-context-candidate-en
       - name: Validate Markdown files
         run: |
           python - <<'PY'
@@ -46,12 +60,23 @@ jobs:
               assert len(item['modules'])>=10, item['file']
           assert (out.parent/'MangoBox_AI_API_Context_zh-TW.zip').stat().st_size>15000
           print('AI CONTEXT BUNDLE PASS:',len(manifest))
+          for folder, expected, channel in [('ai-api-context-stable-en', 10, 'stable'),
+                                            ('ai-api-context-candidate-zh-TW', 8, 'candidate'),
+                                            ('ai-api-context-candidate-en', 8, 'candidate')]:
+              directory=Path('dist')/folder
+              rows=json.loads((directory/'MANIFEST.json').read_text(encoding='utf-8'))
+              assert len(rows)==expected
+              for item in rows:
+                  content=(directory/item['file']).read_text(encoding='utf-8')
+                  assert 'Release status: '+channel in content
+                  assert '## Instructions for an LLM' in content
+              print('AI CONTEXT BUNDLE PASS:',folder,len(rows))
           PY
       - uses: actions/upload-artifact@v4
         with:
           name: MangoBox-AI-API-Markdown-Bundle
           path: |
-            dist/ai-api-context/*.md
-            dist/ai-api-context/MANIFEST.json
-            dist/MangoBox_AI_API_Context_zh-TW.zip
+            dist/ai-api-context*/**
+            dist/MangoBox_AI_API_Context_*.zip
           retention-days: 90
+
