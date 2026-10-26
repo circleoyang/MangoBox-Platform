@@ -3,8 +3,11 @@
 > This index identifies the official MangoBox Student API reference and the AI Context Builder. It is a discovery file, not evidence that every API works in every target or package.
 
 - [MangoBox API Documentation](https://circleoyang.github.io/MangoBox-Platform/docs/student-guide/site/): Searchable Student API guides and references.
-- [AI Context Builder](https://circleoyang.github.io/MangoBox-Platform/docs/student-guide/site/ai-context-builder.html): Select a specific board, programming mode, released profile and modules; generate official Markdown for use with an LLM.
+- [AI Context Builder](https://circleoyang.github.io/MangoBox-Platform/docs/student-guide/site/ai-context-builder.html): Select a release channel, target, programming mode, exact version and modules; generate Markdown for use with an LLM. The default channel is stable. Candidate source documentation is an explicit opt-in.
 - [Supported API profiles](https://circleoyang.github.io/MangoBox-Platform/docs/student-guide/site/data/profiles.json): Target, runtime, host-package and capability metadata.
+- [Candidate source profiles](https://circleoyang.github.io/MangoBox-Platform/docs/student-guide/site/data/candidate-profiles.json): Eight-target source alignment, exact source commits, method allowlists and separate validation states. These profiles do not change stable recommendations and do not prove installed firmware or physical hardware acceptance.
+- [Candidate learner documentation](https://circleoyang.github.io/MangoBox-Platform/docs/student-guide/site/candidate-docs.html): Read the bilingual Guide and API Reference for one exact candidate target, with a separate stable-docs link.
+- [Candidate exact API contract](https://circleoyang.github.io/MangoBox-Platform/docs/student-guide/site/data/candidate-api-contract.json): Target-scoped signatures, parameters, returns, initialization requirements and source references. The candidate builder requires this contract to match the selected source commit.
 - [Module metadata](https://circleoyang.github.io/MangoBox-Platform/docs/student-guide/site/data/modules.json): Module identity, capability and hardware notes.
 - [Method search index](https://circleoyang.github.io/MangoBox-Platform/docs/student-guide/site/data/api-index.json): Method names and signatures for discovery, not a substitute for API Reference.
 - [Traditional Chinese API references](https://github.com/circleoyang/MangoBox-Platform/tree/main/docs/student-guide/zh-TW/reference): Full student method descriptions.
@@ -14,3 +17,15 @@
 ## Usage
 
 Use the AI Context Builder to obtain a profile-filtered Markdown bundle. Do not assume Host Python supports everything in new MicroPython firmware. Validate enabled modules, calibration, pins and connected hardware. Names such as pot1 or strip1 depend on device configuration.
+
+For a candidate profile, the exact target, runtime, programming mode and source commit are all required context. Use only its allowed methods and its selected module references. BarePico has its own capabilities; a MangoX2 or MangoLite example is not automatic BarePico support. A plain Pico has no onboard Wi-Fi or BLE. Host package, MangoThonny product and firmware versions are separate identifiers.
+
+Use the existing Scheduler and RuntimeConfig only where that profile documents them. Keep callbacks short; move complex transitions to the foreground, and never re-enter the scheduler from a callback. Preserve documented event logging without fabricating event markers or logging every polling/animation tick or any secret.
+
+## Local deterministic export
+
+`node scripts/build_ai_api_context_bundle.js --channel stable --lang zh-TW --output dist/ai-api-context-stable`
+
+`node scripts/build_ai_api_context_bundle.js --channel candidate --lang zh-TW --output dist/ai-api-context-candidate`
+
+The browser and CLI share one renderer. The export manifest records profiles, source provenance and SHA-256 for each Markdown file. Missing sources or candidate examples outside the allowed method set stop generation. No workflow dispatch is needed.

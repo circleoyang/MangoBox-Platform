@@ -1,38 +1,66 @@
 "use strict";
-/* Node CLI uses exactly the same renderer loaded by AI Context Builder. */
-const fs=require("fs"),path=require("path"),crypto=require("crypto");
-const {render,paths}=require("../docs/student-guide/site/ai-context-core.js");
-const root=path.resolve(__dirname,"..");
-const site=path.join(root,"docs/student-guide/site");
-const docs=path.join(root,"docs/student-guide");
-const profilesData=JSON.parse(fs.readFileSync(path.join(site,"data/profiles.json"),"utf8"));
-const modules=JSON.parse(fs.readFileSync(path.join(site,"data/modules.json"),"utf8")).modules;
-const profileById=Object.fromEntries(profilesData.profiles.map(x=>[x.id,x]));
-const args=process.argv.slice(2);
-const getArg=(name,fallback)=>{const i=args.indexOf(name);return i<0?fallback:args[i+1]};
-const lang=getArg("--lang","zh-TW");
-const out=path.resolve(getArg("--output","dist/ai-api-context"));
-if(!["zh-TW","en"].includes(lang))throw Error("Bad language");
-fs.mkdirSync(out,{recursive:true});
-const inventory=[];
-for(const [target,modes] of Object.entries(profilesData.recommended)){
- for(const [mode,profileId] of Object.entries(modes)){
-  const profile=profileById[profileId];
-  if(!profile ||profile.target!==target ||profile.mode!==mode) throw Error("Bad recommended profile "+profileId);
-  const sourceDocs={};
-  for(const e of paths(profile,modules,null,lang,true)){
-   const filepath=path.join(docs,e.path);
-   sourceDocs[e.path]=fs.readFileSync(filepath,"utf8");
+/* Local CLI: browser and batch exports share the exact profile renderer. */
+const fs = require("fs"), path = require("path"), crypto = require("crypto");
+const core = require("../docs/student-guide/site/ai-context-core.js");
+const root = path.resolve(__dirname, ".."), docs = path.join(root, "docs/student-guide");
+const data = path.join(docs, "site/data");
+const readJSON = name => JSON.parse(fs.readFileSync(path.join(data,name), "utf8"));
+const args = process.argv.slice(2);
+const names = new Set(["--lang", "--output", "--channel", "--profile", "--modules", "--no-guides", "--help"]);
+for (let i = 0; i < args.length; i++) {
+  if (!names.has(args[i])) throw Error("Unknown option: " + args[i]);
+  if (!["--no-guides", "--help"].includes(args[i])) {
+    if (!args[i+1] || args[i+1].startsWith("--")) throw Error("Missing value for " + args[i]);
+    i++;
   }
-  const value=render({profile,modules,lang,sourceDocs});
-  const filename=target+"__"+(mode==="host_python"?"HOST":"HLMP")+"__"+profileId.split("__").at(-1)+".md";
-  fs.writeFileSync(path.join(out,filename),value,"utf8");
-  inventory.push({file:filename,target,mode,profile:profileId,
-    modules:modules.filter(m=>profile.capabilities.includes(m.capability)).map(m=>m.id),
-    sha256:crypto.createHash("sha256").update(value).digest("hex")});
-  console.log("BUILT",filename,value.length);
- }
 }
-if(inventory.length!==10) throw Error("Expected ten board/mode combinations");
-fs.writeFileSync(path.join(out,"MANIFEST.json"),JSON.stringify(inventory,null,2)+"\n");
-fs.writeFileSync(path.join(out,"README.md"),"# MangoBox AI API Context Bundle\n\nSelect exactly one board/mode profile. The complete Markdown is generated from the same renderer as the online AI Context Builder.\n\nWebsite: https://circleoyang.github.io/MangoBox-Platform/docs/student-guide/site/ai-context-builder.html\n");
+if (args.includes("--help")) {
+  console.log("node scripts/build_ai_api_context_bundle.js [--channel stable|candidate|all] [--profile ID] [--modules led,oled] [--lang zh-TW|en] [--no-guides] [--output DIR]");
+  process.exit(0);
+}
+const getArg = (name, fallback) => { const index = args.indexOf(name); return index < 0 ? fallback : args[index+1]; };
+const lang = getArg("--lang", "zh-TW"), channel = getArg("--channel", "stable");
+if (!["zh-TW", "en"].includes(lang)) throw Error("Bad language");
+if (!["stable", "candidate", "all"].includes(channel)) throw Error("Bad channel");
+const out = path.resolve(getArg("--output", "dist/ai-api-context"));
+const ids = getArg("--modules", null)?.split(",").filter(Boolean) || null;
+const includeGuides = !args.includes("--no-guides");
+const wanted = getArg("--profile", null);
+const catalogs = [];
+if (channel !== "candidate") catalogs.push({channel:"stable", ...readJSON("profiles.json"), modules:readJSON("modules.json").modules});
+if (channel !== "stable") catalogs.push({channel:"candidate", ...readJSON("candidate-profiles.json"),apiContract:readJSON("candidate-api-contract.json")});
+const selections = [];
+for (const catalog of catalogs) {
+  const byId = Object.fromEntries(catalog.profiles.map(profile=>[profile.id, profile]));
+  const profiles = wanted ? catalog.profiles.filter(profile=>profile.id === wanted) :
+    catalog.recommended ? Object.entries(catalog.recommended).flatMap(([target,modes]) => Object.entries(modes).map(([mode,id]) => {
+      const profile = byId[id];
+      if (!profile || profile.target !== target || profile.mode !== mode) throw Error("Bad recommended profile " + id);
+      return profile;
+    })) : catalog.profiles;
+  for (const profile of profiles) {
+    if ((catalog.channel === "candidate") !== core.isCandidate(profile)) throw Error("Channel/profile mismatch: " + profile.id);
+    selections.push({profile, modules:catalog.modules, apiContract:catalog.apiContract});
+  }
+}
+if (!selections.length) throw Error(wanted ? "Profile is not available in this channel: " + wanted : "No exportable profiles");
+if (new Set(selections.map(item=>item.profile.id)).size !== selections.length) throw Error("Duplicate export profiles");
+// Resolve and render everything before writing a new manifest; missing docs fail closed.
+const outputs = selections.map(({profile,modules,apiContract}) => {
+  const sourceDocs = {};
+  for (const entry of core.paths(profile,modules,ids,lang,includeGuides)) sourceDocs[entry.path] = fs.readFileSync(path.join(docs,entry.path),"utf8");
+  const value = core.render({profile,modules,ids,lang,includeGuides,sourceDocs,apiContract});
+  const filename = profile.target + "__" + (profile.mode === "host_python" ? "HOST" : "HLMP") + "__" + profile.id.split("__").at(-1) + ".md";
+  return {value, entry:{file:filename,target:profile.target,mode:profile.mode,profile:profile.id,
+    release_status:profile.release_status, runtime:profile.runtime, host_package:profile.host_package || null,
+    source_repository:profile.source_repository || null, source_commit:profile.source_commit || null,
+    validation:profile.validation || null, language:lang, include_guides:includeGuides,
+    modules:core.selectedModules(profile,modules,ids).map(mod=>mod.id),
+    sha256:crypto.createHash("sha256").update(value).digest("hex")}};
+});
+if (new Set(outputs.map(item=>item.entry.file)).size !== outputs.length) throw Error("Export filenames collide");
+fs.mkdirSync(out,{recursive:true});
+for (const {value,entry} of outputs) { fs.writeFileSync(path.join(out,entry.file),value,"utf8"); console.log("BUILT",entry.file,value.length); }
+fs.writeFileSync(path.join(out,"MANIFEST.json"),JSON.stringify(outputs.map(item=>item.entry),null,2)+"\n");
+fs.writeFileSync(path.join(out,"README.md"),"# MangoBox AI API Context Bundle\n\nChannel: " + channel + ". Select exactly one target/mode/version file. Candidate references are not stable releases or hardware-acceptance evidence.\n\nThe Markdown is generated by the same renderer as the online AI Context Builder. MANIFEST.json records the exact files and their SHA-256.\n\nWebsite: https://circleoyang.github.io/MangoBox-Platform/docs/student-guide/site/ai-context-builder.html\n");
+console.log("EXPORT PASS",outputs.length,"profiles",channel,lang);
