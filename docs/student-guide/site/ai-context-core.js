@@ -72,5 +72,33 @@
     }
     return parts.join("\n").replace(/\n+$/, "") + "\n";
   }
-  return {render, paths, selectedModules};
+  const CURRENT_SOURCE = "96c0099c2a8189e9271c083e903b501903b5bb4b";
+  const CURRENT_TARGETS = ["mangox2-pico","mangox2-picow","mangox2-pico2w","mangolite-picow","mangolite-pico2w","barepico-pico","barepico-picow","barepico-pico2w"];
+  function validateCurrent(pack) {
+    if (!pack || pack.schema_version !== 1 || pack.source_commit !== CURRENT_SOURCE || pack.status !== "TEST_ONLY" || pack.developer !== "歐陽芳泉") throw Error("Invalid firmware source metadata");
+    if (!Array.isArray(pack.targets) || pack.targets.length !== 8) throw Error("Expected exactly eight firmware targets");
+    const ids = new Set();
+    for (const t of pack.targets) {
+      if (!CURRENT_TARGETS.includes(t.id) || ids.has(t.id)) throw Error("Invalid or duplicate firmware target");
+      ids.add(t.id);
+      for (const key of ["label","family","mcu","markdown","markdown_en"]) if (typeof t[key] !== "string" || !t[key].trim()) throw Error("Missing target field: " + key);
+      if (typeof t.wireless !== "boolean") throw Error("Invalid wireless capability");
+    }
+    return pack;
+  }
+  function renderCurrent(pack, id, lang="zh-TW") {
+    validateCurrent(pack);
+    if (!["zh-TW","en"].includes(lang)) throw Error("Unsupported document language");
+    const target=pack.targets.find(t=>t.id===id);
+    if (!target) throw Error("Unknown firmware target");
+    return [HEADER, "", "## Firmware source alignment — TEST_ONLY", "",
+      "- Developer: " + pack.developer, "- Target: " + target.label + " (" + target.id + ")",
+      "- Family: " + target.family, "- MCU: " + target.mcu, "- Wireless board: " + target.wireless,
+      "- Source commit / BUILD_ID: " + pack.source_commit, "- Status: TEST_ONLY",
+      "- Mode: High-Level MicroPython firmware source; not Host Python",
+      "- Source and automated checks do not establish eight-board physical acceptance or release approval.", "",
+      (lang==="en" ? target.markdown_en : target.markdown).trim(), ""].join("\n");
+  }
+  return {render, paths, selectedModules, validateCurrent, renderCurrent, CURRENT_SOURCE, CURRENT_TARGETS};
 });
+

@@ -46,3 +46,17 @@ for(const profile of profiles.profiles){
   }
 }
 console.log("SHARED AI CONTEXT PARITY PASS",runs,"cases");
+
+const fixture=require('./current-fixture.js');
+for(const t of fixture.targets)for(const lang of ['zh-TW','en']){
+ const out=nodeCore.renderCurrent(fixture,t.id,lang);
+ assert.strictEqual(out,browserCore.renderCurrent(fixture,t.id,lang));
+ assert(out.includes('TEST_ONLY')&&out.includes(fixture.source_commit)&&out.includes('歐陽芳泉'));
+ assert(out.includes(lang==='en'?t.markdown_en:t.markdown));
+}
+for(const change of [p=>p.status='released',p=>p.source_commit='wrong',p=>p.targets.pop(),p=>p.targets[1].id=p.targets[0].id,p=>delete p.targets[0].markdown_en,p=>p.targets[0].wireless='yes']){
+ const p=JSON.parse(JSON.stringify(fixture));change(p);assert.throws(()=>nodeCore.renderCurrent(p,p.targets[0].id));
+}
+assert.throws(()=>nodeCore.renderCurrent(fixture,'unknown'));
+assert.throws(()=>nodeCore.renderCurrent(fixture,fixture.targets[0].id,'fr'));
+console.log('CURRENT FIRMWARE PARITY PASS: 16 target/language cases, 8 invalid-input cases');
