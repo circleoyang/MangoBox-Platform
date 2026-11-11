@@ -23,6 +23,10 @@ jobs:
           node-version: '22'
       - run: npm install --no-save playwright@1.56.1
       - run: npx playwright install --with-deps chromium
+      - name: Renderer and offline controller tests
+        run: |
+          node tests/ai-context-builder/parity.js
+          node tests/ai-context-builder/dom-smoke.js
       - name: Launch website locally
         run: |
           python3 -m http.server 8769 --bind 127.0.0.1 &
@@ -32,4 +36,6 @@ jobs:
           done
           exit 1
       - name: Browser API documentation smoke tests
-        run: node tests/ai-context-builder/smoke.js
+        run: |
+          node tests/ai-context-builder/smoke.js
+          AI_CONTEXT_REAL_PACK=1 node tests/ai-context-builder/smoke.js

@@ -14,3 +14,9 @@
 ## Usage
 
 Use the AI Context Builder to obtain a profile-filtered Markdown bundle. Do not assume Host Python supports everything in new MicroPython firmware. Validate enabled modules, calibration, pins and connected hardware. Names such as pot1 or strip1 depend on device configuration.
+
+## Eight-firmware source-aligned mode (TEST_ONLY)
+
+The builder defaults to the eight-target firmware data pack at docs/student-guide/site/data/firmware-current.json. Developer: 歐陽芳泉. Source / BUILD_ID: 96c0099c2a8189e9271c083e903b501903b5bb4b. These source-aligned engineering documents are TEST_ONLY, not eight-board physical acceptance or a production release. Each target exports its complete bilingual Markdown including source appendices. Both language selections currently return the complete bilingual document, not separate English translations. The same text is used for browser print / Save as PDF.
+
+The historical five-target and Host Python profile mode remains separately available. Historical profile capabilities, runtime versions, and Host package support must not be attributed to the current eight-target firmware. This development update does not itself establish publication of the live website.
