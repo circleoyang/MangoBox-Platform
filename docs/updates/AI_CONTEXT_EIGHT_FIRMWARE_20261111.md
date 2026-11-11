@@ -26,3 +26,7 @@ From this repository root run `python3 -m http.server 8769 --bind 127.0.0.1`, th
 The browser smoke suite is prepared for execution where Chromium can run. Run `node tests/ai-context-builder/smoke.js` for mocked current data and `AI_CONTEXT_REAL_PACK=1 node tests/ai-context-builder/smoke.js` for the real pack, with the local server running. Set `PLAYWRIGHT_CHROMIUM_EXECUTABLE` only if using a system browser. The workflow runs the renderer/offline checks and both browser variants.
 
 No firmware, hardware, release status, or public deployment was changed. Automated documentation checks do not establish eight-board physical validation.
+
+## Publication preparation
+
+The original public entry is retained at `https://circleoyang.github.io/MangoBox-Platform/docs/student-guide/site/ai-context-builder.html`. Publication will use the repository's focused pull-request review and existing GitHub Pages deployment, not a replacement website. The main branch was rechecked at `5c05ff702640889b6901fd136812ebb70b5c8dc0`, so these changes do not replace newer unrelated work. The source pack remains TEST_ONLY, and publication does not promote firmware or hardware qualification. Re-run the complete repository CI, including actual browser tests, before merging; verify the deployed entry and its eight-target data afterwards.
