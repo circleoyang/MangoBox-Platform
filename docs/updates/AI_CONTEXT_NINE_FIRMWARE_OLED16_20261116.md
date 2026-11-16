@@ -34,3 +34,11 @@ The complete multimodal v13.2 example remains intact with its historical provena
 - Real-browser and PDF acceptance must use the existing GitHub Actions workflow before publication. Offline DOM checks are not browser/PDF acceptance.
 
 Published release evidence covers hardware testing for MangoLite + Pico W and MangoX2 + Pico only. The other seven combinations are not hardware-accepted. No new firmware build, flash, GPIO operation or production database write is performed by this work.
+
+## Method-index provenance
+
+The method index retains the earlier `96c0099c` installed-method baseline, with a static review against the released source. Complete recursive Git trees identify 56 changed runtime Python files; 22 changed student/runtime-init sources were reviewed, including public media bindings and exact inline wrapper binders. See `OLED16_STUDENT_SOURCE_REVIEW_20261116.json` for blob provenance. Internal ownership/reset changes are not promoted as student methods. Lite Pico legitimately shares Lite Pico W packages according to release staging, with wireless and gateway disabled.
+
+A fresh nine-target installed inventory was not completed and is not claimed. The page and every exported index disclose this limitation. Source review and export tests do not replace device acceptance.
+
+Candidate f10faf0 passed all four GitHub Actions checks, including actual Chromium exports and print/PDF. The final amended head must pass again before merge and Pages verification.

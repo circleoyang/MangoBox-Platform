@@ -1,0 +1,127 @@
+{
+  "baseline": "96c0099c2a8189e9271c083e903b501903b5bb4b",
+  "release_source": "353cc577c8d96e6d9fb945c60ed4f987823f3642",
+  "comparison": "full recursive Git trees, then changed student/runtime-init source AST review",
+  "changed_runtime_python_files": 56,
+  "reviewed_changed_student_and_init_files": 22,
+  "fresh_installed_inventory_rerun": false,
+  "changed_source_blobs": [
+    {
+      "path": "runtime/barepico/firmware/barepico/student_runtime_reset.py",
+      "baseline_blob": "3f43a30c5270dad4c4af3801b3ca0502976e8771",
+      "release_blob": "8784a26631f3512f009de8a22aa28f9ec0249869"
+    },
+    {
+      "path": "runtime/barepico/firmware/barepico/student_oled_owner.py",
+      "baseline_blob": "20dad57958767869ba2ae5aab5656fff56342a8c",
+      "release_blob": "3523e01d080aec8942c2ab7a58dfc2a4e5738eb0"
+    },
+    {
+      "path": "runtime/barepico/firmware/barepico/student_oled_daily.py",
+      "baseline_blob": "569b2a2796544ddecab4f0def6f258fa1e798a98",
+      "release_blob": "791e3212a9b5adce912385910981044f6a721046"
+    },
+    {
+      "path": "runtime/common/peripherals/firmware_candidate/student_oled_media_v2.py",
+      "baseline_blob": "059ea2a2e67db90ce500c275570360fd01c6a660",
+      "release_blob": "172544a41c5b21fac8ca9bb837b6212b11f940ad"
+    },
+    {
+      "path": "runtime/barepico/firmware/barepico/student_service_bridge.py",
+      "baseline_blob": "dd16fa6f8e9fd2e21b6741f508b36568bbb41805",
+      "release_blob": "65b1cd061c5624ffd2a879a2b74fce291084f7ed"
+    },
+    {
+      "path": "runtime/barepico/firmware/barepico/student_oled_media_v2.py",
+      "baseline_blob": "059ea2a2e67db90ce500c275570360fd01c6a660",
+      "release_blob": "172544a41c5b21fac8ca9bb837b6212b11f940ad"
+    },
+    {
+      "path": "runtime/mangolite-pico2w/firmware/mangolite/runtime/__init__.py",
+      "baseline_blob": "02718b432c3156bc489a59a6a0409ff4951f5a39",
+      "release_blob": "0cd2c19c5e56cbc5ad069670ad4e9a32c944919c"
+    },
+    {
+      "path": "runtime/common/student_services/student_oled_owner.py",
+      "baseline_blob": "20dad57958767869ba2ae5aab5656fff56342a8c",
+      "release_blob": "3523e01d080aec8942c2ab7a58dfc2a4e5738eb0"
+    },
+    {
+      "path": "runtime/common/student_services/student_oled_daily.py",
+      "baseline_blob": "569b2a2796544ddecab4f0def6f258fa1e798a98",
+      "release_blob": "791e3212a9b5adce912385910981044f6a721046"
+    },
+    {
+      "path": "runtime/common/student_services/student_runtime_reset.py",
+      "baseline_blob": "3f43a30c5270dad4c4af3801b3ca0502976e8771",
+      "release_blob": "8784a26631f3512f009de8a22aa28f9ec0249869"
+    },
+    {
+      "path": "runtime/mangolite-pico2w/firmware/mangolite/student_oled_daily.py",
+      "baseline_blob": "569b2a2796544ddecab4f0def6f258fa1e798a98",
+      "release_blob": "791e3212a9b5adce912385910981044f6a721046"
+    },
+    {
+      "path": "runtime/common/student_services/student_service_bridge.py",
+      "baseline_blob": "dd16fa6f8e9fd2e21b6741f508b36568bbb41805",
+      "release_blob": "940ef37e5e1bceaaa572a45ded28210fe48e530c"
+    },
+    {
+      "path": "runtime/mangox2-pico/firmware/mangox2/student_oled_daily.py",
+      "baseline_blob": "569b2a2796544ddecab4f0def6f258fa1e798a98",
+      "release_blob": "791e3212a9b5adce912385910981044f6a721046"
+    },
+    {
+      "path": "runtime/mangolite-pico2w/firmware/mangolite/student_runtime_reset.py",
+      "baseline_blob": "3f43a30c5270dad4c4af3801b3ca0502976e8771",
+      "release_blob": "8784a26631f3512f009de8a22aa28f9ec0249869"
+    },
+    {
+      "path": "runtime/mangolite-pico2w/firmware/mangolite/student_service_bridge.py",
+      "baseline_blob": "dd16fa6f8e9fd2e21b6741f508b36568bbb41805",
+      "release_blob": "65b1cd061c5624ffd2a879a2b74fce291084f7ed"
+    },
+    {
+      "path": "runtime/mangolite-pico2w/firmware/mangolite/student_oled_owner.py",
+      "baseline_blob": "20dad57958767869ba2ae5aab5656fff56342a8c",
+      "release_blob": "3523e01d080aec8942c2ab7a58dfc2a4e5738eb0"
+    },
+    {
+      "path": "runtime/mangolite-pico2w/firmware/mangolite/student_oled_media_v2.py",
+      "baseline_blob": "059ea2a2e67db90ce500c275570360fd01c6a660",
+      "release_blob": "172544a41c5b21fac8ca9bb837b6212b11f940ad"
+    },
+    {
+      "path": "runtime/mangox2-pico/firmware/mangox2/student_api.py",
+      "baseline_blob": "4b880dcec7334da67dc89c2a43f35a9ca677086f",
+      "release_blob": "8299051fd2966556afbf7380319c11f457323d8e"
+    },
+    {
+      "path": "runtime/mangox2-pico/firmware/mangox2/student_runtime_reset.py",
+      "baseline_blob": "3f43a30c5270dad4c4af3801b3ca0502976e8771",
+      "release_blob": "8784a26631f3512f009de8a22aa28f9ec0249869"
+    },
+    {
+      "path": "runtime/mangox2-pico/firmware/mangox2/student_oled_owner.py",
+      "baseline_blob": "20dad57958767869ba2ae5aab5656fff56342a8c",
+      "release_blob": "3523e01d080aec8942c2ab7a58dfc2a4e5738eb0"
+    },
+    {
+      "path": "runtime/mangox2-pico/firmware/mangox2/student_service_bridge.py",
+      "baseline_blob": "dd16fa6f8e9fd2e21b6741f508b36568bbb41805",
+      "release_blob": "940ef37e5e1bceaaa572a45ded28210fe48e530c"
+    },
+    {
+      "path": "runtime/mangox2-pico/firmware/mangox2/student_oled_media_v2.py",
+      "baseline_blob": "059ea2a2e67db90ce500c275570360fd01c6a660",
+      "release_blob": "1f090785049a9c5b55dd5f179c66b7c65e335c26"
+    }
+  ],
+  "findings": [
+    "Public OLED media installer bindings and call signatures remain unchanged.",
+    "MangoX2 inline upload/loop wrappers retain exact public parameter binding through _bind_inline_upload(bitmap, slot=0) and _bind_inline_loop(frames, period=500, duration=0).",
+    "Owner scope and reset handler changes are internal, not new student facade APIs.",
+    "Lite Pico staging reuses Lite Pico W packages and sets wireless_capable=False; gateway excluded.",
+    "This source review does not prove all nine installed runtime inventories or hardware behavior."
+  ]
+}
