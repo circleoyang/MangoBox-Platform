@@ -72,17 +72,20 @@
     }
     return parts.join("\n").replace(/\n+$/, "") + "\n";
   }
-  const CURRENT_SOURCE = "96c0099c2a8189e9271c083e903b501903b5bb4b";
-  const CURRENT_TARGETS = ["mangox2-pico","mangox2-picow","mangox2-pico2w","mangolite-picow","mangolite-pico2w","barepico-pico","barepico-picow","barepico-pico2w"];
+  const CURRENT_SOURCE = "353cc577c8d96e6d9fb945c60ed4f987823f3642";
+  const CURRENT_TARGETS = ["mangox2-pico","mangox2-picow","mangox2-pico2w","mangolite-pico","mangolite-picow","mangolite-pico2w","barepico-pico","barepico-picow","barepico-pico2w"];
   function validateCurrent(pack) {
-    if (!pack || pack.schema_version !== 1 || pack.source_commit !== CURRENT_SOURCE || pack.status !== "TEST_ONLY" || pack.developer !== "歐陽芳泉") throw Error("Invalid firmware source metadata");
-    if (!Array.isArray(pack.targets) || pack.targets.length !== 8) throw Error("Expected exactly eight firmware targets");
+    if (!pack || pack.schema_version !== 2 || pack.source_commit !== CURRENT_SOURCE || pack.status !== "RELEASED_PARTIAL_HARDWARE" || pack.developer !== "歐陽芳泉") throw Error("Invalid firmware source metadata");
+    if (pack.release_tag !== "firmware-oled16-20261116") throw Error("Invalid release tag");
+    if (!Array.isArray(pack.targets) || pack.targets.length !== 9) throw Error("Expected exactly nine firmware targets");
     const ids = new Set();
     for (const t of pack.targets) {
       if (!CURRENT_TARGETS.includes(t.id) || ids.has(t.id)) throw Error("Invalid or duplicate firmware target");
       ids.add(t.id);
-      for (const key of ["label","family","mcu","markdown","markdown_en"]) if (typeof t[key] !== "string" || !t[key].trim()) throw Error("Missing target field: " + key);
-      if (typeof t.wireless !== "boolean") throw Error("Invalid wireless capability");
+      for (const key of ["label","family","mcu","runtime_version","markdown","markdown_en"]) if (typeof t[key] !== "string" || !t[key].trim()) throw Error("Missing target field: " + key);
+      const family = t.id.split("-")[0], board = t.id.split("-")[1];
+      if (t.family !== family || t.mcu !== (board === "pico2w" ? "RP2350" : "RP2040") || t.wireless !== (board !== "pico")) throw Error("Invalid target hardware metadata");
+      if (t.runtime_version !== ({mangox2:"0.2.11",mangolite:"0.6.6",barepico:"0.1.1"})[family]) throw Error("Invalid firmware version");
     }
     return pack;
   }
@@ -91,12 +94,12 @@
     if (!["zh-TW","en"].includes(lang)) throw Error("Unsupported document language");
     const target=pack.targets.find(t=>t.id===id);
     if (!target) throw Error("Unknown firmware target");
-    return [HEADER, "", "## Firmware source alignment — TEST_ONLY", "",
+    return [HEADER, "", "## Firmware source alignment — OLED16 release", "",
       "- Developer: " + pack.developer, "- Target: " + target.label + " (" + target.id + ")",
       "- Family: " + target.family, "- MCU: " + target.mcu, "- Wireless board: " + target.wireless,
-      "- Source commit / BUILD_ID: " + pack.source_commit, "- Status: TEST_ONLY",
+      "- Source commit / BUILD_ID: " + pack.source_commit, "- Firmware version: " + target.runtime_version, "- Release: " + pack.release_tag, "- Status: " + pack.status,
       "- Mode: High-Level MicroPython firmware source; not Host Python",
-      "- Source and automated checks do not establish eight-board physical acceptance or release approval.", "",
+      "- Source and automated checks do not establish nine-board physical acceptance. Release evidence covers MangoLite + Pico W and MangoX2 + Pico; seven combinations are not hardware-accepted.", "",
       (lang==="en" ? target.markdown_en : target.markdown).trim(), ""].join("\n");
   }
   return {render, paths, selectedModules, validateCurrent, renderCurrent, CURRENT_SOURCE, CURRENT_TARGETS};

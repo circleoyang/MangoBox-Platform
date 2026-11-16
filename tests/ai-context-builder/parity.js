@@ -51,12 +51,29 @@ const fixture=require('./current-fixture.js');
 for(const t of fixture.targets)for(const lang of ['zh-TW','en']){
  const out=nodeCore.renderCurrent(fixture,t.id,lang);
  assert.strictEqual(out,browserCore.renderCurrent(fixture,t.id,lang));
- assert(out.includes('TEST_ONLY')&&out.includes(fixture.source_commit)&&out.includes('歐陽芳泉'));
+ assert(out.includes('RELEASED_PARTIAL_HARDWARE')&&out.includes(fixture.source_commit)&&out.includes('歐陽芳泉'));
  assert(out.includes(lang==='en'?t.markdown_en:t.markdown));
 }
-for(const change of [p=>p.status='released',p=>p.source_commit='wrong',p=>p.targets.pop(),p=>p.targets[1].id=p.targets[0].id,p=>delete p.targets[0].markdown_en,p=>p.targets[0].wireless='yes']){
+for(const change of [p=>p.status='released',p=>p.source_commit='wrong',p=>p.targets.pop(),p=>p.targets[1].id=p.targets[0].id,p=>delete p.targets[0].markdown_en,p=>p.targets[0].wireless='yes',p=>p.targets[0].mcu='RP2350',p=>p.targets[0].runtime_version='old',p=>p.release_tag='wrong',p=>p.targets[0].family='barepico']){
  const p=JSON.parse(JSON.stringify(fixture));change(p);assert.throws(()=>nodeCore.renderCurrent(p,p.targets[0].id));
 }
 assert.throws(()=>nodeCore.renderCurrent(fixture,'unknown'));
 assert.throws(()=>nodeCore.renderCurrent(fixture,fixture.targets[0].id,'fr'));
-console.log('CURRENT FIRMWARE PARITY PASS: 16 target/language cases, 8 invalid-input cases');
+console.log('CURRENT FIRMWARE PARITY PASS: 18 target/language cases, 12 invalid-input cases');
+
+const real=JSON.parse(fs.readFileSync(path.join(data,'firmware-current.json'),'utf8'));
+nodeCore.validateCurrent(real);
+for(const target of real.targets) for(const lang of ['zh-TW','en']) {
+ const out=nodeCore.renderCurrent(real,target.id,lang);
+ for(const expected of ['1～16','0～3','32768','oled_play_sequence','repeat=False, cycles=1','PR #172','其餘七款']) assert(out.includes(expected),target.id+': '+expected);
+ assert(!out.includes('單一媒體 1..4'));
+ assert(out.includes('Source: `runtime/'));
+ const example=out.split('### OLED16 更新重點與完整用法')[1].split('## 語音與音樂')[0];
+ assert(example.includes('from '+target.family+' import Mango'));
+ assert(example.includes('finally:\n    m.close()'));
+}
+console.log('OLED16 real documentation contract PASS: 18 exports, boundaries and provenance');
+const litePico=real.targets.find(t=>t.id==='mangolite-pico');
+assert.strictEqual(litePico.wireless,false);
+assert(litePico.markdown.includes('沒有板載 Wi-Fi/BLE'));
+assert(!litePico.markdown.includes('本板具有無線硬體'));
