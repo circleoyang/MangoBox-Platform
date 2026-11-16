@@ -13,7 +13,7 @@ const fixture = require('./current-fixture.js');
     await page.goto(root + 'ai-context-builder.html', { waitUntil: 'networkidle' });
     await page.waitForFunction(() => !document.getElementById('generate').disabled);
     assert.strictEqual(await page.locator('#source').inputValue(), 'current');
-    assert.strictEqual(await page.locator('#target option').count(), 8);
+    assert.strictEqual(await page.locator('#target option').count(), 9);
     assert(await page.locator('#mode').isDisabled());
     for (const t of fixture.targets) for (const lang of ['zh-TW','en']) {
       await page.locator('#target').selectOption(t.id);
@@ -21,11 +21,11 @@ const fixture = require('./current-fixture.js');
       assert(await page.locator('#download').isDisabled());
       await page.locator('#generate').click();
       const md = await page.locator('#preview').inputValue();
-      assert(md.includes(fixture.source_commit) && md.includes('TEST_ONLY') && md.includes('歐陽芳泉'));
+      assert(md.includes(fixture.source_commit) && md.includes('RELEASED_PARTIAL_HARDWARE') && md.includes('歐陽芳泉'));
       assert(md.includes(t.id));
     }
     const [currentDownload] = await Promise.all([page.waitForEvent('download'), page.locator('#download').click()]);
-    assert(currentDownload.suggestedFilename().includes('TEST_ONLY.md'));
+    assert(currentDownload.suggestedFilename().includes('OLED16.md'));
     const stream = await currentDownload.createReadStream(); const chunks = [];
     for await (const chunk of stream) chunks.push(chunk);
     assert.strictEqual(Buffer.concat(chunks).toString('utf8'), await page.locator('#preview').inputValue());
@@ -67,7 +67,7 @@ const fixture = require('./current-fixture.js');
     assert(!(await broken.locator('#generate').isDisabled()));
     await broken.close();
     if (errors.length) throw Error('Browser JavaScript errors: ' + errors.join('; '));
-    console.log('AI Context Builder E2E PASS: 16 current exports, MD byte parity, print/PDF parity, missing-data gate, historical profile gate, Pot export, English export');
+    console.log('AI Context Builder E2E PASS: 18 current exports, MD byte parity, print/PDF parity, missing-data gate, historical profile gate, Pot export, English export');
   } finally { await browser.close(); }
 })().catch(e => {console.error(e); process.exit(1)});
 

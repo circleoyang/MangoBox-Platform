@@ -35,10 +35,10 @@ async function load(pack, delayDoc=false){
 (async()=>{
  let cases=0;
  for(const pack of [fixture,JSON.parse(fs.readFileSync(path.join(site,'data/firmware-current.json'),'utf8'))]){
-  const h=await load(pack);assert.strictEqual(h.ids.target.children.length,8);assert(h.ids.mode.disabled);assert(!h.ids.generate.disabled);
+  const h=await load(pack);assert.strictEqual(h.ids.target.children.length,9);assert(h.ids.mode.disabled);assert(!h.ids.generate.disabled);
   for(const t of pack.targets)for(const lang of ['zh-TW','en']){
    h.ids.target.value=t.id;await h.ids.target.event('change');h.ids.lang.value=lang;await h.ids.lang.event('change');assert(h.ids.download.disabled);
-   await h.ids.generate.event('click');const md=h.ids.preview.value;assert(md.includes(pack.source_commit)&&md.includes('TEST_ONLY'));assert(md.includes((lang==='en'?t.markdown_en:t.markdown).trim()));
+   await h.ids.generate.event('click');const md=h.ids.preview.value;assert(md.includes(pack.source_commit)&&md.includes('RELEASED_PARTIAL_HARDWARE'));assert(md.includes((lang==='en'?t.markdown_en:t.markdown).trim()));
    await h.ids.print.event('click');assert.strictEqual(h.printed(),md);
    await h.ids.download.event('click');assert.strictEqual(await h.blob().text(),md);
    await h.ids.copy.event('click');assert.strictEqual(h.copied(),md);cases++;
@@ -49,6 +49,6 @@ async function load(pack, delayDoc=false){
  }
  for(const pack of [null,{...fixture,status:'RELEASED'}]){const h=await load(pack);assert(h.ids.generate.disabled);assert(h.ids.download.disabled);h.ids.source.value='legacy';await h.ids.source.event('change');assert(!h.ids.generate.disabled)}
  // An in-flight legacy fetch must not overwrite a newly selected current source.
- const stale=await load(fixture,true);stale.ids.source.value='legacy';await stale.ids.source.event('change');const pending=stale.call('generate()');stale.ids.source.value='current';await stale.ids.source.event('change');await stale.call('generate()');const latest=stale.ids.preview.value;stale.release();await pending;assert.strictEqual(stale.ids.preview.value,latest);assert(latest.includes('TEST_ONLY'));
+ const stale=await load(fixture,true);stale.ids.source.value='legacy';await stale.ids.source.event('change');const pending=stale.call('generate()');stale.ids.source.value='current';await stale.ids.source.event('change');await stale.call('generate()');const latest=stale.ids.preview.value;stale.release();await pending;assert.strictEqual(stale.ids.preview.value,latest);assert(latest.includes('RELEASED_PARTIAL_HARDWARE'));
  console.log(`OFFLINE DOM SMOKE PASS: ${cases} fixture/real target-language exports, full-content/download/copy/print byte parity, legacy/Host gates, malformed/missing-data gate, stale-fetch protection. No real browser or PDF engine was exercised.`);
 })().catch(e=>{console.error(e);process.exit(1)});
